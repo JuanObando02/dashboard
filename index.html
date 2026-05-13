@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HDPUV - Strategic Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --green: #10b981;
+            --yellow: #f59e0b;
+            --red: #ef4444;
+            --primary: #3b82f6;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 2rem;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.15) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+        header {
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #60a5fa, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        h2.subtitle {
+            color: var(--text-muted);
+            font-weight: 300;
+            font-size: 1.1rem;
+        }
+        
+        .perspectives-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .perspective-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        .perspective-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+        }
+        .perspective-btn.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .kpi-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+            border-color: rgba(255,255,255,0.2);
+        }
+        
+        .kpi-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        .kpi-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 0.25rem;
+        }
+        .kpi-perspective {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 5px;
+            box-shadow: 0 0 8px currentColor;
+        }
+        
+        .kpi-stats {
+            display: flex;
+            align-items: flex-end;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .kpi-value-container {
+            display: flex;
+            flex-direction: column;
+        }
+        .kpi-current-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+        .kpi-meta {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 120px;
+            width: 100%;
+            margin-top: auto;
+        }
+
+        /* Utility Colors */
+        .text-green { color: var(--green); }
+        .text-yellow { color: var(--yellow); }
+        .text-red { color: var(--red); }
+        .bg-green { background-color: var(--green); }
+        .bg-yellow { background-color: var(--yellow); }
+        .bg-red { background-color: var(--red); }
+        
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>HDPUV BSC Dashboard 2024-2029</h1>
+        <h2 class="subtitle">Tablero de Control Estratégico - Área TI</h2>
+    </header>
+
+    <div class="perspectives-nav" id="nav-container">
+        <!-- Buttons injected here -->
+    </div>
+
+    <div class="dashboard-grid" id="dashboard-grid">
+        <!-- Cards injected here -->
+    </div>
+
+    <script>
+        // Embed data from python script
+        const kpiData = {"Disponibilidad HIS":{"p":"Clientes","m":99.0,"u":"%","data":[{"f":"2024-01-01","v":98.61},{"f":"2024-02-01","v":98.04},{"f":"2024-03-01","v":97.86},{"f":"2024-04-01","v":97.83},{"f":"2024-05-01","v":97.93},{"f":"2024-06-01","v":98.19},{"f":"2024-07-01","v":98.35},{"f":"2024-08-01","v":98.48},{"f":"2024-09-01","v":97.93},{"f":"2024-10-01","v":98.14},{"f":"2024-11-01","v":98.59},{"f":"2024-12-01","v":98.01},{"f":"2025-01-01","v":98.52},{"f":"2025-02-01","v":98.42},{"f":"2025-03-01","v":98.22},{"f":"2025-04-01","v":98.58},{"f":"2025-05-01","v":98.55},{"f":"2025-06-01","v":98.38},{"f":"2025-07-01","v":98.69},{"f":"2025-08-01","v":98.67},{"f":"2025-09-01","v":98.96},{"f":"2025-10-01","v":98.44},{"f":"2025-11-01","v":98.19},{"f":"2025-12-01","v":98.97},{"f":"2026-01-01","v":98.62},{"f":"2026-02-01","v":98.83},{"f":"2026-03-01","v":98.6},{"f":"2026-04-01","v":98.82},{"f":"2026-05-01","v":98.89},{"f":"2026-06-01","v":98.6},{"f":"2026-07-01","v":98.8},{"f":"2026-08-01","v":98.79},{"f":"2026-09-01","v":98.4},{"f":"2026-10-01","v":99.14},{"f":"2026-11-01","v":99.03},{"f":"2026-12-01","v":98.74},{"f":"2027-01-01","v":98.81},{"f":"2027-02-01","v":98.81},{"f":"2027-03-01","v":98.67},{"f":"2027-04-01","v":99.22},{"f":"2027-05-01","v":99.47},{"f":"2027-06-01","v":98.79},{"f":"2027-07-01","v":99.3},{"f":"2027-08-01","v":98.56},{"f":"2027-09-01","v":99.11},{"f":"2027-10-01","v":98.62},{"f":"2027-11-01","v":99.65},{"f":"2027-12-01","v":99.5},{"f":"2028-01-01","v":99.16},{"f":"2028-02-01","v":99.47},{"f":"2028-03-01","v":99.16},{"f":"2028-04-01","v":99.97},{"f":"2028-05-01","v":99.33},{"f":"2028-06-01","v":99.86},{"f":"2028-07-01","v":98.81},{"f":"2028-08-01","v":100.22},{"f":"2028-09-01","v":99.94},{"f":"2028-10-01","v":99.93},{"f":"2028-11-01","v":99.19},{"f":"2028-12-01","v":99.4},{"f":"2029-01-01","v":98.98},{"f":"2029-02-01","v":100.07},{"f":"2029-03-01","v":99.6},{"f":"2029-04-01","v":99.81},{"f":"2029-05-01","v":99.2},{"f":"2029-06-01","v":99.68},{"f":"2029-07-01","v":99.62},{"f":"2029-08-01","v":100.02},{"f":"2029-09-01","v":99.81},{"f":"2029-10-01","v":100.0},{"f":"2029-11-01","v":99.68},{"f":"2029-12-01","v":99.72}]},"Satisfaccion Usuario":{"p":"Clientes","m":85.0,"u":"%","data":[{"f":"2024-01-01","v":60.96},{"f":"2024-02-01","v":58.08},{"f":"2024-03-01","v":60.35},{"f":"2024-04-01","v":61.07},{"f":"2024-05-01","v":59.83},{"f":"2024-06-01","v":63.9},{"f":"2024-07-01","v":62.34},{"f":"2024-08-01","v":64.09},{"f":"2024-09-01","v":67.78},{"f":"2024-10-01","v":64.58},{"f":"2024-11-01","v":64.17},{"f":"2024-12-01","v":68.38},{"f":"2025-01-01","v":65.67},{"f":"2025-02-01","v":64.93},{"f":"2025-03-01","v":67.49},{"f":"2025-04-01","v":71.9},{"f":"2025-05-01","v":69.92},{"f":"2025-06-01","v":67.96},{"f":"2025-07-01","v":69.34},{"f":"2025-08-01","v":68.83},{"f":"2025-09-01","v":70.14},{"f":"2025-10-01","v":72.96},{"f":"2025-11-01","v":74.98},{"f":"2025-12-01","v":71.99},{"f":"2026-01-01","v":72.19},{"f":"2026-02-01","v":77.65},{"f":"2026-03-01","v":77.77},{"f":"2026-04-01","v":74.64},{"f":"2026-05-01","v":72.35},{"f":"2026-06-01","v":74.88},{"f":"2026-07-01","v":76.11},{"f":"2026-08-01","v":77.75},{"f":"2026-09-01","v":72.24},{"f":"2026-10-01","v":78.06},{"f":"2026-11-01","v":79.18},{"f":"2026-12-01","v":79.08},{"f":"2027-01-01","v":80.25},{"f":"2027-02-01","v":80.03},{"f":"2027-03-01","v":80.25},{"f":"2027-04-01","v":79.93},{"f":"2027-05-01","v":81.49},{"f":"2027-06-01","v":81.88},{"f":"2027-07-01","v":83.16},{"f":"2027-08-01","v":83.57},{"f":"2027-09-01","v":80.74},{"f":"2027-10-01","v":83.79},{"f":"2027-11-01","v":83.38},{"f":"2027-12-01","v":85.45},{"f":"2028-01-01","v":85.4},{"f":"2028-02-01","v":87.81},{"f":"2028-03-01","v":84.63},{"f":"2028-04-01","v":87.92},{"f":"2028-05-01","v":84.05},{"f":"2028-06-01","v":84.88},{"f":"2028-07-01","v":87.93},{"f":"2028-08-01","v":88.02},{"f":"2028-09-01","v":85.04},{"f":"2028-10-01","v":86.0},{"f":"2028-11-01","v":86.37},{"f":"2028-12-01","v":85.13},{"f":"2029-01-01","v":88.79},{"f":"2029-02-01","v":88.63},{"f":"2029-03-01","v":91.14},{"f":"2029-04-01","v":86.92},{"f":"2029-05-01","v":86.89},{"f":"2029-06-01","v":90.81},{"f":"2029-07-01","v":87.97},{"f":"2029-08-01","v":89.79},{"f":"2029-09-01","v":86.18},{"f":"2029-10-01","v":91.22},{"f":"2029-11-01","v":90.82},{"f":"2029-12-01","v":93.16}]},"Interoperabilidad":{"p":"Procesos","m":80.0,"u":"%","data":[{"f":"2024-01-01","v":21.98},{"f":"2024-02-01","v":22.21},{"f":"2024-03-01","v":21.37},{"f":"2024-04-01","v":23.48},{"f":"2024-05-01","v":23.53},{"f":"2024-06-01","v":26.26},{"f":"2024-07-01","v":27.71},{"f":"2024-08-01","v":24.32},{"f":"2024-09-01","v":27.93},{"f":"2024-10-01","v":28.11},{"f":"2024-11-01","v":32.4},{"f":"2024-12-01","v":29.13},{"f":"2025-01-01","v":31.55},{"f":"2025-02-01","v":31.51},{"f":"2025-03-01","v":34.69},{"f":"2025-04-01","v":35.42},{"f":"2025-05-01","v":33.2},{"f":"2025-06-01","v":36.18},{"f":"2025-07-01","v":38.38},{"f":"2025-08-01","v":35.96},{"f":"2025-09-01","v":37.23},{"f":"2025-10-01","v":42.42},{"f":"2025-11-01","v":41.79},{"f":"2025-12-01","v":45.49},{"f":"2026-01-01","v":43.52},{"f":"2026-02-01","v":42.22},{"f":"2026-03-01","v":46.36},{"f":"2026-04-01","v":47.9},{"f":"2026-05-01","v":48.05},{"f":"2026-06-01","v":46.56},{"f":"2026-07-01","v":47.98},{"f":"2026-08-01","v":49.71},{"f":"2026-09-01","v":49.79},{"f":"2026-10-01","v":51.49},{"f":"2026-11-01","v":51.35},{"f":"2026-12-01","v":54.88},{"f":"2027-01-01","v":52.01},{"f":"2027-02-01","v":53.71},{"f":"2027-03-01","v":53.16},{"f":"2027-04-01","v":55.96},{"f":"2027-05-01","v":56.19},{"f":"2027-06-01","v":57.12},{"f":"2027-07-01","v":57.95},{"f":"2027-08-01","v":57.05},{"f":"2027-09-01","v":59.77},{"f":"2027-10-01","v":62.39},{"f":"2027-11-01","v":62.22},{"f":"2027-12-01","v":62.36},{"f":"2028-01-01","v":63.17},{"f":"2028-02-01","v":64.61},{"f":"2028-03-01","v":67.36},{"f":"2028-04-01","v":70.49},{"f":"2028-05-01","v":69.37},{"f":"2028-06-01","v":70.0},{"f":"2028-07-01","v":65.6},{"f":"2028-08-01","v":70.57},{"f":"2028-09-01","v":72.14},{"f":"2028-10-01","v":70.47},{"f":"2028-11-01","v":73.52},{"f":"2028-12-01","v":73.23},{"f":"2029-01-01","v":76.21},{"f":"2029-02-01","v":77.7},{"f":"2029-03-01","v":75.16},{"f":"2029-04-01","v":78.14},{"f":"2029-05-01","v":78.61},{"f":"2029-06-01","v":78.0},{"f":"2029-07-01","v":80.55},{"f":"2029-08-01","v":82.67},{"f":"2029-09-01","v":81.57},{"f":"2029-10-01","v":82.38},{"f":"2029-11-01","v":83.05},{"f":"2029-12-01","v":85.26}]},"Capacitaciones Mes":{"p":"Aprendizaje","m":12.0,"u":"N","data":[{"f":"2024-01-01","v":8.0},{"f":"2024-02-01","v":17.0},{"f":"2024-03-01","v":25.0},{"f":"2024-04-01","v":16.0},{"f":"2024-05-01","v":15.0},{"f":"2024-06-01","v":11.0},{"f":"2024-07-01","v":16.0},{"f":"2024-08-01","v":12.0},{"f":"2024-09-01","v":20.0},{"f":"2024-10-01","v":8.0},{"f":"2024-11-01","v":8.0},{"f":"2024-12-01","v":11.0},{"f":"2025-01-01","v":14.0},{"f":"2025-02-01","v":10.0},{"f":"2025-03-01","v":25.0},{"f":"2025-04-01","v":10.0},{"f":"2025-05-01","v":14.0},{"f":"2025-06-01","v":18.0},{"f":"2025-07-01","v":15.0},{"f":"2025-08-01","v":13.0},{"f":"2025-09-01","v":17.0},{"f":"2025-10-01","v":9.0},{"f":"2025-11-01","v":12.0},{"f":"2025-12-01","v":11.0},{"f":"2026-01-01","v":12.0},{"f":"2026-02-01","v":18.0},{"f":"2026-03-01","v":11.0},{"f":"2026-04-01","v":17.0},{"f":"2026-05-01","v":16.0},{"f":"2026-06-01","v":16.0},{"f":"2026-07-01","v":12.0},{"f":"2026-08-01","v":18.0},{"f":"2026-09-01","v":14.0},{"f":"2026-10-01","v":17.0},{"f":"2026-11-01","v":15.0},{"f":"2026-12-01","v":17.0},{"f":"2027-01-01","v":17.0},{"f":"2027-02-01","v":13.0},{"f":"2027-03-01","v":17.0},{"f":"2027-04-01","v":12.0},{"f":"2027-05-01","v":10.0},{"f":"2027-06-01","v":17.0},{"f":"2027-07-01","v":10.0},{"f":"2027-08-01","v":16.0},{"f":"2027-09-01","v":15.0},{"f":"2027-10-01","v":18.0},{"f":"2027-11-01","v":15.0},{"f":"2027-12-01","v":13.0},{"f":"2028-01-01","v":7.0},{"f":"2028-02-01","v":12.0},{"f":"2028-03-01","v":13.0},{"f":"2028-04-01","v":17.0},{"f":"2028-05-01","v":11.0},{"f":"2028-06-01","v":17.0},{"f":"2028-07-01","v":13.0},{"f":"2028-08-01","v":12.0},{"f":"2028-09-01","v":13.0},{"f":"2028-10-01","v":13.0},{"f":"2028-11-01","v":17.0},{"f":"2028-12-01","v":18.0},{"f":"2029-01-01","v":12.0},{"f":"2029-02-01","v":13.0},{"f":"2029-03-01","v":15.0},{"f":"2029-04-01","v":13.0},{"f":"2029-05-01","v":12.0},{"f":"2029-06-01","v":10.0},{"f":"2029-07-01","v":13.0},{"f":"2029-08-01","v":14.0},{"f":"2029-09-01","v":14.0},{"f":"2029-10-01","v":17.0},{"f":"2029-11-01","v":13.0},{"f":"2029-12-01","v":12.0}]},"Ejecucion Presupuestal %":{"p":"Financiera","m":95.0,"u":"%","data":[{"f":"2024-01-01","v":8.29},{"f":"2024-02-01","v":17.43},{"f":"2024-03-01","v":22.62},{"f":"2024-04-01","v":31.48},{"f":"2024-05-01","v":37.47},{"f":"2024-06-01","v":48.5},{"f":"2024-07-01","v":56.47},{"f":"2024-08-01","v":63.35},{"f":"2024-09-01","v":73.41},{"f":"2024-10-01","v":79.82},{"f":"2024-11-01","v":87.51},{"f":"2024-12-01","v":97.89},{"f":"2025-01-01","v":5.22},{"f":"2025-02-01","v":15.92},{"f":"2025-03-01","v":20.98},{"f":"2025-04-01","v":30.33},{"f":"2025-05-01","v":38.75},{"f":"2025-06-01","v":47.65},{"f":"2025-07-01","v":56.97},{"f":"2025-08-01","v":67.15},{"f":"2025-09-01","v":71.0},{"f":"2025-10-01","v":80.61},{"f":"2025-11-01","v":91.22},{"f":"2025-12-01","v":97.25},{"f":"2026-01-01","v":6.71},{"f":"2026-02-01","v":17.68},{"f":"2026-03-01","v":26.69},{"f":"2026-04-01","v":33.02},{"f":"2026-05-01","v":37.27},{"f":"2026-06-01","v":50.02},{"f":"2026-07-01","v":55.39},{"f":"2026-08-01","v":64.14},{"f":"2026-09-01","v":71.54},{"f":"2026-10-01","v":82.93},{"f":"2026-11-01","v":88.36},{"f":"2026-12-01","v":93.98},{"f":"2027-01-01","v":6.52},{"f":"2027-02-01","v":14.25},{"f":"2027-03-01","v":25.83},{"f":"2027-04-01","v":31.39},{"f":"2027-05-01","v":39.33},{"f":"2027-06-01","v":44.35},{"f":"2027-07-01","v":57.06},{"f":"2027-08-01","v":64.48},{"f":"2027-09-01","v":70.06},{"f":"2027-10-01","v":81.06},{"f":"2027-11-01","v":85.06},{"f":"2027-12-01","v":94.98},{"f":"2028-01-01","v":8.86},{"f":"2028-02-01","v":15.83},{"f":"2028-03-01","v":21.87},{"f":"2028-04-01","v":33.11},{"f":"2028-05-01","v":38.65},{"f":"2028-06-01","v":49.13},{"f":"2028-07-01","v":56.47},{"f":"2028-08-01","v":62.42},{"f":"2028-09-01","v":71.99},{"f":"2028-10-01","v":79.85},{"f":"2028-11-01","v":87.19},{"f":"2028-12-01","v":96.77},{"f":"2029-01-01","v":6.04},{"f":"2029-02-01","v":14.61},{"f":"2029-03-01","v":21.08},{"f":"2029-04-01","v":32.84},{"f":"2029-05-01","v":39.74},{"f":"2029-06-01","v":49.43},{"f":"2029-07-01","v":56.94},{"f":"2029-08-01","v":63.22},{"f":"2029-09-01","v":71.85},{"f":"2029-10-01","v":77.35},{"f":"2029-11-01","v":87.06},{"f":"2029-12-01","v":99.47}]}};
+        
+        // Define perspectives
+        const perspectives = ['Todas', 'Clientes', 'Procesos', 'Aprendizaje', 'Financiera', 'PETI'];
+        let currentPerspective = 'Todas';
+        const charts = {}; // store chart instances
+
+        function getComplianceLogic(kpiName, valor, meta) {
+            // Less is better logic
+            if (kpiName === 'Incidentes Criticos Seguridad' || kpiName === 'Incidentes Criticos HC') {
+                if (valor === 0) return { pct: 100, color: 'green' };
+                if (valor < 0.5) return { pct: 85, color: 'yellow' };
+                return { pct: 0, color: 'red' };
+            }
+            // Glosas Logic
+            if (kpiName === 'Glosas Facturacion') {
+                let pct = (1.2 / valor) * 100;
+                return { pct, color: getTrafficLight(pct) };
+            }
+            
+            // Standard
+            let pct = (valor / meta) * 100;
+            return { pct, color: getTrafficLight(pct) };
+        }
+
+        function getTrafficLight(pct) {
+            if (pct >= 100) return 'green';
+            if (pct >= 80) return 'yellow';
+            return 'red';
+        }
+
+        function initNav() {
+            const nav = document.getElementById('nav-container');
+            perspectives.forEach(p => {
+                const btn = document.createElement('button');
+                btn.className = 'perspective-btn' + (p === 'Todas' ? ' active' : '');
+                btn.textContent = p;
+                btn.onclick = () => {
+                    document.querySelectorAll('.perspective-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentPerspective = p;
+                    renderDashboard();
+                };
+                nav.appendChild(btn);
+            });
+        }
+
+        function renderDashboard() {
+            const grid = document.getElementById('dashboard-grid');
+            grid.innerHTML = '';
+            
+            // Cleanup old charts
+            Object.values(charts).forEach(c => c.destroy());
+
+            Object.entries(kpiData).forEach(([kpiName, dataObj], index) => {
+                if (currentPerspective !== 'Todas' && dataObj.p !== currentPerspective) return;
+
+                // Sort data by date just in case
+                dataObj.data.sort((a,b) => new Date(a.f) - new Date(b.f));
+                
+                const latestData = dataObj.data[dataObj.data.length - 1];
+                const valor = latestData ? latestData.v : 0;
+                const meta = dataObj.m;
+                const unit = dataObj.u;
+                
+                const compliance = getComplianceLogic(kpiName, valor, meta);
+                
+                const card = document.createElement('div');
+                card.className = 'kpi-card';
+                card.innerHTML = `
+                    <div class="kpi-header">
+                        <div>
+                            <div class="kpi-title">${kpiName}</div>
+                            <div class="kpi-perspective">${dataObj.p}</div>
+                        </div>
+                        <div class="status-indicator bg-${compliance.color}" title="Cumplimiento: ${compliance.pct.toFixed(1)}%"></div>
+                    </div>
+                    <div class="kpi-stats">
+                        <div class="kpi-value-container">
+                            <div class="kpi-current-value text-${compliance.color}">${valor}${unit}</div>
+                            <div class="kpi-meta">Meta: ${meta}${unit}</div>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="chart-${index}"></canvas>
+                    </div>
+                `;
+                grid.appendChild(card);
+
+                // Render Chart
+                const ctx = document.getElementById(`chart-${index}`).getContext('2d');
+                const colorMap = {
+                    'green': '#10b981',
+                    'yellow': '#f59e0b',
+                    'red': '#ef4444'
+                };
+                
+                const chartColor = colorMap[compliance.color];
+                
+                charts[`chart-${index}`] = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dataObj.data.map(d => d.f.substring(0, 7)),
+                        datasets: [{
+                            label: 'Valor',
+                            data: dataObj.data.map(d => d.v),
+                            borderColor: chartColor,
+                            backgroundColor: chartColor + '33', // 20% opacity
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            pointHoverRadius: 4,
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false,
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.parsed.y} ${unit}`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: { display: false },
+                            y: { 
+                                display: false,
+                                min: kpiName === 'Glosas Facturacion' ? 0 : Math.min(...dataObj.data.map(d => d.v)) * 0.9,
+                                max: kpiName === 'Incidentes Criticos Seguridad' ? 5 : Math.max(meta, ...dataObj.data.map(d => d.v)) * 1.1
+                            }
+                        },
+                        interaction: {
+                            mode: 'nearest',
+                            axis: 'x',
+                            intersect: false
+                        }
+                    }
+                });
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initNav();
+            renderDashboard();
+        });
+    </script>
+</body>
+</html>
