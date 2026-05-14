@@ -136,6 +136,17 @@
         </div>
     </div>
 
+    <!-- MODAL INICIATIVA -->
+    <div class="overlay" id="ini-overlay" onclick="if(event.target===this)closeIniModal()">
+        <div class="modal">
+            <div class="modal-head" style="margin-bottom:8px;">
+                <div class="modal-title" id="i-title"></div>
+                <button class="modal-close" onclick="closeIniModal()">✕</button>
+            </div>
+            <div id="i-desc" style="font-size: 13px; color: var(--ink); line-height: 1.5; white-space: pre-wrap;"></div>
+        </div>
+    </div>
+
     <!-- MODAL INFORMACIÓN -->
     <div class="overlay" id="info-overlay" onclick="if(event.target===this)closeInfo()">
         <div class="modal info-modal">

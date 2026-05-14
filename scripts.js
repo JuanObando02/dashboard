@@ -448,12 +448,15 @@ function renderStrategicInfo(k) {
     }
     
     if (foundObj) {
-        let inisHtml = foundObj.iniciativas.map(i => `
+        let inisHtml = foundObj.iniciativas.map(i => {
+            const btn = i.descripcion ? `<button class="btn-strat" onclick="openIniModal(decodeURIComponent('${encodeURIComponent(i.nombre)}'), decodeURIComponent('${encodeURIComponent(i.descripcion)}'))" style="margin-left:8px;">Ver Descripción</button>` : '';
+            return `
             <div class="strat-ini">
-                <div class="strat-ini-name">• ${i.nombre}</div>
+                <div class="strat-ini-name">• ${i.nombre} ${btn}</div>
                 <div class="strat-ini-budget">Presupuesto: USD $${(i.presupuesto_usd / 1000000).toFixed(1)}M | COP $${(i.presupuesto_cop / 1000000).toFixed(1)}M</div>
             </div>
-        `).join('');
+            `;
+        }).join('');
         
         el.style.display = 'block';
         el.innerHTML = `
@@ -474,6 +477,17 @@ function renderStrategicInfo(k) {
     }
 }
 
+// ── MODAL INICIATIVA ───────────────────────────────────────
+function openIniModal(nombre, descripcion) {
+    document.getElementById('i-title').innerText = nombre;
+    document.getElementById('i-desc').innerText = descripcion;
+    document.getElementById('ini-overlay').classList.add('open');
+}
+
+function closeIniModal() {
+    document.getElementById('ini-overlay').classList.remove('open');
+}
+
 // ── MODAL PERSPECTIVA ──────────────────────────────────────
 function openPerspModal(pName) {
     if (!bscData || !bscData.perspectivas) return;
@@ -492,12 +506,15 @@ function openPerspModal(pName) {
     
     let objsHtml = '';
     p.objetivos.forEach(o => {
-        let inisHtml = o.iniciativas.map(i => `
+        let inisHtml = o.iniciativas.map(i => {
+            const btn = i.descripcion ? `<button class="btn-strat" onclick="openIniModal(decodeURIComponent('${encodeURIComponent(i.nombre)}'), decodeURIComponent('${encodeURIComponent(i.descripcion)}'))" style="margin-left:8px; display:inline-block;">Ver Descripción</button>` : '';
+            return `
             <div class="strat-ini-item">
-                • ${i.nombre}
+                • ${i.nombre} ${btn}
                 <span class="strat-ini-item-budget" style="color:${pc.color}">USD $${(i.presupuesto_usd / 1000000).toFixed(1)}M | COP $${(i.presupuesto_cop / 1000000).toFixed(1)}M</span>
             </div>
-        `).join('');
+            `;
+        }).join('');
         
         objsHtml += `
             <div class="strat-obj-card" style="margin-bottom:12px;">
