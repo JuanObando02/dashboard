@@ -69,6 +69,8 @@
                     <div class="chart-sub" id="main-sub">Haga clic en cualquier indicador del cuadro de mando</div>
                 </div>
                 <div class="chart-wrap"><canvas id="mainChart"></canvas></div>
+                <!-- NEW SECTION FOR STRATEGIC INFO -->
+                <div class="kpi-strategic-info" id="kpi-strat-info" style="display:none; margin-top:20px; padding-top:15px; border-top:1px dashed #2d3748;"></div>
             </div>
             <div class="chart-card">
                 <div class="chart-head">
@@ -78,6 +80,7 @@
                 <div class="chart-wrap"><canvas id="barChart"></canvas></div>
             </div>
         </div>
+
 
         <!-- BOTTOM ROW -->
         <div class="sec-label">Diagnóstico de avance y brechas</div>
@@ -118,6 +121,18 @@
             <div class="modal-stats" id="m-stats"></div>
             <div class="modal-chart"><canvas id="mChart"></canvas></div>
             <div class="modal-insight" id="m-insight"></div>
+        </div>
+    </div>
+
+    <!-- MODAL PERSPECTIVA -->
+    <div class="overlay" id="persp-overlay" onclick="if(event.target===this)closePerspModal()">
+        <div class="modal">
+            <div class="modal-head" style="margin-bottom:8px;">
+                <div class="modal-title" id="p-title"></div>
+                <button class="modal-close" onclick="closePerspModal()">✕</button>
+            </div>
+            <div class="strat-persp-budget" id="p-budget" style="font-size:12px; margin-bottom:18px;"></div>
+            <div id="p-content" style="max-height: 60vh; overflow-y: auto; padding-right: 8px;"></div>
         </div>
     </div>
 

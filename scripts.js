@@ -1,10 +1,33 @@
 // ═══════════════════════════════════════════════════════════
-// ═══════════════════════════════════════════════════════════
 // DATASET — cargado desde data_BSC_HDPUV.json
 // ═══════════════════════════════════════════════════════════
 let D = {};
+let bscData = null;
 
-// ═══════════════════════════════════════════════════════════
+// Funciones de utilidad para búsqueda
+function normalizeStr(str) {
+    return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, "");
+}
+function getWords(str) {
+    return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9\s]/g, " ").split(/\s+/).filter(w => w.length > 3);
+}
+function getMatchScore(str1, str2) {
+    const s1 = normalizeStr(str1);
+    const s2 = normalizeStr(str2);
+    if (s1 === s2) return 1.0;
+    if (s1.includes(s2) || s2.includes(s1)) return 0.9;
+    
+    const w1 = getWords(str1);
+    const w2 = getWords(str2);
+    if (w1.length === 0 || w2.length === 0) return 0;
+    
+    let intersection = 0;
+    const union = new Set([...w1, ...w2]);
+    for (const w of w1) {
+        if (w2.includes(w)) intersection++;
+    }
+    return intersection / union.size;
+}// ═══════════════════════════════════════════════════════════
 // CONFIG PERSPECTIVAS
 // ═══════════════════════════════════════════════════════════
 const PERSP = {
@@ -149,6 +172,7 @@ function renderBSC() {
         <div class="persp-head">
           <div class="persp-dot" style="background:${pc.color}"></div>
           <div class="persp-title">${pc.label}</div>
+          <button class="btn-strat" onclick="openPerspModal('${p}')">Objetivos e Iniciativas</button>
           <div class="persp-badge" style="background:${stBg(scCls)};color:${stColor(scCls)}">${sc}%</div>
         </div>
         ${rows}
@@ -341,7 +365,7 @@ function renderGauge() {
         const pctM = Math.min((m / maxScale) * 100, 100);
         const st = status(k);
         return `<div class="gauge-item">
-      <div class="gauge-label">${k.split(' ').slice(0, 3).join(' ')}</div>
+      <div class="gauge-label" title="${k}">${k}</div>
       <div class="gauge-track">
         <div class="gauge-fill" style="width:${pctV}%;background:${stColor(st)}"></div>
         <div class="gauge-lb" style="left:${pctLB}%" title="LB: ${fmt(k, lb)}"></div>
@@ -393,6 +417,105 @@ function selectKPI(k) {
     activeKPI = k;
     renderBSC();
     renderMain(k);
+    renderStrategicInfo(k);
+}
+
+// ── INFO ESTRATÉGICA ───────────────────────────────────────
+function renderStrategicInfo(k) {
+    const el = document.getElementById('kpi-strat-info');
+    if (!el || !bscData) return;
+    
+    let foundObj = null;
+    let foundPersp = null;
+    let bestScore = 0;
+    if (bscData.perspectivas) {
+        for (const persp of bscData.perspectivas) {
+            for (const obj of persp.objetivos) {
+                for (const kpi of obj.kpis) {
+                    const score = getMatchScore(kpi.nombre, k);
+                    if (score > bestScore) {
+                        bestScore = score;
+                        foundObj = obj;
+                        foundPersp = persp;
+                    }
+                }
+            }
+        }
+    }
+    
+    if (bestScore < 0.4) {
+        foundObj = null;
+    }
+    
+    if (foundObj) {
+        let inisHtml = foundObj.iniciativas.map(i => `
+            <div class="strat-ini">
+                <div class="strat-ini-name">• ${i.nombre}</div>
+                <div class="strat-ini-budget">Presupuesto: USD $${(i.presupuesto_usd / 1000000).toFixed(1)}M | COP $${(i.presupuesto_cop / 1000000).toFixed(1)}M</div>
+            </div>
+        `).join('');
+        
+        el.style.display = 'block';
+        el.innerHTML = `
+            <div class="strat-section">
+                <div class="strat-label">Objetivo Estratégico (${foundObj.id})</div>
+                <div class="strat-desc">${foundObj.descripcion}</div>
+            </div>
+            <div class="strat-section">
+                <div class="strat-label">Iniciativas Asociadas</div>
+                <div class="strat-inis">
+                    ${inisHtml}
+                </div>
+            </div>
+        `;
+    } else {
+        el.style.display = 'none';
+        el.innerHTML = '';
+    }
+}
+
+// ── MODAL PERSPECTIVA ──────────────────────────────────────
+function openPerspModal(pName) {
+    if (!bscData || !bscData.perspectivas) return;
+    
+    let targetName = pName;
+    if (pName === 'Procesos') targetName = 'Procesos internos';
+    if (pName === 'Aprendizaje') targetName = 'Aprendizaje y crecimiento';
+    
+    const p = bscData.perspectivas.find(x => x.nombre === targetName || x.nombre === pName);
+    if (!p) return;
+    
+    const pc = PERSP[pName] || { color: '#ffffff' };
+    
+    document.getElementById('p-title').innerHTML = `<span style="color:${pc.color}">Perspectiva:</span> ${p.nombre}`;
+    document.getElementById('p-budget').innerHTML = `Presupuesto asignado: USD $${(p.presupuesto_usd / 1000000).toFixed(1)}M | COP $${(p.presupuesto_cop / 1000000).toFixed(1)}M`;
+    
+    let objsHtml = '';
+    p.objetivos.forEach(o => {
+        let inisHtml = o.iniciativas.map(i => `
+            <div class="strat-ini-item">
+                • ${i.nombre}
+                <span class="strat-ini-item-budget" style="color:${pc.color}">USD $${(i.presupuesto_usd / 1000000).toFixed(1)}M | COP $${(i.presupuesto_cop / 1000000).toFixed(1)}M</span>
+            </div>
+        `).join('');
+        
+        objsHtml += `
+            <div class="strat-obj-card" style="margin-bottom:12px;">
+                <div class="strat-obj-id">${o.id}</div>
+                <div class="strat-obj-desc">${o.descripcion}</div>
+                <div class="strat-ini-list">
+                    ${inisHtml}
+                </div>
+            </div>
+        `;
+    });
+    
+    document.getElementById('p-content').innerHTML = objsHtml;
+    document.getElementById('persp-overlay').classList.add('open');
+}
+
+function closePerspModal() {
+    document.getElementById('persp-overlay').classList.remove('open');
 }
 
 // ── MODAL ──────────────────────────────────────────────────
@@ -542,20 +665,31 @@ function updateDateDisplay() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    fetch('data_BSC_HDPUV.json')
-        .then(r => {
+    Promise.all([
+        fetch('data_BSC_HDPUV.json').then(r => {
             if (!r.ok) throw new Error('No se pudo cargar data_BSC_HDPUV.json');
             return r.json();
+        }),
+        fetch('bsc_hdpuv.json').then(r => {
+            if (!r.ok) throw new Error('No se pudo cargar bsc_hdpuv.json');
+            return r.json();
+        }).catch(err => {
+            console.warn("Could not load bsc_hdpuv.json", err);
+            return null;
         })
-        .then(json => {
-            D = json;
-            init();
-        })
-        .catch(err => {
-            console.error(err);
-            document.body.innerHTML = `<div style="color:#ef4444;padding:40px;font-family:monospace">
-                <b>Error al cargar datos:</b> ${err.message}<br><br>
-                Asegúrate de servir el dashboard desde un servidor HTTP (no file://).
-            </div>`;
-        });
+    ])
+    .then(([dataJSON, bscJSON]) => {
+        D = dataJSON;
+        if (bscJSON && bscJSON.bsc) {
+            bscData = bscJSON.bsc;
+        }
+        init();
+    })
+    .catch(err => {
+        console.error(err);
+        document.body.innerHTML = `<div style="color:#ef4444;padding:40px;font-family:monospace">
+            <b>Error al cargar datos:</b> ${err.message}<br><br>
+            Asegúrate de servir el dashboard desde un servidor HTTP (no file://).
+        </div>`;
+    });
 });

@@ -1,0 +1,313 @@
+{
+  "bsc": {
+    "nombre": "BSC HDPUV - Ajustado",
+    "fecha": "2026-06-01",
+    "trm_usd_cop": 3794.91,
+    "trm_fecha": "2026-05-14",
+    "presupuesto_total_usd": 123100000,
+    "presupuesto_total_cop": 467063420000,
+    "perspectivas": [
+      {
+        "nombre": "Clientes",
+        "presupuesto_usd": 39700000,
+        "presupuesto_cop": 150567830000,
+        "objetivos": [
+          {
+            "id": "OB-C1",
+            "descripcion": "Mejorar la disponibilidad y calidad de los servicios tecnológicos institucionales",
+            "iniciativas": [
+              {
+                "id": "I3",
+                "nombre": "Servicios Digitales al Usuario",
+                "presupuesto_usd": 6100000,
+                "presupuesto_cop": 23148950000,
+                "descripcion": "Desarrollar y consolidar los canales digitales de atención e interacción para usuarios internos, pacientes y entidades externas, garantizando la disponibilidad, usabilidad y continuidad del HIS y demás sistemas institucionales, con foco en la experiencia del usuario y la accesibilidad de los servicios en línea."
+              }
+            ],
+            "kpis": [
+              {
+                "nombre": "Disponibilidad funcional y técnica del HIS",
+                "valor_actual": "65%"
+              }
+            ]
+          },
+          {
+            "id": "OB-C2",
+            "descripcion": "Incrementar la satisfacción de los usuarios frente a los sistemas institucionales",
+            "iniciativas": [
+              {
+                "id": "I3",
+                "nombre": "Servicios Digitales al Usuario",
+                "presupuesto_usd": 6100000,
+                "presupuesto_cop": 23148950000,
+                "descripcion": "Desarrollar y consolidar los canales digitales de atención e interacción para usuarios internos, pacientes y entidades externas, garantizando la disponibilidad, usabilidad y continuidad del HIS y demás sistemas institucionales, con foco en la experiencia del usuario y la accesibilidad de los servicios en línea."
+              }
+            ],
+            "kpis": [
+              {
+                "nombre": "Nivel de satisfacción (encuesta semestral)",
+                "valor_actual": "0%"
+              }
+            ]
+          },
+          {
+            "id": "OB-C3",
+            "descripcion": "Optimizar la atención y trazabilidad de la información clínica",
+            "iniciativas": [
+              {
+                "id": "I2",
+                "nombre": "Arquitectura Digital Integrada",
+                "presupuesto_usd": 15900000,
+                "presupuesto_cop": 60339570000,
+                "descripcion": "Diseñar e implementar una arquitectura tecnológica integrada que estandarice plataformas, protocolos de interoperabilidad y servicios compartidos, reduciendo la fragmentación de sistemas, eliminando tecnología obsoleta y habilitando la integración entre los sistemas clínicos, administrativos y externos del hospital."
+              },
+              {
+                "id": "I4",
+                "nombre": "Inteligencia y Datos",
+                "presupuesto_usd": 5600000,
+                "presupuesto_cop": 21251490000,
+                "descripcion": "Construir las capacidades analíticas e infraestructura de datos del hospital mediante la implementación de un gobierno del dato, modelos de inteligencia de negocios, integración de fuentes clínicas y administrativas, y herramientas de visualización que soporten la toma de decisiones clínicas y gerenciales."
+              }
+            ],
+            "kpis": [
+              {
+                "nombre": "Trazabilidad de registros clínicos completos y trazables",
+                "valor_actual": "62%"
+              }
+            ]
+          },
+          {
+            "id": "OB-C4",
+            "descripcion": "Mejorar la accesibilidad digital para pacientes y entidades externas",
+            "iniciativas": [
+              {
+                "id": "I3",
+                "nombre": "Servicios Digitales al Usuario",
+                "presupuesto_usd": 6100000,
+                "presupuesto_cop": 23148950000,
+                "descripcion": "Desarrollar y consolidar los canales digitales de atención e interacción para usuarios internos, pacientes y entidades externas, garantizando la disponibilidad, usabilidad y continuidad del HIS y demás sistemas institucionales, con foco en la experiencia del usuario y la accesibilidad de los servicios en línea."
+              }
+            ],
+            "kpis": [
+              {
+                "nombre": "Servicios accesibles por canal digital",
+                "valor_actual": "12%"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "nombre": "Procesos internos",
+        "presupuesto_usd": 34200000,
+        "presupuesto_cop": 129786000000,
+        "objetivos": [
+          {
+            "id": "OB-P1",
+            "descripcion": "Fortalecer el gobierno y la gestión estratégica de TI alineada al MIPG",
+            "iniciativas": [
+              {
+                "id": "I1",
+                "nombre": "Gobernanza y Estrategia TI",
+                "presupuesto_usd": 4800000,
+                "presupuesto_cop": 18215570000,
+                "descripcion": "Establecer el marco de gobernanza TI del hospital alineado al MIPG y al PETI, fortaleciendo la planeación estratégica, la gestión de portafolio de proyectos, la medición del desempeño tecnológico y la toma de decisiones basada en datos para optimizar el uso de los recursos institucionales."
+              },
+              {
+                "id": "I4",
+                "nombre": "Inteligencia y Datos",
+                "presupuesto_usd": 5600000,
+                "presupuesto_cop": 21251490000,
+                "descripcion": "Construir las capacidades analíticas e infraestructura de datos del hospital mediante la implementación de un gobierno del dato, modelos de inteligencia de negocios, integración de fuentes clínicas y administrativas, y herramientas de visualización que soporten la toma de decisiones clínicas y gerenciales."
+              }
+            ],
+            "kpis": [
+              {
+                "nombre": "Procesos TI documentados y formalizados",
+                "valor_actual": "45%"
+              },
+              {
+                "nombre": "Puntaje Subíndice FURAG de Gobernanza",
+                "valor_actual": "72.22"
+              }
+            ]
+          },
+          {
+            "id": "OB-P2",
+            "descripcion": "Mejorar la interoperabilidad institucional mediante una arquitectura tecnológica definida",
+            "iniciativas": [
+              {
+                "id": "I2",
+                "nombre": "Arquitectura Digital Integrada",
+                "presupuesto_usd": 15900000,
+                "presupuesto_cop": 60339570000,
+                "descripcion": "Diseñar e implementar una arquitectura tecnológica integrada que estandarice plataformas, protocolos de interoperabilidad y servicios compartidos, reduciendo la fragmentación de sistemas, eliminando tecnología obsoleta y habilitando la integración entre los sistemas clínicos, administrativos y externos del hospital."
+              }
+            ],
+            "kpis": [
+              {
+                "nombre": "Interoperabilidad entre sistemas",
+                "valor_actual": "20%"
+              },
+              {
+                "nombre": "Puntaje Subíndice FURAG de Arquitectura",
+                "valor_actual": "28.57"
+              }
+            ]
+          },
+          {
+            "id": "OB-P3",
+            "descripcion": "Fortalecer la seguridad y continuidad operativa de los servicios tecnológicos",
+            "iniciativas": [
+              {
+                "id": "I5",
+                "nombre": "Seguridad, Cambio y Cultura Digital",
+                "presupuesto_usd": 7900000,
+                "presupuesto_cop": 29979790000,
+                "descripcion": "Fortalecer la ciberseguridad institucional, la continuidad operativa y la cultura digital del personal, mediante la implementación del MSPI MinTIC, programas de formación y certificación en competencias digitales, gestión del cambio tecnológico y estrategias de apropiación de herramientas institucionales."
+              }
+            ],
+            "kpis": [
+              {
+                "nombre": "N° de incidentes críticos de seguridad",
+                "valor_actual": "10"
+              },
+              {
+                "nombre": "Nivel de cumplimiento MSPI MinTIC",
+                "valor_actual": "1.5"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "nombre": "Aprendizaje y crecimiento",
+        "presupuesto_usd": 23800000,
+        "presupuesto_cop": 90318860000,
+        "objetivos": [
+          {
+            "id": "OB-A1",
+            "descripcion": "Fortalecer las competencias digitales del personal institucional",
+            "iniciativas": [
+              {
+                "id": "I5",
+                "nombre": "Seguridad, Cambio y Cultura Digital",
+                "presupuesto_usd": 7900000,
+                "presupuesto_cop": 29979790000,
+                "descripcion": "Fortalecer la ciberseguridad institucional, la continuidad operativa y la cultura digital del personal, mediante la implementación del MSPI MinTIC, programas de formación y certificación en competencias digitales, gestión del cambio tecnológico y estrategias de apropiación de herramientas institucionales."
+              }
+            ],
+            "kpis": [
+              {
+                "nombre": "Personal que supera nivel básico en evaluación certificada de competencia digital (anual)",
+                "valor_actual": "30%"
+              }
+            ]
+          },
+          {
+            "id": "OB-A2",
+            "descripcion": "Mejorar la adopción y uso eficiente de herramientas tecnológicas",
+            "iniciativas": [
+              {
+                "id": "I5",
+                "nombre": "Seguridad, Cambio y Cultura Digital",
+                "presupuesto_usd": 7900000,
+                "presupuesto_cop": 29979790000,
+                "descripcion": "Fortalecer la ciberseguridad institucional, la continuidad operativa y la cultura digital del personal, mediante la implementación del MSPI MinTIC, programas de formación y certificación en competencias digitales, gestión del cambio tecnológico y estrategias de apropiación de herramientas institucionales."
+              }
+            ],
+            "kpis": [
+              {
+                "nombre": "% del personal capacitado y activo mensualmente en plataformas institucionales",
+                "valor_actual": "42%"
+              }
+            ]
+          },
+          {
+            "id": "OB-A3",
+            "descripcion": "Impulsar una cultura de transformación digital institucional",
+            "iniciativas": [
+              {
+                "id": "I5",
+                "nombre": "Seguridad, Cambio y Cultura Digital",
+                "presupuesto_usd": 7900000,
+                "presupuesto_cop": 29979790000,
+                "descripcion": "Fortalecer la ciberseguridad institucional, la continuidad operativa y la cultura digital del personal, mediante la implementación del MSPI MinTIC, programas de formación y certificación en competencias digitales, gestión del cambio tecnológico y estrategias de apropiación de herramientas institucionales."
+              }
+            ],
+            "kpis": [
+              {
+                "nombre": "Puntaje Subíndice FURAG de Cultura y Apropiación",
+                "valor_actual": "87.5"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "nombre": "Finanzas",
+        "presupuesto_usd": 25400000,
+        "presupuesto_cop": 96390710000,
+        "objetivos": [
+          {
+            "id": "OB-F1",
+            "descripcion": "Optimizar el uso de los recursos tecnológicos institucionales",
+            "iniciativas": [
+              {
+                "id": "I1",
+                "nombre": "Gobernanza y Estrategia TI",
+                "presupuesto_usd": 4800000,
+                "presupuesto_cop": 18215570000,
+                "descripcion": "Establecer el marco de gobernanza TI del hospital alineado al MIPG y al PETI, fortaleciendo la planeación estratégica, la gestión de portafolio de proyectos, la medición del desempeño tecnológico y la toma de decisiones basada en datos para optimizar el uso de los recursos institucionales."
+              }
+            ],
+            "kpis": [
+              {
+                "nombre": "% del presupuesto TI ejecutado en proyectos alineados al PETI",
+                "valor_actual": "62%"
+              }
+            ]
+          },
+          {
+            "id": "OB-F2",
+            "descripcion": "Reducir costos operativos asociados a obsolescencia tecnológica",
+            "iniciativas": [
+              {
+                "id": "I2",
+                "nombre": "Arquitectura Digital Integrada",
+                "presupuesto_usd": 15900000,
+                "presupuesto_cop": 60339570000,
+                "descripcion": "Diseñar e implementar una arquitectura tecnológica integrada que estandarice plataformas, protocolos de interoperabilidad y servicios compartidos, reduciendo la fragmentación de sistemas, eliminando tecnología obsoleta y habilitando la integración entre los sistemas clínicos, administrativos y externos del hospital."
+              }
+            ],
+            "kpis": [
+              {
+                "nombre": "Reducción de costos de mantenimiento",
+                "valor_actual": "195800000"
+              }
+            ]
+          },
+          {
+            "id": "OB-F3",
+            "descripcion": "Priorizar inversiones TI alineadas a objetivos institucionales",
+            "iniciativas": [
+              {
+                "id": "I1",
+                "nombre": "Gobernanza y Estrategia TI",
+                "presupuesto_usd": 4800000,
+                "presupuesto_cop": 18215570000,
+                "descripcion": "Establecer el marco de gobernanza TI del hospital alineado al MIPG y al PETI, fortaleciendo la planeación estratégica, la gestión de portafolio de proyectos, la medición del desempeño tecnológico y la toma de decisiones basada en datos para optimizar el uso de los recursos institucionales."
+              }
+            ],
+            "kpis": [
+              {
+                "nombre": "Proyectos TI alineados al PETI-FURAG",
+                "valor_actual": "100"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
