@@ -55,6 +55,10 @@ function fmt(k, v) {
 function slice(k) {
     const all = D[k].data.filter(x => x.f <= filterDate);
     if (activePeriod === 0) return all;
+    if (activePeriod === 'YTD') {
+        const year = filterDate.slice(0, 4);
+        return all.filter(x => x.f.startsWith(year));
+    }
     return all.slice(-activePeriod);
 }
 
@@ -239,8 +243,10 @@ function renderBar() {
 function renderRadar() {
     const ctx = document.getElementById('radarChart').getContext('2d');
     if (chartRadar) chartRadar.destroy();
-    const labels = Object.keys(PERSP).map(p => PERSP[p].label.split(' ')[0]);
-    // 2024: tomar primer valor de cada KPI, calcular cumpl. teórico
+    
+    // Labels más descriptivos para el radar
+    const labels = Object.keys(PERSP).map(p => PERSP[p].label);
+    
     const initData = Object.keys(PERSP).map(p => {
         const ks = Object.keys(D).filter(k => D[k].p === p);
         const avg = ks.reduce((s, k) => {
@@ -250,31 +256,73 @@ function renderRadar() {
         }, 0) / ks.length;
         return Math.round(avg);
     });
-    const now = Object.keys(PERSP).map(p => Math.min(perspScore(p), 100));
+    
+    const now = Object.keys(PERSP).map(p => Math.min(perspScore(p), 110));
+    
     chartRadar = new Chart(ctx, {
         type: 'radar',
         data: {
             labels,
             datasets: [
                 {
-                    label: 'Inicio 2024', data: initData,
-                    borderColor: '#475569', backgroundColor: '#CBD5E120', borderWidth: 1.5, pointRadius: 3
+                    label: 'Inicio 2024',
+                    data: initData,
+                    borderColor: '#64748b',
+                    backgroundColor: 'rgba(100, 116, 139, 0.15)',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    fill: true
                 },
                 {
-                    label: 'Corte seleccionado', data: now,
-                    borderColor: '#00d4ff', backgroundColor: '#00d4ff20', borderWidth: 2, pointRadius: 4
+                    label: 'Corte actual',
+                    data: now,
+                    borderColor: '#00d4ff',
+                    backgroundColor: 'rgba(0, 212, 255, 0.25)',
+                    borderWidth: 3,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#00d4ff',
+                    fill: true
                 }
             ]
         },
         options: {
-            responsive: true, maintainAspectRatio: false,
-            plugins: { legend: { labels: { color: '#94a3b8', font: { size: 10, family: 'DM Mono' } } } },
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: { 
+                        color: '#94a3b8', 
+                        font: { size: 12, weight: '500' },
+                        padding: 20
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: (ctx) => `${ctx.dataset.label}: ${ctx.raw}%`
+                    }
+                }
+            },
             scales: {
                 r: {
-                    ticks: { color: '#64748b', font: { size: 8 }, stepSize: 25 },
-                    grid: { color: '#1e2a3a' },
-                    pointLabels: { color: '#94a3b8', font: { size: 11 } },
-                    min: 0, max: 110
+                    angleLines: { color: 'rgba(255, 255, 255, 0.08)' },
+                    grid: { color: 'rgba(255, 255, 255, 0.08)' },
+                    ticks: {
+                        display: true,
+                        color: '#64748b',
+                        font: { size: 10 },
+                        stepSize: 20,
+                        showLabelBackdrop: false,
+                        backdropColor: 'transparent'
+                    },
+                    pointLabels: {
+                        color: '#cbd5e1',
+                        font: { size: 13, weight: '600' },
+                        padding: 15
+                    },
+                    min: 0,
+                    max: 100, // Limitar a 100 para claridad, los valores superiores se verán al borde
+                    beginAtZero: true
                 }
             }
         }
@@ -421,6 +469,9 @@ Estado: <strong style="color:${stc}">${st === 'g' ? 'En meta ✓' : st === 'y' ?
 
 function closeModal() { document.getElementById('overlay').classList.remove('open'); }
 
+function openInfo() { document.getElementById('info-overlay').classList.add('open'); }
+function closeInfo() { document.getElementById('info-overlay').classList.remove('open'); }
+
 // ── PERÍODO ────────────────────────────────────────────────
 function setPeriod(n, btn) {
     activePeriod = n;
@@ -440,7 +491,7 @@ document.addEventListener('dblclick', e => {
 
 // ── INIT ──────────────────────────────────────────────────
 function init() {
-    Chart.defaults.font.family = 'DM Mono';
+    Chart.defaults.font.family = 'Outfit';
     
     // Extraer todas las fechas únicas
     const dateSet = new Set();
