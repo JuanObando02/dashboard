@@ -1,61 +1,52 @@
-# 📊 HDPUV - CIO Strategic Dashboard
+# 📊 Dashboard Estratégico HDPUV — PETI 2026–2029
 
-![Python](https://img.shields.io/badge/Python-3.8+-blue?style=for-the-badge&logo=python&logoColor=white)
-![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white)
-![Plotly](https://img.shields.io/badge/Plotly-3F4F75?style=for-the-badge&logo=plotly&logoColor=white)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Chart.js](https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white)
 
 ## 📝 Descripción
-Este proyecto es un **Dashboard Estratégico de TI** desarrollado para el Hospital Departamental Psiquiátrico Universitario del Valle (HDPUV). Está diseñado para proporcionar al CIO una visión integral y de alto nivel sobre el desempeño del departamento de tecnología, alineando los indicadores técnicos con los objetivos institucionales.
+Este es el **Dashboard Estratégico de TI** para el Hospital Departamental Psiquiátrico Universitario del Valle (HDPUV), diseñado para el seguimiento del Plan Estratégico de Tecnologías de la Información (PETI) 2026-2029. 
 
-La herramienta permite visualizar la evolución de indicadores clave (KPIs) desde el año 2024 hasta proyecciones para el 2029, facilitando la toma de decisiones basada en datos.
+La herramienta proporciona una visualización de alto nivel (Balance Scorecard) para el CIO, permitiendo monitorear métricas clave en tiempo real a través de una interfaz moderna, oscura y altamente interactiva.
 
 ## 🚀 Características Principales
 
-### 🎯 Perspectivas Estratégicas
-El dashboard se organiza en cinco pestañas interactivas:
-1.  **💰 Finanzas de TI**: Análisis del TCO (Total Cost of Ownership), ROI de proyectos tecnológicos y cumplimiento del presupuesto.
-2.  **🛡️ Ciberseguridad**: Monitoreo de incidentes, métricas de respuesta (MTTD y MTTR) y el índice de postura de seguridad (Cyber Score).
-3.  **⚙️ Desempeño Operativo**: Eficiencia del service desk, tasa de resolución en el primer contacto (FCR) y volumen de tickets.
-4.  **🤝 Satisfacción Cliente**: Experiencia del usuario medida a través de CSAT, NPS y CES.
-5.  **🌐 TI Unificado**: Salud de la infraestructura, disponibilidad de sistemas críticos y cumplimiento de parches.
+### 🎯 Perspectivas del Balanced Scorecard (BSC)
+El dashboard visualiza indicadores en cuatro dimensiones críticas:
+1.  **👥 Clientes**: Nivel de satisfacción, servicios digitales y trazabilidad clínica.
+2.  **⚙️ Procesos Internos**: Gobernanza TI, interoperabilidad, arquitectura y seguridad.
+3.  **🌱 Aprendizaje y Crecimiento**: Competencias digitales y cultura de apropiación.
+4.  **💰 Finanzas**: Ejecución presupuestal PETI y reducción de costos operativos.
 
-### Estética 
-- **Glassmorphism**: Tarjetas de métricas con efectos de transparencia y desenfoque.
-- **Interactividad**: Gráficos dinámicos que responden al filtrado por rango de fechas.
-- **Diseño Responsivo**: Adaptable a diferentes tamaños de pantalla y compatible con modo oscuro.
+### ✨ Estética y UX
+- **Premium Dark Theme**: Diseño optimizado para baja fatiga visual con estética de vanguardia.
+- **Glassmorphism**: Componentes con efectos de transparencia y desenfoque.
+- **Carga Dinámica**: Los datos se cargan de forma asíncrona desde un archivo JSON externo, desacoplando la lógica de la información.
+- **Interactividad Total**: Filtrado por periodos, tooltips detallados y modales de análisis profundo para cada KPI.
 
 ## 🛠️ Stack Tecnológico
-- **Frontend/Backend**: [Streamlit](https://streamlit.io/)
-- **Visualización**: [Plotly Express](https://plotly.com/python/plotly-express/) & [Plotly Graph Objects](https://plotly.com/python/graph-objects/)
-- **Análisis de Datos**: [Pandas](https://pandas.pydata.org/) & [NumPy](https://numpy.org/)
-
-## 📊 Estructura del Dataset
-El proyecto utiliza el archivo `Dataset_BSC_HDPUV_Enriquecido.csv`, el cual contiene las siguientes dimensiones:
-
-| Columna | Descripción |
-| :--- | :--- |
-| `Fecha` | Mes y año del registro (YYYY-MM-DD) |
-| `Perspectiva` | Categoría estratégica (Finanzas, Procesos, Clientes, etc.) |
-| `KPI` | Nombre del indicador de desempeño |
-| `Valor` | Resultado obtenido o proyectado |
-| `Meta` | Objetivo esperado para el periodo |
-| `Unidad` | Unidad de medida (%, $, Horas, etc.) |
-
-## 📦 Instalación y Ejecución
-
-1.  Asegúrate de tener Python instalado.
-2.  Instala las dependencias:
-    ```bash
-    pip install streamlit pandas numpy plotly
-    ```
-3.  Ejecuta la aplicación:
-    ```bash
-    streamlit run dashboard_cio.py
-    ```
+- **Core**: HTML5 semántico y CSS3 (Vanilla) con variables modernas.
+- **Lógica**: JavaScript ES6+ (Fetch API para datos dinámicos).
+- **Visualización**: [Chart.js](https://www.chartjs.org/) para gráficos dinámicos y responsivos.
 
 ## 📂 Estructura de Archivos
-- `dashboard_cio.py`: Script principal de la aplicación Streamlit.
-- `Dataset_BSC_HDPUV_Enriquecido.csv`: Dataset con datos históricos y proyectados.
-- `Scrip1.py`: Scripts auxiliares de procesamiento de datos.
+- `index.html`: Aplicación principal (Estructura, Estilos y Lógica).
+- `data_BSC_HDPUV.json`: Dataset centralizado que alimenta el dashboard.
+- `assets/`: (Opcional) Imágenes y recursos visuales.
+
+## 📦 Ejecución Local
+
+Debido a que el dashboard utiliza la Fetch API para cargar datos externos (`.json`), los navegadores bloquean la carga por políticas de seguridad (CORS) si se abre el archivo directamente desde el sistema de archivos (`file://`).
+
+**Para ejecutarlo correctamente:**
+
+1. Abre una terminal en la carpeta del proyecto.
+2. Inicia un servidor web local (ejemplo con Python):
+   ```bash
+   python -m http.server 8080
+   ```
+3. Abre tu navegador en: [http://localhost:8080](http://localhost:8080)
 
 ---
+Desarrollado para el fortalecimiento tecnológico del HDPUV.
