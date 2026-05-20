@@ -27,6 +27,11 @@ def load_external_dashboard_json():
         if path and os.path.exists(path):
             try:
                 with open(path, 'r', encoding='utf-8') as f:
+                    raw_data = json.load(f)
+                    
+                    if isinstance(raw_data, list) and len(raw_data) > 0:
+                        return raw_data[0], None  # <--- Retornamos el diccionario puro
+                    
                     return json.load(f), None
             except Exception as e:
                 return None, f"Error al decodificar JSON en {path}: {str(e)}"
