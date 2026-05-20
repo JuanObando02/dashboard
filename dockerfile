@@ -16,4 +16,4 @@ RUN echo "=== MOSTRANDO TODO EL CONTENIDO DEL REPOSITORIO ===" && find . -maxdep
 EXPOSE 8501
 
 # Comando para arrancar Streamlit deshabilitando bloqueos de CORS de Docker
-CMD ["streamlit", "run", "dashboardStreamlit.py", "--server.port=8501", "--server.address=0.0.0.0"]
+CMD ["streamlit", "run", "dashboardStream.py", "--server.port=8501", "--server.address=0.0.0.0"]
