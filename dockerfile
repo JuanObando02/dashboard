@@ -8,6 +8,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copiar el código del dashboard
 COPY . .
+# --- ESTO IMPRIMIRÁ LOS ARCHIVOS EN EL LOG DE COOLIFY ---
+RUN echo "=== MOSTRANDO ARCHIVOS EN /app ===" && ls -la /app
+RUN echo "=== MOSTRANDO TODO EL CONTENIDO DEL REPOSITORIO ===" && find . -maxdepth 3
 
 # Exponer el puerto por defecto de Streamlit
 EXPOSE 8501
