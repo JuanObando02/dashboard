@@ -6,6 +6,9 @@ import seaborn as sns
 import json
 import os
 
+
+JSON_PATH = '/app/data/dashboard.json'
+
 # Evitar advertencias de downcasting en pandas futuras
 pd.set_option('future.no_silent_downcasting', True)
 
