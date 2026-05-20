@@ -7,8 +7,13 @@ import json
 import os
 import textwrap
 
+LOCAL_JSON_PATH = 'data/dashboard.json'
+VPS_JSON_PATH = '/app/data/dashboard.json'
 
-JSON_PATH = '/app/data/dashboard.json'
+if os.path.exists(LOCAL_JSON_PATH):
+    JSON_PATH = LOCAL_JSON_PATH
+else:
+    JSON_PATH = VPS_JSON_PATH
 
 def load_external_dashboard_json():
     # Intentar cargar desde la ruta absoluta de Docker y luego rutas relativas locales
