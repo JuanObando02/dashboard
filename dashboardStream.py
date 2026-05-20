@@ -5,9 +5,27 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import json
 import os
+import textwrap
 
 
 JSON_PATH = '/app/data/dashboard.json'
+
+def load_external_dashboard_json():
+    # Intentar cargar desde la ruta absoluta de Docker y luego rutas relativas locales
+    paths_to_try = [
+        JSON_PATH,
+        'data/dashboard.json',
+        './data/dashboard.json',
+        os.path.join(os.path.dirname(__file__), 'data', 'dashboard.json')
+    ]
+    for path in paths_to_try:
+        if path and os.path.exists(path):
+            try:
+                with open(path, 'r', encoding='utf-8') as f:
+                    return json.load(f), None
+            except Exception as e:
+                return None, f"Error al decodificar JSON en {path}: {str(e)}"
+    return None, f"No se encontró el archivo de datos del Dashboard en ninguna de las siguientes rutas:\n" + "\n".join([f"- {p}" for p in paths_to_try])
 
 # Evitar advertencias de downcasting en pandas futuras
 pd.set_option('future.no_silent_downcasting', True)
@@ -362,13 +380,14 @@ st.markdown("#### Plan Estratégico de Tecnologías de la Información (PETI) 20
 st.divider()
 
 # Definición de pestañas
-tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
+tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
     "💰 Finanzas de TI",
     "🛡️ Ciberseguridad",
     "⚙️ Desempeño Operativo",
     "🤝 Satisfacción Cliente",
     "🌐 TI Unificado",
-    "🏛️ Gobernanza ISO 38500"
+    "🏛️ Gobernanza ISO 38500",
+    "🎓 Dashboard ISO 38500 (USC)"
 ])
 
 # --- TAB 1: FINANZAS DE TI ---
@@ -1067,6 +1086,255 @@ with tab6:
             text.set_color('#cbd5e1')
         plt.tight_layout()
         st.pyplot(fig_mon)
+
+# --- TAB 7: DASHBOARD ISO 38500 (USC) ---
+with tab7:
+    col_header, col_refresh = st.columns([3, 1])
+    with col_header:
+        st.subheader("🎓 Gobernanza Corporativa de TI - Universidad Santiago de Cali")
+    with col_refresh:
+        st.markdown("<div style='padding-top: 10px;'></div>", unsafe_allow_html=True)
+        if st.button("🔄 Actualizar Datos", key="refresh_usc_dashboard", use_container_width=True):
+            st.rerun()
+            
+    st.markdown(
+        "Este panel presenta los indicadores y objetivos de gobernanza de TI de la **Universidad Santiago de Cali**, "
+        "generados y actualizados automáticamente por flujos de integración en **n8n** bajo la norma **ISO 38500:2024**."
+    )
+    
+    # Cargar datos JSON de forma robusta
+    data_json, err_msg = load_external_dashboard_json()
+    
+    if err_msg:
+        # Pantalla de Error Hermosa y Descriptiva si no se encuentran datos
+        error_template = textwrap.dedent("""
+        <div style="background-color: #3b0712; border: 2px solid #991b1b; padding: 25px; border-radius: 12px; margin: 20px 0;">
+            <h3 style="color: #f87171; margin-top: 0; font-weight: bold;">⚠️ Error de Conexión de Datos</h3>
+            <p style="color: #fca5a5; font-size: 14px;">
+                No se pudo cargar la información del servidor de integración. El archivo de origen no está disponible o presenta problemas de formato.
+            </p>
+            <div style="background-color: #1e1b1b; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 12px; color: #f87171; white-space: pre-wrap; margin: 15px 0; border: 1px solid #7f1d1d;">
+                {err_msg}
+            </div>
+            <p style="color: #cbd5e1; font-size: 13px; margin-bottom: 0;">
+                💡 <b>Instrucciones de soporte:</b> Asegúrate de que el flujo de integración de <b>n8n</b> haya generado el archivo en la ruta <code>/app/data/dashboard.json</code> dentro del servidor o que exista una copia en <code>data/dashboard.json</code> para pruebas locales.
+            </p>
+        </div>
+        """)
+        st.markdown(error_template.format(err_msg=err_msg), unsafe_allow_html=True)
+    else:
+        # Extraer elementos del JSON cargado correctamente
+        metadata = data_json.get("metadata", {})
+        kpis = data_json.get("kpis", [])
+        principios = data_json.get("principios_iso38500", {})
+        resumen = data_json.get("resumen_ejecutivo", {})
+        
+        # Fila de metadatos del sistema
+        col_meta1, col_meta2, col_meta3 = st.columns([2, 1, 1])
+        with col_meta1:
+            st.markdown(f"**🏢 Organización:** `{metadata.get('organizacion', 'N/A')}`")
+        with col_meta2:
+            st.markdown(f"**📜 Norma:** `{metadata.get('iso_version', 'N/A')}`")
+        with col_meta3:
+            st.markdown(f"**⚙️ Origen:** `{metadata.get('generado_por', 'N/A')}`")
+            
+        st.caption(f"📅 Generado el: {metadata.get('generado_en', 'N/A')} | Última actualización: {resumen.get('ultima_actualizacion', 'N/A')}")
+        st.divider()
+        
+        # Resumen Ejecutivo - Tarjetas
+        st.markdown("### 📈 Resumen Ejecutivo (n8n)")
+        col_res1, col_res2, col_res3, col_res4 = st.columns(4)
+        
+        col_res1.metric(
+            label="Total Indicadores (KPIs)",
+            value=resumen.get("total_kpis", 0)
+        )
+        col_res2.metric(
+            label="KPIs en Meta Destino",
+            value=resumen.get("kpis_en_meta", 0),
+            delta=f"{resumen.get('kpis_en_meta', 0)} de {resumen.get('total_kpis', 0)}"
+        )
+        col_res3.metric(
+            label="Objetivos Estratégicos Activos",
+            value=resumen.get("objetivos_activos", 0)
+        )
+        col_res4.metric(
+            label="Contratos de Adquisición Activos",
+            value=resumen.get("contratos_activos", 0)
+        )
+        
+        st.divider()
+        
+        # Cuadrícula de KPIs Estilizados
+        st.markdown("### 📊 Indicadores Clave de Rendimiento (KPIs)")
+        kpi_cols = st.columns(4)
+        for i, kpi in enumerate(kpis):
+            with kpi_cols[i % 4]:
+                # Análisis de tendencia
+                trend = kpi.get("tendencia", "stable")
+                if trend == "up":
+                    trend_icon = "▲ UP"
+                    trend_color = "#10b981"  # Verde esmeralda
+                elif trend == "down":
+                    trend_icon = "▼ DOWN"
+                    # Para k4 (incidentes), que baje es positivo!
+                    if kpi.get("id") == "k4":
+                        trend_color = "#10b981"
+                    else:
+                        trend_color = "#f43f5e"
+                else:
+                    trend_icon = "■ STABLE"
+                    trend_color = "#94a3b8"
+                
+                cumplimiento = kpi.get("cumplimiento_pct")
+                cump_str = f"{cumplimiento}%" if cumplimiento is not None else "N/A"
+                
+                # Barra de progreso visual para cumplimiento
+                cump_html = ""
+                if cumplimiento is not None:
+                    cump_html = (
+                        f'<div style="margin-top: 12px;">'
+                        f'<div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 3px; color: #cbd5e1;">'
+                        f'<span>Cumplimiento:</span>'
+                        f'<span style="font-weight: bold; color: #10b981;">{cump_str}</span>'
+                        f'</div>'
+                        f'<div style="background-color: #334155; border-radius: 4px; height: 6px; overflow: hidden;">'
+                        f'<div style="background-color: #10b981; width: {cumplimiento}%; height: 100%;"></div>'
+                        f'</div>'
+                        f'</div>'
+                    )
+                else:
+                    cump_html = (
+                        '<div style="margin-top: 12px; font-size: 11px; color: #94a3b8;">'
+                        'Cumplimiento: <span style="font-style: italic;">No aplica (Meta = 0)</span>'
+                        '</div>'
+                    )
+                
+                card_template = (
+                    '<div style="background-color: #1e293b; border: 1px solid #334155; padding: 18px; border-radius: 12px; min-height: 195px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">'
+                    '<div>'
+                    '<div style="font-size: 11px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">'
+                    '{principio}'
+                    '</div>'
+                    '<h4 style="margin: 0 0 10px 0; font-size: 15px; font-weight: 700; color: #f8fafc; line-height: 1.3;">'
+                    '{nombre}'
+                    '</h4>'
+                    '</div>'
+                    '<div>'
+                    '<div style="font-size: 26px; font-weight: bold; color: #f8fafc; margin-bottom: 4px;">'
+                    '{valor} <span style="font-size: 13px; font-weight: 500; color: #94a3b8;">{unidad}</span>'
+                    '</div>'
+                    '<div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #cbd5e1;">'
+                    '<span>Meta: <b>{meta}</b></span>'
+                    '<span style="color: {trend_color}; font-weight: bold; font-size: 11px;">{trend_icon}</span>'
+                    '</div>'
+                    '{cump_html}'
+                    '</div>'
+                    '</div>'
+                )
+                
+                st.markdown(card_template.format(
+                    principio=kpi.get('principio'),
+                    nombre=kpi.get('nombre'),
+                    valor=kpi.get('valor'),
+                    unidad=kpi.get('unidad'),
+                    meta=kpi.get('meta'),
+                    trend_color=trend_color,
+                    trend_icon=trend_icon,
+                    cump_html=cump_html
+                ), unsafe_allow_html=True)
+                
+        st.divider()
+        
+        # Desglose Detallado por Principios ISO 38500
+        st.markdown("### 🏛️ Principios Rectores ISO 38500 (USC)")
+        
+        # 1. Estrategia (Strategy)
+        strat_info = principios.get("strategy", {})
+        with st.expander(f"📍 Principio: **{strat_info.get('nombre', 'Estrategia')}** ({len(strat_info.get('objetivos', []))} Objetivos Activos)"):
+            st.markdown(
+                "La dirección debe evaluar y alinear la estrategia de TI con las metas de la organización para asegurar la creación de valor."
+            )
+            for obj in strat_info.get("objetivos", []):
+                col_obj1, col_obj2 = st.columns([3, 1])
+                with col_obj1:
+                    st.markdown(f"**🎯 {obj.get('id')}: {obj.get('objetivo')}**")
+                    st.caption(obj.get("descripcion"))
+                with col_obj2:
+                    st.markdown(f"**Estado:** `{obj.get('estado')}`")
+                    st.caption(f"Fin: {obj.get('fecha_fin')}")
+                
+                # Barra de progreso
+                avance = obj.get("avance", 0)
+                st.progress(avance / 100.0)
+                st.markdown(f"<span style='font-size:12px; color:#cbd5e1;'>Progreso actual: <b>{avance}%</b></span>", unsafe_allow_html=True)
+                st.divider()
+                
+        # 2. Adquisición (Acquisition)
+        acq_info = principios.get("acquisition", {})
+        with st.expander(f"📍 Principio: **{acq_info.get('nombre', 'Adquisición')}** (Presupuesto total asignado: COP ${acq_info.get('valor_total_cop', 0):,})"):
+            st.markdown(
+                "Las adquisiciones de TI deben ser transparentes, equilibradas y basadas en un análisis costo-beneficio riguroso."
+            )
+            
+            contracts = acq_info.get("contratos", [])
+            if contracts:
+                # Renderizar tabla HTML elegante de contratos
+                table_rows = ""
+                for c in contracts:
+                    table_rows += (
+                        f'<tr style="border-bottom: 1px solid #334155; font-size: 13px;">'
+                        f'<td style="padding: 10px 5px; color: #3b82f6; font-weight: bold;">{c.get("contrato")}</td>'
+                        f'<td style="padding: 10px 5px; color: #f8fafc;">{c.get("proveedor")}</td>'
+                        f'<td style="padding: 10px 5px; color: #10b981; font-weight: bold;">COP ${c.get("valor_cop", 0):,}</td>'
+                        f'<td style="padding: 10px 5px; color: #cbd5e1;"><span style="background-color: #064e3b; color: #10b981; padding: 2px 6px; border-radius: 4px; font-size: 11px;">{c.get("estado")}</span></td>'
+                        f'<td style="padding: 10px 5px; color: #94a3b8;">{c.get("modalidad")}</td>'
+                        f'</tr>'
+                    )
+                
+                table_template = textwrap.dedent("""
+                <table style="width: 100%; border-collapse: collapse; text-align: left; margin-top: 10px;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid #334155; font-size: 12px; color: #94a3b8; text-transform: uppercase;">
+                            <th style="padding: 8px 5px;">Contrato</th>
+                            <th style="padding: 8px 5px;">Proveedor</th>
+                            <th style="padding: 8px 5px;">Valor (COP)</th>
+                            <th style="padding: 8px 5px;">Estado</th>
+                            <th style="padding: 8px 5px;">Modalidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {table_rows}
+                    </tbody>
+                </table>
+                """)
+                st.markdown(table_template.format(table_rows=table_rows), unsafe_allow_html=True)
+            else:
+                st.info("No hay contratos activos registrados en el periodo actual.")
+                
+        # 3. Desempeño (Performance)
+        perf_info = principios.get("performance", {})
+        with st.expander(f"📍 Principio: **{perf_info.get('nombre', 'Desempeño')}**"):
+            st.markdown(
+                "El desempeño de TI debe asegurar que las tecnologías de la información den el soporte adecuado y oportuno a la entidad."
+            )
+            st.info("ℹ️ No hay servicios operativos en monitoreo registrados bajo este principio en la actual actualización del servidor.")
+            
+        # 4. Conformidad (Conformance)
+        conf_info = principios.get("conformance", {})
+        with st.expander(f"📍 Principio: **{conf_info.get('nombre', 'Conformidad')}**"):
+            st.markdown(
+                "Las TI deben cumplir con todas las políticas internas, regulaciones gubernamentales y normas externas aplicables."
+            )
+            st.info("ℹ️ No hay controles de auditoría o conformidad activos reportados bajo este principio en la actual actualización del servidor.")
+            
+        # 5. Comportamiento Humano (Human Behaviour)
+        hum_info = principios.get("human_behaviour", {})
+        with st.expander(f"📍 Principio: **{hum_info.get('nombre', 'Comportamiento Humano')}**"):
+            st.markdown(
+                "Las políticas, prácticas y decisiones de TI deben respetar el comportamiento humano y las necesidades de todas las personas de la entidad."
+            )
+            st.info("ℹ️ No hay programas de capacitación o cultura digital programados bajo este principio en la actual actualización del servidor.")
 
 # --- 9. PIE DE PÁGINA ---
 st.divider()
