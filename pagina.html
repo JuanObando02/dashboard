@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Estratégico - Gobierno de TI (ISO 38500)</title>
+    <!-- Tailwind CSS vía CDN para prototipado rápido -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js para simular donde irían las gráficas -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="bg-gray-100 text-gray-800 font-sans">
+
+    <!-- Navbar / Header Ejecutivo -->
+    <nav class="bg-blue-900 text-white p-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold">Gobierno de TI - Hospital Departamental</h1>
+                <p class="text-sm text-blue-200">Panel Ejecutivo CIO | Basado en ISO 38500</p>
+            </div>
+            <div class="text-right text-sm">
+                <p>Última actualización: <strong>Mayo 2026</strong></p>
+                <p class="text-green-400 font-semibold">Estado Global: Óptimo</p>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-4 mt-4">
+
+        <!-- Sección 1: Los 6 Principios de la ISO 38500 -->
+        <h2 class="text-xl font-bold mb-4 text-gray-700">Cumplimiento por Principios ISO 38500</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+            <!-- Principio 1 -->
+            <div class="bg-white p-4 rounded-lg shadow border-t-4 border-blue-500">
+                <h3 class="text-xs font-bold text-gray-500 uppercase">Responsabilidad</h3>
+                <p class="text-2xl font-black text-gray-800 mt-2">85%</p>
+                <p class="text-xs text-green-500 mt-1">▲ En meta</p>
+            </div>
+            <!-- Principio 2 -->
+            <div class="bg-white p-4 rounded-lg shadow border-t-4 border-blue-500">
+                <h3 class="text-xs font-bold text-gray-500 uppercase">Estrategia</h3>
+                <p class="text-2xl font-black text-gray-800 mt-2">92%</p>
+                <p class="text-xs text-green-500 mt-1">▲ En meta</p>
+            </div>
+            <!-- Principio 3 -->
+            <div class="bg-white p-4 rounded-lg shadow border-t-4 border-yellow-500">
+                <h3 class="text-xs font-bold text-gray-500 uppercase">Adquisición</h3>
+                <p class="text-2xl font-black text-gray-800 mt-2">68%</p>
+                <p class="text-xs text-yellow-600 mt-1">▶ Atención requerida</p>
+            </div>
+            <!-- Principio 4 -->
+            <div class="bg-white p-4 rounded-lg shadow border-t-4 border-green-500">
+                <h3 class="text-xs font-bold text-gray-500 uppercase">Rendimiento</h3>
+                <p class="text-2xl font-black text-gray-800 mt-2">97%</p>
+                <p class="text-xs text-green-500 mt-1">▲ Óptimo</p>
+            </div>
+            <!-- Principio 5 -->
+            <div class="bg-white p-4 rounded-lg shadow border-t-4 border-red-500">
+                <h3 class="text-xs font-bold text-gray-500 uppercase">Conformidad</h3>
+                <p class="text-2xl font-black text-gray-800 mt-2">45%</p>
+                <p class="text-xs text-red-500 mt-1">▼ Riesgo Crítico</p>
+            </div>
+            <!-- Principio 6 -->
+            <div class="bg-white p-4 rounded-lg shadow border-t-4 border-blue-500">
+                <h3 class="text-xs font-bold text-gray-500 uppercase">Comportamiento H.</h3>
+                <p class="text-2xl font-black text-gray-800 mt-2">75%</p>
+                <p class="text-xs text-green-500 mt-1">▲ Mejorando</p>
+            </div>
+        </div>
+
+        <!-- Sección 2: Gráficos de Tendencia (Aquí se inyectan los datos sintéticos) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <div class="bg-white p-4 rounded-lg shadow">
+                <h3 class="font-bold text-gray-700 mb-2">Rendimiento: Uptime del HIS (HOSVITAL)</h3>
+                <div class="relative h-64 w-full">
+                    <canvas id="uptimeChart"></canvas>
+                </div>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow">
+                <h3 class="font-bold text-gray-700 mb-2">Estrategia: Trámites Digitalizados (Acumulado)</h3>
+                <div class="relative h-64 w-full">
+                    <canvas id="tramitesChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección 3: Tabla de Detalle KPIs (El JSON plano mapeado) -->
+        <h2 class="text-xl font-bold mb-4 text-gray-700">Detalle Operativo de KPIs (BSC)</h2>
+        <div class="bg-white rounded-lg shadow overflow-x-auto">
+            <table class="min-w-full text-left text-sm whitespace-nowrap">
+                <thead class="uppercase tracking-wider border-b-2 border-gray-200 bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-4 text-gray-600 font-bold">Perspectiva BSC</th>
+                        <th class="px-6 py-4 text-gray-600 font-bold">Principio ISO</th>
+                        <th class="px-6 py-4 text-gray-600 font-bold">Indicador (KPI)</th>
+                        <th class="px-6 py-4 text-gray-600 font-bold">Valor Actual</th>
+                        <th class="px-6 py-4 text-gray-600 font-bold">Meta 2029</th>
+                        <th class="px-6 py-4 text-gray-600 font-bold">Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-b border-gray-200 hover:bg-gray-50">
+                        <td class="px-6 py-4">Clientes</td>
+                        <td class="px-6 py-4 font-semibold text-blue-600">Rendimiento</td>
+                        <td class="px-6 py-4">% de uptime del HIS (HOSVITAL) mensual</td>
+                        <td class="px-6 py-4">97.5%</td>
+                        <td class="px-6 py-4">99.5%</td>
+                        <td class="px-6 py-4"><span
+                                class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-bold">En
+                                Progreso</span></td>
+                    </tr>
+                    <tr class="border-b border-gray-200 hover:bg-gray-50">
+                        <td class="px-6 py-4">Procesos Internos</td>
+                        <td class="px-6 py-4 font-semibold text-red-600">Conformidad</td>
+                        <td class="px-6 py-4">% controles MSPI implementados</td>
+                        <td class="px-6 py-4">15%</td>
+                        <td class="px-6 py-4">90%</td>
+                        <td class="px-6 py-4"><span
+                                class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-bold">Crítico</span>
+                        </td>
+                    </tr>
+                    <tr class="border-b border-gray-200 hover:bg-gray-50">
+                        <td class="px-6 py-4">Clientes</td>
+                        <td class="px-6 py-4 font-semibold text-green-600">Estrategia</td>
+                        <td class="px-6 py-4">N.º trámites digitalizados</td>
+                        <td class="px-6 py-4">8</td>
+                        <td class="px-6 py-4">18</td>
+                        <td class="px-6 py-4"><span
+                                class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-bold">Óptimo</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <!-- Script para renderizar gráficos de prueba con Chart.js -->
+    <script>
+        // Gráfico 1: Simulación de datos de Uptime
+        const ctxUptime = document.getElementById('uptimeChart').getContext('2d');
+        new Chart(ctxUptime, {
+            type: 'line',
+            data: {
+                labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                datasets: [{
+                    label: '% Uptime HIS',
+                    data: [96.5, 96.8, 97.0, 96.2, 97.5, 97.8, 97.4, 98.0, 98.1, 98.5, 98.2, 99.0],
+                    borderColor: 'rgb(59, 130, 246)', // Tailwind Blue-500
+                    tension: 0.3,
+                    fill: false
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+
+        // Gráfico 2: Simulación de Trámites
+        const ctxTramites = document.getElementById('tramitesChart').getContext('2d');
+        new Chart(ctxTramites, {
+            type: 'bar',
+            data: {
+                labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                datasets: [{
+                    label: 'Trámites Digitalizados Acumulados',
+                    data: [2, 2, 3, 4, 4, 5, 6, 6, 7, 7, 8, 9],
+                    backgroundColor: 'rgb(16, 185, 129)', // Tailwind Green-500
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(copy \"c:\\\\Users\\\\juano\\\\Documents\\\\GitHub\\\\dashboard\\\\dashboard iso\\\\dashboard_data.json\" \"c:\\\\Users\\\\juano\\\\Documents\\\\GitHub\\\\dashboard\\\\dashboard iso\\\\iso-dashboard\\\\src\\\\data\\\\dashboard_data.json\")",
+      "Bash(npm run *)"
+    ]
+  }
+}
