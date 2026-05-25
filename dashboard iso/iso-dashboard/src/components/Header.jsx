@@ -1,4 +1,5 @@
 import { Building2, CalendarDays, ShieldCheck } from 'lucide-react'
+import ExecutiveReportButton from './ExecutiveReportButton'
 
 export default function Header({ metadata }) {
   const nombre = metadata?.nombre ?? 'Hospital'
@@ -20,11 +21,14 @@ export default function Header({ metadata }) {
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-2 bg-white/10 rounded-lg px-4 py-2 self-start md:self-auto">
-          <CalendarDays size={16} className="text-blue-300" />
-          <div>
-            <p className="text-xs text-blue-300 leading-none">Última actualización</p>
-            <p className="text-sm font-semibold">{fecha}</p>
+        <div className="flex items-center gap-3 self-start md:self-auto">
+          <ExecutiveReportButton />
+          <div className="flex items-center gap-2 bg-white/10 rounded-lg px-4 py-2">
+            <CalendarDays size={16} className="text-blue-300" />
+            <div>
+              <p className="text-xs text-blue-300 leading-none">Última actualización</p>
+              <p className="text-sm font-semibold">{fecha}</p>
+            </div>
           </div>
         </div>
       </div>

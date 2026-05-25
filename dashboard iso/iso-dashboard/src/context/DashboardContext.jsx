@@ -18,15 +18,32 @@ export function DashboardProvider({ children }) {
   const [activePrinciple, setActivePrinciple] = useState(null)
   const [selectedKpiIdx,  setSelectedKpiIdx]  = useState(0)
   const [periodFilter,    setPeriodFilter]     = useState('6m')
+  const [searchQuery,     setSearchQuery]      = useState('')
+  const [roleFilter,      setRoleFilter]       = useState('')
 
   const allKpis = _data.kpis
 
-  const filteredKpis = useMemo(
-    () => activePrinciple
-      ? allKpis.filter(k => k.principio_iso === activePrinciple)
-      : allKpis,
-    [activePrinciple, allKpis]
+  const uniqueRoles = useMemo(
+    () => [...new Set(allKpis.map(k => k.rol_responsable).filter(Boolean))].sort(),
+    [allKpis]
   )
+
+  const filteredKpis = useMemo(() => {
+    let kpis = activePrinciple
+      ? allKpis.filter(k => k.principio_iso === activePrinciple)
+      : allKpis
+
+    if (roleFilter) {
+      kpis = kpis.filter(k => k.rol_responsable?.toLowerCase().includes(roleFilter.toLowerCase()))
+    } else if (searchQuery.trim()) {
+      const q = searchQuery.trim().toLowerCase()
+      kpis = kpis.filter(k =>
+        k.kpi?.toLowerCase().includes(q) ||
+        k.rol_responsable?.toLowerCase().includes(q)
+      )
+    }
+    return kpis
+  }, [activePrinciple, allKpis, searchQuery, roleFilter])
 
   const safeIdx     = selectedKpiIdx < filteredKpis.length ? selectedKpiIdx : 0
   const selectedKpi = filteredKpis[safeIdx] ?? null
@@ -47,6 +64,11 @@ export function DashboardProvider({ children }) {
       togglePrinciple,
       periodFilter,
       setPeriodFilter,
+      searchQuery,
+      setSearchQuery,
+      roleFilter,
+      setRoleFilter,
+      uniqueRoles,
     }}>
       {children}
     </Ctx.Provider>
