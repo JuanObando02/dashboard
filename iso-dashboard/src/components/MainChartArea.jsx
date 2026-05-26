@@ -42,10 +42,19 @@ export default function MainChartArea() {
     )
   }
 
-  const historico  = selectedKpi.historico_simulado ?? []
+  const isPct = selectedKpi.Unidad === '%'
+  const mult = isPct ? 100 : 1
+
+  const rawHistorico  = selectedKpi.historico_simulado ?? []
+  const historico = rawHistorico.map(h => ({
+    periodo: h.periodo,
+    valor: h.valor !== null && h.valor !== undefined ? h.valor * mult : null
+  }))
   const chartData  = periodFilter === '6m' ? historico.slice(-6) : historico
   const color      = SEM_COLOR[selectedKpi.semaforo] ?? '#3b82f6'
   const useBar     = chartData.length <= 4
+  const metaScaled = selectedKpi['Meta 2029'] !== null && selectedKpi['Meta 2029'] !== undefined ? selectedKpi['Meta 2029'] * mult : null
+  const valSimScaled = selectedKpi.valor_actual_simulado !== null && selectedKpi.valor_actual_simulado !== undefined ? selectedKpi.valor_actual_simulado * mult : null
 
   return (
     <div className="bg-[#111e35] rounded-xl border border-slate-800 overflow-hidden">
@@ -58,10 +67,10 @@ export default function MainChartArea() {
               Tendencia histórica
             </p>
             <h3 className="text-sm font-semibold text-white leading-snug">
-              {selectedKpi.kpi}
+              {selectedKpi.KPI}
             </h3>
             <p className="text-xs text-slate-500 mt-0.5">
-              {selectedKpi.perspectiva} · {selectedKpi.obj_bsc} · {selectedKpi.principio_iso}
+              {selectedKpi.Perspectiva} · {selectedKpi['Obj. BSC']} · {selectedKpi.principio_iso}
             </p>
           </div>
         </div>
@@ -82,14 +91,14 @@ export default function MainChartArea() {
         {[
           {
             label: 'Valor actual',
-            value: selectedKpi.valor_actual_simulado ?? '—',
-            unit:  selectedKpi.unidad,
+            value: valSimScaled !== null ? Number(valSimScaled.toFixed(isPct ? 1 : 2)) : '—',
+            unit:  selectedKpi.Unidad,
             color: '#f1f5f9',
           },
           {
             label: 'Meta 2029',
-            value: selectedKpi.meta_2029 ?? '—',
-            unit:  selectedKpi.unidad,
+            value: metaScaled !== null ? Number(metaScaled.toFixed(isPct ? 1 : 2)) : '—',
+            unit:  selectedKpi.Unidad,
             color: '#94a3b8',
           },
           {
@@ -118,10 +127,10 @@ export default function MainChartArea() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
                 <XAxis dataKey="periodo" tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} />
-                {selectedKpi.meta_2029 != null && (
-                  <ReferenceLine y={selectedKpi.meta_2029} stroke="#22c55e" strokeDasharray="4 2" strokeOpacity={0.5} />
+                {metaScaled != null && (
+                  <ReferenceLine y={metaScaled} stroke="#22c55e" strokeDasharray="4 2" strokeOpacity={0.5} />
                 )}
-                <Tooltip content={<Tooltip_ unit={selectedKpi.unidad} meta={selectedKpi.meta_2029} />} cursor={false} />
+                <Tooltip content={<Tooltip_ unit={selectedKpi.Unidad} meta={metaScaled} />} cursor={false} />
                 <Bar dataKey="valor" fill={color} radius={[4, 4, 0, 0]} maxBarSize={40} />
               </BarChart>
             ) : (
@@ -129,10 +138,10 @@ export default function MainChartArea() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
                 <XAxis dataKey="periodo" tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} />
-                {selectedKpi.meta_2029 != null && (
-                  <ReferenceLine y={selectedKpi.meta_2029} stroke="#22c55e" strokeDasharray="4 2" strokeOpacity={0.5} />
+                {metaScaled != null && (
+                  <ReferenceLine y={metaScaled} stroke="#22c55e" strokeDasharray="4 2" strokeOpacity={0.5} />
                 )}
-                <Tooltip content={<Tooltip_ unit={selectedKpi.unidad} meta={selectedKpi.meta_2029} />} />
+                <Tooltip content={<Tooltip_ unit={selectedKpi.Unidad} meta={metaScaled} />} />
                 <Line
                   type="monotone"
                   dataKey="valor"
@@ -160,7 +169,7 @@ export default function MainChartArea() {
               <button
                 key={i}
                 onClick={() => setSelectedKpiIdx(i)}
-                title={k.kpi}
+                title={k.KPI}
                 className="text-[10px] px-2 py-0.5 rounded-md border transition-colors"
                 style={{
                   background:   isSelected ? '#1d4ed8' : '#1e293b',
@@ -168,7 +177,7 @@ export default function MainChartArea() {
                   color:        isSelected ? '#fff' : '#94a3b8',
                 }}
               >
-                {k.obj_bsc} – K{i + 1}
+                {k['Obj. BSC']} – K{i + 1}
               </button>
             )
           })}

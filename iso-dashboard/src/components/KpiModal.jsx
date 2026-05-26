@@ -50,15 +50,23 @@ export default function KpiModal({ kpi, onClose, iniciativas = [] }) {
 
   const semaforo = SEMAFORO_STYLES[kpi.semaforo] ?? SEMAFORO_STYLES.rojo
   const chartColor = CHART_COLOR[kpi.semaforo] ?? '#3b82f6'
-  const historico = kpi.historico_simulado ?? []
-  const meta = kpi.meta_2029
+
+  const isPct = kpi.Unidad === '%'
+  const mult = isPct ? 100 : 1
+
+  const historico = (kpi.historico_simulado ?? []).map(h => ({
+    periodo: h.periodo,
+    valor: h.valor !== null && h.valor !== undefined ? h.valor * mult : null
+  }))
+  const meta = kpi['Meta 2029'] !== null && kpi['Meta 2029'] !== undefined ? kpi['Meta 2029'] * mult : null
+  const valSim = kpi.valor_actual_simulado !== null && kpi.valor_actual_simulado !== undefined ? kpi.valor_actual_simulado * mult : null
 
   const useBar = historico.length <= 4
   const ChartComp = useBar ? BarChart : LineChart
   const DataComp = useBar ? Bar : Line
 
   const kpiIniciativas = iniciativas.filter(ini => {
-    const ids = (kpi.iniciativas ?? '').split(',').map(s => s.trim())
+    const ids = (kpi.Iniciativas ?? '').split(',').map(s => s.trim())
     return ids.includes(ini.ID)
   })
 
@@ -73,19 +81,19 @@ export default function KpiModal({ kpi, onClose, iniciativas = [] }) {
           <div className="flex items-start gap-3">
             <span className={`mt-1 w-3 h-3 rounded-full shrink-0 ${semaforo.dot}`} />
             <div>
-              <h2 className="text-white font-bold text-base leading-snug">{kpi.kpi ?? 'KPI'}</h2>
+              <h2 className="text-white font-bold text-base leading-snug">{kpi.KPI ?? 'KPI'}</h2>
               <div className="flex flex-wrap gap-2 mt-1.5">
                 <span className={`text-xs px-2 py-0.5 rounded-full font-medium border ${semaforo.badge}`}>
                   {semaforo.label}
                 </span>
-                {kpi.perspectiva && (
+                {kpi.Perspectiva && (
                   <span className="text-xs px-2 py-0.5 rounded-full bg-white/20 text-white font-medium">
-                    {kpi.perspectiva}
+                    {kpi.Perspectiva}
                   </span>
                 )}
-                {kpi.obj_bsc && (
+                {kpi['Obj. BSC'] && (
                   <span className="text-xs px-2 py-0.5 rounded-full bg-white/20 text-white font-medium">
-                    BSC: {kpi.obj_bsc}
+                    BSC: {kpi['Obj. BSC']}
                   </span>
                 )}
               </div>
@@ -106,15 +114,15 @@ export default function KpiModal({ kpi, onClose, iniciativas = [] }) {
             <div className="px-6 py-4">
               <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Información del KPI</h3>
 
-              <InfoRow icon={Target}      label="Meta 2029"      value={meta != null ? `${meta} ${kpi.unidad ?? ''}` : null} />
-              <InfoRow icon={TrendingUp}  label="Valor actual"   value={kpi.valor_actual_simulado != null ? `${kpi.valor_actual_simulado} ${kpi.unidad ?? ''}` : 'N/D'} />
+              <InfoRow icon={Target}      label="Meta 2029"      value={meta != null ? `${Number(meta.toFixed(isPct ? 1 : 2))} ${kpi.Unidad ?? ''}` : null} />
+              <InfoRow icon={TrendingUp}  label="Valor actual"   value={valSim != null ? `${Number(valSim.toFixed(isPct ? 1 : 2))} ${kpi.Unidad ?? ''}` : 'N/D'} />
               <InfoRow icon={ShieldCheck} label="Principio ISO"  value={kpi.principio_iso} />
               <InfoRow icon={User}        label="Responsable"    value={kpi.rol_responsable} />
-              <InfoRow icon={FileText}    label="Frecuencia"     value={kpi.frecuencia} />
+              <InfoRow icon={FileText}    label="Frecuencia"     value={kpi.Frecuencia} />
               <InfoRow icon={DollarSign}  label="Presupuesto"    value={kpi.presupuesto_cop} />
-              <InfoRow icon={FileText}    label="Fuente"         value={kpi.fuente} />
+              <InfoRow icon={FileText}    label="Fuente"         value={kpi.Fuente} />
               <InfoRow icon={Lightbulb}   label="Justificación ISO" value={kpi.justificacion_iso} />
-              <InfoRow icon={Target}      label="OEs relacionados" value={kpi.oes_relacionados} />
+              <InfoRow icon={Target}      label="OEs relacionados" value={kpi['OEs Relacionados']} />
 
               {/* Iniciativas */}
               {kpiIniciativas.length > 0 && (
@@ -163,13 +171,13 @@ export default function KpiModal({ kpi, onClose, iniciativas = [] }) {
                       tickLine={false}
                       width={40}
                     />
-                    <Tooltip content={<CustomTooltip unidad={kpi.unidad ?? ''} />} />
+                     <Tooltip content={<CustomTooltip unidad={kpi.Unidad ?? ''} />} />
                     {meta != null && (
                       <ReferenceLine
                         y={meta}
                         stroke="#1e4d8c"
                         strokeDasharray="4 3"
-                        label={{ value: `Meta: ${meta}`, position: 'right', fontSize: 10, fill: '#1e4d8c' }}
+                        label={{ value: `Meta: ${Number(meta.toFixed(isPct ? 1 : 2))}`, position: 'right', fontSize: 10, fill: '#1e4d8c' }}
                       />
                     )}
                     {useBar ? (
@@ -194,11 +202,11 @@ export default function KpiModal({ kpi, onClose, iniciativas = [] }) {
                   {[
                     { label: 'Mínimo', value: Math.min(...historico.map(h => h.valor)) },
                     { label: 'Máximo', value: Math.max(...historico.map(h => h.valor)) },
-                    { label: 'Promedio', value: (historico.reduce((a, b) => a + b.valor, 0) / historico.length).toFixed(1) },
+                    { label: 'Promedio', value: (historico.reduce((a, b) => a + b.valor, 0) / historico.length) },
                   ].map(({ label, value }) => (
                     <div key={label} className="bg-slate-50 rounded-lg px-3 py-2 text-center">
                       <p className="text-xs text-slate-400">{label}</p>
-                      <p className="text-sm font-bold text-slate-700">{value} {kpi.unidad ?? ''}</p>
+                      <p className="text-sm font-bold text-slate-700">{Number(value?.toFixed(isPct ? 1 : 2))} {kpi.Unidad ?? ''}</p>
                     </div>
                   ))}
                 </div>

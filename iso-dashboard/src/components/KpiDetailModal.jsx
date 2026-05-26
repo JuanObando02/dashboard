@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { X, ChevronDown, ChevronUp, Target, Zap, Shield } from 'lucide-react'
 import {
   LineChart, Line, BarChart, Bar,
@@ -56,17 +56,28 @@ export default function KpiDetailModal({ kpi, onClose }) {
   const { data } = useDashboard()
   const sem      = SEM[kpi.semaforo] ?? SEM.rojo
 
-  const kpiInitIds  = (kpi.iniciativas    ?? '').split(',').map(s => s.trim()).filter(Boolean)
-  const kpiOeIds    = (kpi.oes_relacionados ?? '').split(',').map(s => s.trim()).filter(Boolean)
+  const isPct    = kpi.Unidad === '%'
+  const mult     = isPct ? 100 : 1
+
+  const kpiInitIds  = (kpi.Iniciativas    ?? '').split(',').map(s => s.trim()).filter(Boolean)
+  const kpiOeIds    = (kpi['OEs Relacionados'] ?? '').split(',').map(s => s.trim()).filter(Boolean)
 
   const relInits    = data.iniciativas.filter(i => kpiInitIds.includes(i.ID))
   const relOes      = data.objetivos_estrategicos.filter(oe =>
     kpiOeIds.includes(oe['Objetivo Estratégico'])
   )
 
-  const historico   = kpi.historico_simulado ?? []
+  const historico   = useMemo(() => {
+    return (kpi.historico_simulado ?? []).map(h => ({
+      periodo: h.periodo,
+      valor: h.valor !== null && h.valor !== undefined ? h.valor * mult : null
+    }))
+  }, [kpi.historico_simulado, mult])
+
   const useBar      = historico.length <= 4
   const chartColor  = sem.dot
+  const metaScaled  = kpi['Meta 2029'] !== null && kpi['Meta 2029'] !== undefined ? kpi['Meta 2029'] * mult : null
+  const valSimScaled = kpi.valor_actual_simulado !== null && kpi.valor_actual_simulado !== undefined ? kpi.valor_actual_simulado * mult : null
 
   return (
     <div
@@ -96,10 +107,10 @@ export default function KpiDetailModal({ kpi, onClose }) {
                 {kpi.principio_iso}
               </span>
               <span className="text-[10px] text-blue-300 bg-white/10 px-2 py-0.5 rounded-full">
-                {kpi.perspectiva} · {kpi.obj_bsc}
+                {kpi.Perspectiva} · {kpi['Obj. BSC']}
               </span>
             </div>
-            <h2 className="text-sm font-bold text-white leading-snug">{kpi.kpi}</h2>
+            <h2 className="text-sm font-bold text-white leading-snug">{kpi.KPI}</h2>
           </div>
           <button
             onClick={onClose}
@@ -114,8 +125,8 @@ export default function KpiDetailModal({ kpi, onClose }) {
           {/* Metrics */}
           <div className="grid grid-cols-3 border-b" style={{ borderColor: '#1e293b' }}>
             {[
-              { label: 'Valor Actual', value: `${kpi.valor_actual_simulado ?? '—'} ${kpi.unidad}`, color: '#f1f5f9' },
-              { label: 'Meta 2029',    value: `${kpi.meta_2029 ?? '—'} ${kpi.unidad}`,             color: '#94a3b8' },
+              { label: 'Valor Actual', value: valSimScaled !== null ? `${Number(valSimScaled.toFixed(isPct ? 1 : 2))} ${kpi.Unidad ?? ''}` : '—', color: '#f1f5f9' },
+              { label: 'Meta 2029',    value: metaScaled !== null ? `${Number(metaScaled.toFixed(isPct ? 1 : 2))} ${kpi.Unidad ?? ''}` : '—',             color: '#94a3b8' },
               { label: 'Cumplimiento', value: `${kpi.cumplimiento_pct ?? 0}%`,                      color: sem.dot  },
             ].map(m => (
               <div key={m.label} className="px-4 py-3 border-r last:border-r-0" style={{ borderColor: '#1e293b' }}>
@@ -138,10 +149,10 @@ export default function KpiDetailModal({ kpi, onClose }) {
                       <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
                       <XAxis dataKey="periodo" tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} />
                       <YAxis tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} />
-                      {kpi.meta_2029 != null && (
-                        <ReferenceLine y={kpi.meta_2029} stroke="#22c55e" strokeDasharray="4 2" strokeOpacity={0.5} />
+                      {metaScaled != null && (
+                        <ReferenceLine y={metaScaled} stroke="#22c55e" strokeDasharray="4 2" strokeOpacity={0.5} />
                       )}
-                      <Tooltip content={<ChartTooltip unit={kpi.unidad} />} cursor={false} />
+                      <Tooltip content={<ChartTooltip unit={kpi.Unidad} />} cursor={false} />
                       <Bar dataKey="valor" fill={chartColor} radius={[3, 3, 0, 0]} maxBarSize={30} />
                     </BarChart>
                   ) : (
@@ -149,10 +160,10 @@ export default function KpiDetailModal({ kpi, onClose }) {
                       <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
                       <XAxis dataKey="periodo" tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} />
                       <YAxis tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} />
-                      {kpi.meta_2029 != null && (
-                        <ReferenceLine y={kpi.meta_2029} stroke="#22c55e" strokeDasharray="4 2" strokeOpacity={0.5} />
+                      {metaScaled != null && (
+                        <ReferenceLine y={metaScaled} stroke="#22c55e" strokeDasharray="4 2" strokeOpacity={0.5} />
                       )}
-                      <Tooltip content={<ChartTooltip unit={kpi.unidad} />} />
+                      <Tooltip content={<ChartTooltip unit={kpi.Unidad} />} />
                       <Line
                         type="monotone" dataKey="valor" stroke={chartColor} strokeWidth={2}
                         dot={{ fill: chartColor, r: 3, strokeWidth: 0 }} activeDot={{ r: 4, strokeWidth: 0 }}
@@ -163,16 +174,22 @@ export default function KpiDetailModal({ kpi, onClose }) {
 
                 {/* Mini stats */}
                 <div className="grid grid-cols-3 gap-2 mt-3">
-                  {[
-                    { l: 'Mínimo',   v: Math.min(...historico.map(h => h.valor)) },
-                    { l: 'Máximo',   v: Math.max(...historico.map(h => h.valor)) },
-                    { l: 'Promedio', v: (historico.reduce((a, b) => a + b.valor, 0) / historico.length).toFixed(1) },
-                  ].map(({ l, v }) => (
-                    <div key={l} className="rounded-lg px-3 py-2 text-center" style={{ background: '#0b1829' }}>
-                      <p className="text-[10px] text-slate-500">{l}</p>
-                      <p className="text-xs font-bold text-slate-300">{v} {kpi.unidad}</p>
-                    </div>
-                  ))}
+                  {(() => {
+                    const valores = historico.map(h => h.valor).filter(v => v != null && !Number.isNaN(v))
+                    if (valores.length === 0) return null
+                    const dec = isPct ? 1 : 2
+                    const fmt = n => Number(n.toFixed(dec))
+                    return [
+                      { l: 'Mínimo',   v: fmt(Math.min(...valores)) },
+                      { l: 'Máximo',   v: fmt(Math.max(...valores)) },
+                      { l: 'Promedio', v: fmt(valores.reduce((a, b) => a + b, 0) / valores.length) },
+                    ].map(({ l, v }) => (
+                      <div key={l} className="rounded-lg px-3 py-2 text-center" style={{ background: '#0b1829' }}>
+                        <p className="text-[10px] text-slate-500">{l}</p>
+                        <p className="text-xs font-bold text-slate-300">{v} {kpi.Unidad}</p>
+                      </div>
+                    ))
+                  })()}
                 </div>
               </div>
             )}
@@ -194,12 +211,12 @@ export default function KpiDetailModal({ kpi, onClose }) {
             {/* Meta details */}
             <div className="grid grid-cols-2 gap-3 text-xs">
               {[
-                ['Tipo de KPI',    kpi.tipo === 'MAX' ? 'Maximizar' : 'Minimizar'],
-                ['Frecuencia',     kpi.frecuencia],
+                ['Tipo de KPI',    kpi.Tipo === 'MAX' ? 'Maximizar' : 'Minimizar'],
+                ['Frecuencia',     kpi.Frecuencia],
                 ['Responsable',    kpi.rol_responsable],
                 ['Presupuesto',    kpi.presupuesto_cop],
-                ['Fuente',         kpi.fuente, true],
-                ['OEs relacionados', kpi.oes_relacionados],
+                ['Fuente',         kpi.Fuente, true],
+                ['OEs relacionados', kpi['OEs Relacionados']],
               ].map(([l, v, full]) => v ? (
                 <div key={l} className={full ? 'col-span-2' : ''}>
                   <p className="text-[10px] text-slate-500 uppercase tracking-wide mb-0.5">{l}</p>

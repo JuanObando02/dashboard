@@ -24,11 +24,15 @@ export default function GapAnalysisBar() {
     (data?.iniciativas ?? []).map(i => [i.ID, i])
   )
 
-  const ids = (selectedKpi.iniciativas ?? '').split(',').map(s => s.trim()).filter(Boolean)
+  const isPct = selectedKpi.Unidad === '%'
+  const mult = isPct ? 100 : 1
+
+  const ids = (selectedKpi.Iniciativas ?? '').split(',').map(s => s.trim()).filter(Boolean)
   const linked = ids.map(id => ({ id, ...initiativeMap[id] })).filter(i => i['Nombre Iniciativa'])
 
   const totalBudget = linked.reduce((s, i) => s + parseBudget(i['Presupuesto (COP)']), 0)
   const cumplPct    = selectedKpi.cumplimiento_pct ?? 0
+  const metaScaled = selectedKpi['Meta 2029'] !== null && selectedKpi['Meta 2029'] !== undefined ? selectedKpi['Meta 2029'] * mult : null
 
   if (linked.length === 0) return null
 
@@ -45,7 +49,7 @@ export default function GapAnalysisBar() {
             Análisis de Brecha — Inversión Requerida
           </p>
           <p className="text-sm font-semibold text-white truncate mt-0.5">
-            {selectedKpi.kpi}
+            {selectedKpi.KPI}
           </p>
         </div>
         <span className="shrink-0 text-xs bg-red-500/10 border border-red-500/30 text-red-400 px-2 py-0.5 rounded-md">
@@ -81,7 +85,7 @@ export default function GapAnalysisBar() {
 
         <div className="flex justify-between text-[10px] text-slate-600 mt-1">
           <span>0%</span>
-          <span className="text-green-500">Meta 2029: {selectedKpi.meta_2029} {selectedKpi.unidad}</span>
+          <span className="text-green-500">Meta 2029: {metaScaled} {selectedKpi.Unidad}</span>
           <span>100%</span>
         </div>
       </div>

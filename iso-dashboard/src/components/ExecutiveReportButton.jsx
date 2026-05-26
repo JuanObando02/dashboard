@@ -82,15 +82,22 @@ export default function ExecutiveReportButton() {
     })
 
     // ── KPI table ─────────────────────────────────────────────────────────────
-    const rows = filteredKpis.map(k => [
-      k.kpi ?? '—',
-      k.principio_iso ?? '—',
-      k.rol_responsable ?? '—',
-      k.valor_actual_simulado != null ? `${k.valor_actual_simulado} ${k.unidad ?? ''}` : '—',
-      k.meta_2029 != null ? `${k.meta_2029} ${k.unidad ?? ''}` : '—',
-      `${k.cumplimiento_pct ?? 0}%`,
-      semLabel(k.semaforo),
-    ])
+    const rows = filteredKpis.map(k => {
+      const isPct = k.Unidad === '%'
+      const mult = isPct ? 100 : 1
+      const valSimScaled = k.valor_actual_simulado != null ? k.valor_actual_simulado * mult : null
+      const metaScaled = k['Meta 2029'] != null ? k['Meta 2029'] * mult : null
+
+      return [
+        k.KPI ?? '—',
+        k.principio_iso ?? '—',
+        k.rol_responsable ?? '—',
+        valSimScaled != null ? `${Number(valSimScaled.toFixed(isPct ? 1 : 2))} ${k.Unidad ?? ''}` : '—',
+        metaScaled != null ? `${Number(metaScaled.toFixed(isPct ? 1 : 2))} ${k.Unidad ?? ''}` : '—',
+        `${k.cumplimiento_pct ?? 0}%`,
+        semLabel(k.semaforo),
+      ]
+    })
 
     autoTable(doc, {
       startY: 43,
@@ -131,7 +138,7 @@ export default function ExecutiveReportButton() {
       const budgetRows = []
 
       redKpis.forEach(k => {
-        const ids = (k.iniciativas ?? '').split(',').map(s => s.trim()).filter(Boolean)
+        const ids = (k.Iniciativas ?? '').split(',').map(s => s.trim()).filter(Boolean)
         ids.forEach(id => {
           if (seen.has(id)) return
           seen.add(id)

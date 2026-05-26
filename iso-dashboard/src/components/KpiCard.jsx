@@ -30,11 +30,15 @@ const PERSPECTIVA_COLORS = {
 
 export default function KpiCard({ kpi, onDetail }) {
   const semaforo = SEMAFORO_STYLES[kpi.semaforo] ?? SEMAFORO_STYLES.rojo
-  const perspColor = PERSPECTIVA_COLORS[kpi.perspectiva] ?? 'bg-slate-100 text-slate-600'
+  const perspColor = PERSPECTIVA_COLORS[kpi.Perspectiva] ?? 'bg-slate-100 text-slate-600'
 
-  const valorActual = kpi.valor_actual_simulado ?? kpi.valor_actual_2025
-  const meta = kpi.meta_2029
-  const pct = meta > 0 ? Math.min(100, Math.round((valorActual / meta) * 100)) : 0
+  const isPct = kpi.Unidad === '%'
+  const mult = isPct ? 100 : 1
+
+  const rawVal = kpi.valor_actual_simulado ?? kpi['Valor Actual']
+  const valorActual = rawVal !== null && rawVal !== undefined ? rawVal * mult : null
+  const meta = kpi['Meta 2029'] !== null && kpi['Meta 2029'] !== undefined ? kpi['Meta 2029'] * mult : null
+  const pct = kpi.cumplimiento_pct ?? 0
 
   const TrendIcon = pct >= 90 ? TrendingUp : pct >= 50 ? Minus : TrendingDown
   const trendColor = pct >= 90 ? 'text-emerald-500' : pct >= 50 ? 'text-yellow-500' : 'text-red-500'
@@ -50,7 +54,7 @@ export default function KpiCard({ kpi, onDetail }) {
           <div className="flex items-start gap-2">
             <span className={`mt-1 w-2.5 h-2.5 rounded-full shrink-0 ${semaforo.dot}`} />
             <p className="text-sm font-semibold text-slate-800 leading-snug line-clamp-2">
-              {kpi.kpi ?? 'KPI sin nombre'}
+              {kpi.KPI ?? 'KPI sin nombre'}
             </p>
           </div>
           <TrendIcon size={16} className={`${trendColor} shrink-0 mt-0.5`} />
@@ -75,13 +79,13 @@ export default function KpiCard({ kpi, onDetail }) {
           <div>
             <p className="text-xs text-slate-400">Valor actual</p>
             <p className="text-base font-bold text-slate-800">
-              {valorActual != null ? `${valorActual} ${kpi.unidad ?? ''}` : 'N/D'}
+              {valorActual != null ? `${Number(valorActual.toFixed(isPct ? 1 : 2))} ${kpi.Unidad ?? ''}` : 'N/D'}
             </p>
           </div>
           <div>
             <p className="text-xs text-slate-400">Meta 2029</p>
             <p className="text-base font-bold text-slate-500">
-              {meta != null ? `${meta} ${kpi.unidad ?? ''}` : 'N/D'}
+              {meta != null ? `${Number(meta.toFixed(isPct ? 1 : 2))} ${kpi.Unidad ?? ''}` : 'N/D'}
             </p>
           </div>
         </div>
@@ -92,7 +96,7 @@ export default function KpiCard({ kpi, onDetail }) {
             {semaforo.label}
           </span>
           <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${perspColor}`}>
-            {kpi.perspectiva ?? 'N/D'}
+            {kpi.Perspectiva ?? 'N/D'}
           </span>
           {kpi.principio_iso && (
             <span className="text-xs px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 font-medium">

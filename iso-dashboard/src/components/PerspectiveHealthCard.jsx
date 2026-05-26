@@ -25,7 +25,7 @@ export default function PerspectiveHealthCard() {
   const [active, setActive] = useState('Clientes')
 
   const pkpis = useMemo(
-    () => allKpis.filter(k => k.perspectiva === active),
+    () => allKpis.filter(k => k.Perspectiva === active),
     [allKpis, active]
   )
 
@@ -48,7 +48,9 @@ export default function PerspectiveHealthCard() {
       .filter(k => (k.historico_simulado?.length ?? 0) >= 2)
       .map(k => {
         const h = k.historico_simulado
-        return h[h.length - 1].valor - h[0].valor
+        const isPct = k.Unidad === '%'
+        const mult = isPct ? 100 : 1
+        return (h[h.length - 1].valor - h[0].valor) * mult
       })
     return deltas.length > 0
       ? deltas.reduce((s, d) => s + d, 0) / deltas.length
@@ -143,7 +145,7 @@ export default function PerspectiveHealthCard() {
               <div key={i} className="flex items-start gap-2 py-0.5">
                 <span className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" style={{ background: dot }} />
                 <p className="text-[11px] text-slate-400 leading-snug flex-1 min-w-0 line-clamp-2">
-                  {k.kpi}
+                  {k.KPI}
                 </p>
                 <span
                   className="text-[10px] font-bold tabular-nums shrink-0"

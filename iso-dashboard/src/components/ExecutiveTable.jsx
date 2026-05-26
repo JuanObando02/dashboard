@@ -55,8 +55,13 @@ export default function ExecutiveTable() {
             <tbody>
               {filteredKpis.map((kpi, i) => {
                 const sem      = SEM[kpi.semaforo] ?? SEM.rojo
-                const pColor   = PERSP_COLORS[kpi.perspectiva] ?? { bg: 'rgba(100,116,139,0.1)', color: '#94a3b8' }
+                const pColor   = PERSP_COLORS[kpi.Perspectiva] ?? { bg: 'rgba(100,116,139,0.1)', color: '#94a3b8' }
                 const isActive = kpi === selectedKpi
+
+                const isPct = kpi.Unidad === '%'
+                const mult = isPct ? 100 : 1
+                const valSimScaled = kpi.valor_actual_simulado !== null && kpi.valor_actual_simulado !== undefined ? kpi.valor_actual_simulado * mult : null
+                const metaScaled = kpi['Meta 2029'] !== null && kpi['Meta 2029'] !== undefined ? kpi['Meta 2029'] * mult : null
 
                 return (
                   <tr
@@ -75,16 +80,16 @@ export default function ExecutiveTable() {
                         )}
                         <div>
                           <p className="text-slate-200 font-medium leading-snug line-clamp-2">
-                            {kpi.kpi}
+                            {kpi.KPI}
                           </p>
                           <div className="flex items-center gap-1.5 mt-1">
                             <span
                               className="text-[9px] px-1.5 py-0.5 rounded-full font-medium"
                               style={{ background: pColor.bg, color: pColor.color }}
                             >
-                              {kpi.perspectiva}
+                              {kpi.Perspectiva}
                             </span>
-                            <span className="text-[9px] text-slate-500 font-mono">{kpi.obj_bsc}</span>
+                            <span className="text-[9px] text-slate-500 font-mono">{kpi['Obj. BSC']}</span>
                           </div>
                         </div>
                       </div>
@@ -93,17 +98,17 @@ export default function ExecutiveTable() {
                     {/* Valor actual */}
                     <td className="px-3 py-3 text-right whitespace-nowrap">
                       <span className="text-slate-100 font-semibold">
-                        {kpi.valor_actual_simulado ?? '—'}
+                        {valSimScaled !== null ? Number(valSimScaled.toFixed(isPct ? 1 : 2)) : '—'}
                       </span>
-                      <span className="text-slate-500 ml-1">{kpi.unidad}</span>
+                      <span className="text-slate-500 ml-1">{kpi.Unidad}</span>
                     </td>
 
                     {/* Meta */}
                     <td className="px-3 py-3 text-right whitespace-nowrap">
                       <span className="text-slate-400">
-                        {kpi.meta_2029 ?? '—'}
+                        {metaScaled !== null ? Number(metaScaled.toFixed(isPct ? 1 : 2)) : '—'}
                       </span>
-                      <span className="text-slate-600 ml-1">{kpi.unidad}</span>
+                      <span className="text-slate-600 ml-1">{kpi.Unidad}</span>
                     </td>
 
                     {/* Semáforo */}
