@@ -45,7 +45,6 @@ export function DashboardProvider({ children }) {
   const allKpis = useMemo(() => {
     return kpisRaw.map(k => {
       const valorActual = k['Valor Actual']
-      const valSim = k['Valor Actual']
       const meta = k['Meta 2029']
       const critico = k['Umbral Crítico']
       const moderado = k['Umbral Moderado']
@@ -64,11 +63,11 @@ export function DashboardProvider({ children }) {
       }
 
       let cumplimiento_pct = 0
-      if (valSim !== null && valSim !== undefined && meta) {
+      if (valorActual !== null && valorActual !== undefined && meta) {
         if (k.Tipo === 'MIN') {
-          cumplimiento_pct = Math.round((meta / valSim) * 100)
+          cumplimiento_pct = Math.round((meta / valorActual) * 100)
         } else {
-          cumplimiento_pct = Math.round((valSim / meta) * 100)
+          cumplimiento_pct = Math.round((valorActual / meta) * 100)
         }
       }
 
