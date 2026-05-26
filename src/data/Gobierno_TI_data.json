@@ -1,0 +1,2325 @@
+[
+    {
+        "__tipo": "kpi",
+        "row_number": 2,
+        "Perspectiva": "Clientes",
+        "Obj. BSC": "C1",
+        "KPI": "% de uptime del HIS (HOSVITAL) mensual",
+        "Tipo KRI": "Eficiencia",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0.97,
+        "Valor Actual": 0.97,
+        "Meta 2026": 0.99,
+        "Meta 2027": 0.999,
+        "Meta 2028": 0.999,
+        "Meta 2029": 0.999,
+        "Umbral Crítico": 0.965,
+        "Umbral Moderado": 0.98,
+        "Frecuencia": "Mensual",
+        "OEs Relacionados": "OE1, OE2, OE3",
+        "Iniciativas": "I-03, I-15, I-16",
+        "Fuente": "PETI 2024, Tabla 13 y 24; servidores obsoletos",
+        "principio_iso": "Rendimiento",
+        "rol_responsable": "Gerente de TI (IT Manager)",
+        "justificacion_iso": "El principio de Rendimiento bajo ISO 38500 exige que el uso de TI sea apto para cumplir con los propósitos de negocio, asegurando que los niveles de servicio (como el uptime de sistemas críticos) se mantengan alineados con la demanda operativa.",
+        "historico_simulado": [
+            {
+                "periodo": "2024-01-01",
+                "valor": 0.97
+            },
+            {
+                "periodo": "2024-02-01",
+                "valor": 0.97
+            },
+            {
+                "periodo": "2024-03-01",
+                "valor": 0.97
+            },
+            {
+                "periodo": "2024-04-01",
+                "valor": 0.97
+            },
+            {
+                "periodo": "2024-05-01",
+                "valor": 0.97
+            },
+            {
+                "periodo": "2024-06-01",
+                "valor": 0.97
+            },
+            {
+                "periodo": "2024-07-01",
+                "valor": 0.97
+            },
+            {
+                "periodo": "2024-08-01",
+                "valor": 0.97
+            },
+            {
+                "periodo": "2024-09-01",
+                "valor": 0.97
+            },
+            {
+                "periodo": "2024-10-01",
+                "valor": 0.97
+            },
+            {
+                "periodo": "2024-11-01",
+                "valor": 0.97
+            },
+            {
+                "periodo": "2024-12-01",
+                "valor": 0.97
+            },
+            {
+                "periodo": "2025-01-01",
+                "valor": 0.97
+            },
+            {
+                "periodo": "2025-02-01",
+                "valor": 0.97
+            },
+            {
+                "periodo": "2025-03-01",
+                "valor": 0.97
+            },
+            {
+                "periodo": "2025-04-01",
+                "valor": 0.97
+            },
+            {
+                "periodo": "2025-05-01",
+                "valor": 0.97
+            },
+            {
+                "periodo": "2025-06-01",
+                "valor": 0.97
+            },
+            {
+                "periodo": "2025-07-01",
+                "valor": 0.97
+            },
+            {
+                "periodo": "2025-08-01",
+                "valor": 0.97
+            },
+            {
+                "periodo": "2025-09-01",
+                "valor": 0.97
+            },
+            {
+                "periodo": "2025-10-01",
+                "valor": 0.97
+            },
+            {
+                "periodo": "2025-11-01",
+                "valor": 0.97
+            },
+            {
+                "periodo": "2025-12-01",
+                "valor": 0.97
+            },
+            {
+                "periodo": "2026-01-01",
+                "valor": 0.97
+            },
+            {
+                "periodo": "2026-02-01",
+                "valor": 0.97
+            },
+            {
+                "periodo": "2026-03-01",
+                "valor": 0.97
+            },
+            {
+                "periodo": "2026-04-01",
+                "valor": 0.97
+            },
+            {
+                "periodo": "2026-05-01",
+                "valor": 0.97
+            }
+        ],
+        "valor_actual_simulado": 0.97
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 3,
+        "Perspectiva": "Clientes",
+        "Obj. BSC": "C1",
+        "KPI": "% incidentes críticos resueltos dentro del SLA formal",
+        "Tipo KRI": "Eficacia",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0,
+        "Valor Actual": 0,
+        "Meta 2026": 0.5,
+        "Meta 2027": 0.75,
+        "Meta 2028": 0.85,
+        "Meta 2029": 0.9,
+        "Umbral Crítico": 0.36,
+        "Umbral Moderado": 0.63,
+        "Frecuencia": "Mensual",
+        "OEs Relacionados": "OE1, OE2",
+        "Iniciativas": "I-03, I-15",
+        "Fuente": "PETI 2024, Tabla 20, ST15; sin SLA formalizado",
+        "principio_iso": "Rendimiento",
+        "rol_responsable": "Gerente de Servicios de TI (IT Service Manager)",
+        "justificacion_iso": "El KPI evalúa la eficacia operativa en la entrega de servicios conforme a los niveles acordados (SLA), componente fundamental del principio de Rendimiento bajo ISO 38500.",
+        "historico_simulado": [],
+        "valor_actual_simulado": 0
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 4,
+        "Perspectiva": "Clientes",
+        "Obj. BSC": "C1",
+        "KPI": "% usuarios que evalúan positivamente disponibilidad de sistemas",
+        "Tipo KRI": "Efectividad",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": null,
+        "Valor Actual": null,
+        "Meta 2026": 0.65,
+        "Meta 2027": 0.7,
+        "Meta 2028": 0.75,
+        "Meta 2029": 0.75,
+        "Umbral Crítico": 0.375,
+        "Umbral Moderado": 0.562,
+        "Frecuencia": "Semestral",
+        "OEs Relacionados": "OE1",
+        "Iniciativas": "I-03, I-15",
+        "Fuente": "PETI 2024, Tabla 24; sin encuesta activa",
+        "principio_iso": "Rendimiento",
+        "rol_responsable": "CIO (Chief Information Officer)",
+        "justificacion_iso": "El KPI mide la percepción de calidad del servicio sobre la disponibilidad de los sistemas, factor crítico para garantizar que la infraestructura tecnológica soporte los resultados de negocio bajo el principio de Rendimiento de ISO 38500.",
+        "historico_simulado": [],
+        "valor_actual_simulado": null
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 5,
+        "Perspectiva": "Clientes",
+        "Obj. BSC": "C2",
+        "KPI": "Índice satisfacción usuarios internos con servicio TI (1–5)",
+        "Tipo KRI": "Efectividad",
+        "Unidad": "Puntos (1–5)",
+        "Tipo": "MAX",
+        "Línea Base": null,
+        "Valor Actual": null,
+        "Meta 2026": 3.2,
+        "Meta 2027": 3.7,
+        "Meta 2028": 4,
+        "Meta 2029": 4.2,
+        "Umbral Crítico": 2.3,
+        "Umbral Moderado": 3.4,
+        "Frecuencia": "Semestral",
+        "OEs Relacionados": "OE1, OE5",
+        "Iniciativas": "I-09",
+        "Fuente": "PETI 2024, Hallazgo H21; sin instrumento de medición",
+        "principio_iso": "Comportamiento Humano",
+        "rol_responsable": "Gerente de Servicios TI (Service Delivery Manager)",
+        "justificacion_iso": "El KPI mide la percepción cualitativa de los usuarios finales, siendo un indicador clave del impacto de la tecnología en el capital humano y la cultura organizacional, alineándose con el principio de asegurar que las políticas de TI respeten las necesidades humanas.",
+        "historico_simulado": [],
+        "valor_actual_simulado": null
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 6,
+        "Perspectiva": "Clientes",
+        "Obj. BSC": "C2",
+        "KPI": "% tickets de soporte resueltos en 1er nivel sin escalamiento",
+        "Tipo KRI": "Eficacia",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0.45,
+        "Valor Actual": 0.45,
+        "Meta 2026": 0.55,
+        "Meta 2027": 0.62,
+        "Meta 2028": 0.7,
+        "Meta 2029": 0.7,
+        "Umbral Crítico": 0.35,
+        "Umbral Moderado": 0.525,
+        "Frecuencia": "Mensual",
+        "OEs Relacionados": "OE1, OE5",
+        "Iniciativas": "I-09",
+        "Fuente": "PETI 2024, Tabla 20, ST21; GLPI sin parametrizar",
+        "principio_iso": "Rendimiento",
+        "rol_responsable": "Gerente de Operaciones de TI",
+        "justificacion_iso": "El KPI mide la eficacia del soporte técnico y la eficiencia operativa en la gestión de servicios, lo cual es fundamental para asegurar que los recursos de TI entreguen los resultados esperados según el principio de Rendimiento de ISO/IEC 38500.",
+        "historico_simulado": [
+            {
+                "periodo": "2024-01-01",
+                "valor": 0.45
+            },
+            {
+                "periodo": "2024-02-01",
+                "valor": 0.46
+            },
+            {
+                "periodo": "2024-03-01",
+                "valor": 0.44
+            },
+            {
+                "periodo": "2024-04-01",
+                "valor": 0.45
+            },
+            {
+                "periodo": "2024-05-01",
+                "valor": 0.45
+            },
+            {
+                "periodo": "2024-06-01",
+                "valor": 0.46
+            },
+            {
+                "periodo": "2024-07-01",
+                "valor": 0.44
+            },
+            {
+                "periodo": "2024-08-01",
+                "valor": 0.45
+            },
+            {
+                "periodo": "2024-09-01",
+                "valor": 0.45
+            },
+            {
+                "periodo": "2024-10-01",
+                "valor": 0.45
+            },
+            {
+                "periodo": "2024-11-01",
+                "valor": 0.44
+            },
+            {
+                "periodo": "2024-12-01",
+                "valor": 0.46
+            },
+            {
+                "periodo": "2025-01-01",
+                "valor": 0.45
+            },
+            {
+                "periodo": "2025-02-01",
+                "valor": 0.45
+            },
+            {
+                "periodo": "2025-03-01",
+                "valor": 0.44
+            },
+            {
+                "periodo": "2025-04-01",
+                "valor": 0.46
+            },
+            {
+                "periodo": "2025-05-01",
+                "valor": 0.45
+            },
+            {
+                "periodo": "2025-06-01",
+                "valor": 0.45
+            },
+            {
+                "periodo": "2025-07-01",
+                "valor": 0.44
+            },
+            {
+                "periodo": "2025-08-01",
+                "valor": 0.45
+            },
+            {
+                "periodo": "2025-09-01",
+                "valor": 0.46
+            },
+            {
+                "periodo": "2025-10-01",
+                "valor": 0.45
+            },
+            {
+                "periodo": "2025-11-01",
+                "valor": 0.45
+            },
+            {
+                "periodo": "2025-12-01",
+                "valor": 0.44
+            },
+            {
+                "periodo": "2026-01-01",
+                "valor": 0.46
+            },
+            {
+                "periodo": "2026-02-01",
+                "valor": 0.45
+            },
+            {
+                "periodo": "2026-03-01",
+                "valor": 0.45
+            },
+            {
+                "periodo": "2026-04-01",
+                "valor": 0.44
+            },
+            {
+                "periodo": "2026-05-01",
+                "valor": 0.45
+            }
+        ],
+        "valor_actual_simulado": 0.45
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 7,
+        "Perspectiva": "Clientes",
+        "Obj. BSC": "C2",
+        "KPI": "Tiempo promedio resolución tickets soporte TI (horas hábiles)",
+        "Tipo KRI": "Eficiencia",
+        "Unidad": "Horas",
+        "Tipo": "MIN",
+        "Línea Base": 14,
+        "Valor Actual": 14,
+        "Meta 2026": 8,
+        "Meta 2027": 6,
+        "Meta 2028": 5,
+        "Meta 2029": 4,
+        "Umbral Crítico": 6,
+        "Umbral Moderado": 5,
+        "Frecuencia": "Mensual",
+        "OEs Relacionados": "OE1, OE5",
+        "Iniciativas": "I-09",
+        "Fuente": "PETI 2024, Tabla 20, ST15; sin registro de tiempos",
+        "principio_iso": "Rendimiento",
+        "rol_responsable": "Gerente de Servicios TI (IT Service Manager)",
+        "justificacion_iso": "El tiempo de resolución de tickets es un indicador clave de desempeño (KPI) que mide la eficacia y eficiencia operativa de la infraestructura de TI para soportar los procesos de negocio.",
+        "historico_simulado": [
+            {
+                "periodo": "2024-01-01",
+                "valor": 14.01
+            },
+            {
+                "periodo": "2024-02-01",
+                "valor": 13.99
+            },
+            {
+                "periodo": "2024-03-01",
+                "valor": 14.01
+            },
+            {
+                "periodo": "2024-04-01",
+                "valor": 14
+            },
+            {
+                "periodo": "2024-05-01",
+                "valor": 13.99
+            },
+            {
+                "periodo": "2024-06-01",
+                "valor": 14.01
+            },
+            {
+                "periodo": "2024-07-01",
+                "valor": 14
+            },
+            {
+                "periodo": "2024-08-01",
+                "valor": 14.01
+            },
+            {
+                "periodo": "2024-09-01",
+                "valor": 13.99
+            },
+            {
+                "periodo": "2024-10-01",
+                "valor": 14
+            },
+            {
+                "periodo": "2024-11-01",
+                "valor": 14.01
+            },
+            {
+                "periodo": "2024-12-01",
+                "valor": 13.99
+            },
+            {
+                "periodo": "2025-01-01",
+                "valor": 14
+            },
+            {
+                "periodo": "2025-02-01",
+                "valor": 14.01
+            },
+            {
+                "periodo": "2025-03-01",
+                "valor": 13.99
+            },
+            {
+                "periodo": "2025-04-01",
+                "valor": 14
+            },
+            {
+                "periodo": "2025-05-01",
+                "valor": 14.01
+            },
+            {
+                "periodo": "2025-06-01",
+                "valor": 13.99
+            },
+            {
+                "periodo": "2025-07-01",
+                "valor": 14
+            },
+            {
+                "periodo": "2025-08-01",
+                "valor": 14.01
+            },
+            {
+                "periodo": "2025-09-01",
+                "valor": 13.99
+            },
+            {
+                "periodo": "2025-10-01",
+                "valor": 14
+            },
+            {
+                "periodo": "2025-11-01",
+                "valor": 14.01
+            },
+            {
+                "periodo": "2025-12-01",
+                "valor": 13.99
+            },
+            {
+                "periodo": "2026-01-01",
+                "valor": 14
+            },
+            {
+                "periodo": "2026-02-01",
+                "valor": 14.01
+            },
+            {
+                "periodo": "2026-03-01",
+                "valor": 13.99
+            },
+            {
+                "periodo": "2026-04-01",
+                "valor": 14
+            },
+            {
+                "periodo": "2026-05-01",
+                "valor": 14.01
+            }
+        ],
+        "valor_actual_simulado": 14.01
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 8,
+        "Perspectiva": "Clientes",
+        "Obj. BSC": "C3",
+        "KPI": "N.º consultas de telemedicina realizadas por período (mensual)",
+        "Tipo KRI": "Efectividad",
+        "Unidad": "Numero",
+        "Tipo": "MAX",
+        "Línea Base": 0,
+        "Valor Actual": 0,
+        "Meta 2026": 40,
+        "Meta 2027": 120,
+        "Meta 2028": 200,
+        "Meta 2029": 200,
+        "Umbral Crítico": 60,
+        "Umbral Moderado": 120,
+        "Frecuencia": "Mensual",
+        "OEs Relacionados": "OE4",
+        "Iniciativas": "I-01",
+        "Fuente": "PETI 2024, Tabla 16 y 20; servicio no existente",
+        "principio_iso": "Rendimiento",
+        "rol_responsable": "Gerente de Operaciones de TI / Director de Transformación Digital",
+        "justificacion_iso": "El indicador mide la efectividad operativa de la plataforma de telemedicina bajo el principio de Rendimiento, el cual asegura que el uso de TI sea apto para cumplir con los requisitos del negocio y generar valor mediante la prestación de servicios.",
+        "historico_simulado": [],
+        "valor_actual_simulado": 0
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 9,
+        "Perspectiva": "Clientes",
+        "Obj. BSC": "C3",
+        "KPI": "% integración funcional plataforma telepsiquiatría–HIS",
+        "Tipo KRI": "Eficacia",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0,
+        "Valor Actual": 0,
+        "Meta 2026": 0.3,
+        "Meta 2027": 0.6,
+        "Meta 2028": 0.85,
+        "Meta 2029": 0.9,
+        "Umbral Crítico": 0.27,
+        "Umbral Moderado": 0.54,
+        "Frecuencia": "Trimestral",
+        "OEs Relacionados": "OE4",
+        "Iniciativas": "I-01",
+        "Fuente": "PETI 2024, Tabla 8, Hallazgo H02; sin módulo activo",
+        "principio_iso": "Estrategia",
+        "rol_responsable": "CIO (Chief Information Officer)",
+        "justificacion_iso": "El KPI mide el nivel de integración de sistemas críticos para la prestación de servicios, lo cual es un habilitador estratégico derivado de la planificación de TI para cumplir con los objetivos operativos de salud.",
+        "historico_simulado": [],
+        "valor_actual_simulado": 0
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 10,
+        "Perspectiva": "Clientes",
+        "Obj. BSC": "C3",
+        "KPI": "Costo promedio consulta telemedicina vs. presencial (reducción %)",
+        "Tipo KRI": "Eficiencia",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0,
+        "Valor Actual": 0,
+        "Meta 2026": 0.55,
+        "Meta 2027": 0.4,
+        "Meta 2028": 0.3,
+        "Meta 2029": 0.2,
+        "Umbral Crítico": 0.12,
+        "Umbral Moderado": 0.16,
+        "Frecuencia": "Semestral",
+        "OEs Relacionados": "OE4",
+        "Iniciativas": "I-01",
+        "Fuente": "PETI 2024, Tabla 17; servicio inexistente",
+        "principio_iso": "Rendimiento",
+        "rol_responsable": "CIO / Director de Transformación Digital",
+        "justificacion_iso": "El KPI evalúa la eficiencia operativa y la optimización de recursos financieros en la prestación de servicios, alineándose con el principio de Rendimiento al medir el impacto económico del modelo de telemedicina.",
+        "historico_simulado": [],
+        "valor_actual_simulado": 0
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 11,
+        "Perspectiva": "Clientes",
+        "Obj. BSC": "C4",
+        "KPI": "N.º trámites digitalizados y disponibles sin papel (acumulado)",
+        "Tipo KRI": "Eficacia",
+        "Unidad": "Numero",
+        "Tipo": "MAX",
+        "Línea Base": 2,
+        "Valor Actual": 2,
+        "Meta 2026": 3,
+        "Meta 2027": 8,
+        "Meta 2028": 15,
+        "Meta 2029": 18,
+        "Umbral Crítico": 5,
+        "Umbral Moderado": 10,
+        "Frecuencia": "Trimestral",
+        "OEs Relacionados": "OE4",
+        "Iniciativas": "I-02, I-08",
+        "Fuente": "PETI 2024, Tabla 20, ST17 y ST25",
+        "principio_iso": "Estrategia",
+        "rol_responsable": "CIO (Chief Information Officer)",
+        "justificacion_iso": "La digitalización de trámites es una palanca estratégica de transformación operativa que alinea las capacidades tecnológicas con los objetivos de negocio y la eficiencia organizacional.",
+        "historico_simulado": [
+            {
+                "periodo": "2024-01-01",
+                "valor": 2
+            },
+            {
+                "periodo": "2024-04-01",
+                "valor": 2
+            },
+            {
+                "periodo": "2024-07-01",
+                "valor": 2
+            },
+            {
+                "periodo": "2024-10-01",
+                "valor": 2
+            },
+            {
+                "periodo": "2025-01-01",
+                "valor": 2
+            },
+            {
+                "periodo": "2025-04-01",
+                "valor": 2
+            },
+            {
+                "periodo": "2025-07-01",
+                "valor": 2
+            },
+            {
+                "periodo": "2025-10-01",
+                "valor": 2
+            },
+            {
+                "periodo": "2026-01-01",
+                "valor": 2
+            },
+            {
+                "periodo": "2026-04-01",
+                "valor": 2
+            }
+        ],
+        "valor_actual_simulado": 2
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 12,
+        "Perspectiva": "Clientes",
+        "Obj. BSC": "C4",
+        "KPI": "% reducción tiempo promedio trámites administrativos del paciente",
+        "Tipo KRI": "Efectividad",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0,
+        "Valor Actual": 0,
+        "Meta 2026": 0.1,
+        "Meta 2027": 0.2,
+        "Meta 2028": 0.4,
+        "Meta 2029": 0.45,
+        "Umbral Crítico": 0.25,
+        "Umbral Moderado": 0.35,
+        "Frecuencia": "Trimestral",
+        "OEs Relacionados": "OE4",
+        "Iniciativas": "I-02, I-08",
+        "Fuente": "PETI 2024, Tabla 18; sin indicadores de tiempo",
+        "principio_iso": "Rendimiento",
+        "rol_responsable": "Gerente de TI / CIO",
+        "justificacion_iso": "El KPI mide la eficiencia operativa y la mejora en los tiempos de respuesta del servicio, alineándose directamente con el principio de Rendimiento que busca asegurar que TI entregue valor mediante la optimización de procesos.",
+        "historico_simulado": [],
+        "valor_actual_simulado": 0
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 13,
+        "Perspectiva": "Clientes",
+        "Obj. BSC": "C4",
+        "KPI": "% reducción costo fotocopiado e impresión",
+        "Tipo KRI": "Eficiencia",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0,
+        "Valor Actual": 0,
+        "Meta 2026": 0.3,
+        "Meta 2027": 0.35,
+        "Meta 2028": 0.4,
+        "Meta 2029": 0.55,
+        "Umbral Crítico": 0.3,
+        "Umbral Moderado": 0.42,
+        "Frecuencia": "Anual",
+        "OEs Relacionados": "OE4",
+        "Iniciativas": "I-02, I-08, I-13",
+        "Fuente": "PETI 2024, Tabla 46, GO015; $89.5M COP base 2025",
+        "principio_iso": "Rendimiento",
+        "rol_responsable": "CIO (Chief Information Officer)",
+        "justificacion_iso": "El KPI mide la eficiencia operativa y la optimización de recursos financieros, lo cual es fundamental para asegurar que las TI proporcionen el valor esperado a la organización bajo el principio de Rendimiento de la norma ISO/IEC 38500.",
+        "historico_simulado": [],
+        "valor_actual_simulado": 0
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 14,
+        "Perspectiva": "Procesos Internos",
+        "Obj. BSC": "P1",
+        "KPI": "% módulos críticos del HIS implementados y operativos",
+        "Tipo KRI": "Eficacia",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0.55,
+        "Valor Actual": 0.55,
+        "Meta 2026": 0.65,
+        "Meta 2027": 0.75,
+        "Meta 2028": 0.88,
+        "Meta 2029": 0.95,
+        "Umbral Crítico": 0.43,
+        "Umbral Moderado": 0.67,
+        "Frecuencia": "Trimestral",
+        "OEs Relacionados": "OE2",
+        "Iniciativas": "I-04",
+        "Fuente": "PETI 2024, Tabla 8; Madurez SI 3.0/5",
+        "principio_iso": "Rendimiento",
+        "rol_responsable": "CIO (Chief Information Officer)",
+        "justificacion_iso": "El KPI mide la eficacia en la implementación de sistemas críticos (HIS), directamente relacionado con la capacidad de TI para entregar valor y cumplir con los objetivos operativos del negocio, bajo el principio de Rendimiento de la norma ISO 38500.",
+        "historico_simulado": [
+            {
+                "periodo": "2024-01-01",
+                "valor": 0.55
+            },
+            {
+                "periodo": "2024-04-01",
+                "valor": 0.54
+            },
+            {
+                "periodo": "2024-07-01",
+                "valor": 0.56
+            },
+            {
+                "periodo": "2024-10-01",
+                "valor": 0.55
+            },
+            {
+                "periodo": "2025-01-01",
+                "valor": 0.55
+            },
+            {
+                "periodo": "2025-04-01",
+                "valor": 0.56
+            },
+            {
+                "periodo": "2025-07-01",
+                "valor": 0.54
+            },
+            {
+                "periodo": "2025-10-01",
+                "valor": 0.55
+            },
+            {
+                "periodo": "2026-01-01",
+                "valor": 0.55
+            },
+            {
+                "periodo": "2026-04-01",
+                "valor": 0.55
+            }
+        ],
+        "valor_actual_simulado": 0.55
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 15,
+        "Perspectiva": "Procesos Internos",
+        "Obj. BSC": "P1",
+        "KPI": "% interfaces de integración implementadas en cronograma y costo",
+        "Tipo KRI": "Eficiencia",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0,
+        "Valor Actual": 0,
+        "Meta 2026": 0.5,
+        "Meta 2027": 0.75,
+        "Meta 2028": 0.8,
+        "Meta 2029": 0.85,
+        "Umbral Crítico": 0.3,
+        "Umbral Moderado": 0.55,
+        "Frecuencia": "Trimestral",
+        "OEs Relacionados": "OE2",
+        "Iniciativas": "I-04",
+        "Fuente": "PETI 2024, Hallazgo H02; Interoperabilidad 0.9/5",
+        "principio_iso": "Rendimiento",
+        "rol_responsable": "Gerente de Proyectos de TI / PMO",
+        "justificacion_iso": "El KPI mide el desempeño en la ejecución de proyectos de integración frente a restricciones de tiempo y presupuesto, alineándose con el principio de Rendimiento que exige que TI sea apta para el propósito y eficiente en el uso de recursos.",
+        "historico_simulado": [],
+        "valor_actual_simulado": 0
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 16,
+        "Perspectiva": "Procesos Internos",
+        "Obj. BSC": "P1",
+        "KPI": "% procesos asistenciales sin dependencia de Excel manual crítico",
+        "Tipo KRI": "Efectividad",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0.2,
+        "Valor Actual": 0.2,
+        "Meta 2026": 0.35,
+        "Meta 2027": 0.55,
+        "Meta 2028": 0.75,
+        "Meta 2029": 0.9,
+        "Umbral Crítico": 0.27,
+        "Umbral Moderado": 0.54,
+        "Frecuencia": "Trimestral",
+        "OEs Relacionados": "OE2",
+        "Iniciativas": "I-04",
+        "Fuente": "PETI 2024, Tabla 26, D03; Hallazgo H03",
+        "principio_iso": "Rendimiento",
+        "rol_responsable": "CIO (Chief Information Officer)",
+        "justificacion_iso": "Este KPI mide la eficacia operativa y la optimización de procesos mediante la reducción de deuda técnica y dependencia de herramientas manuales, lo cual es fundamental para el rendimiento del Gobierno de TI.",
+        "historico_simulado": [
+            {
+                "periodo": "2024-01-01",
+                "valor": 0.2
+            },
+            {
+                "periodo": "2024-04-01",
+                "valor": 0.21
+            },
+            {
+                "periodo": "2024-07-01",
+                "valor": 0.19
+            },
+            {
+                "periodo": "2024-10-01",
+                "valor": 0.2
+            },
+            {
+                "periodo": "2025-01-01",
+                "valor": 0.2
+            },
+            {
+                "periodo": "2025-04-01",
+                "valor": 0.21
+            },
+            {
+                "periodo": "2025-07-01",
+                "valor": 0.19
+            },
+            {
+                "periodo": "2025-10-01",
+                "valor": 0.2
+            },
+            {
+                "periodo": "2026-01-01",
+                "valor": 0.2
+            },
+            {
+                "periodo": "2026-04-01",
+                "valor": 0.2
+            }
+        ],
+        "valor_actual_simulado": 0.2
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 17,
+        "Perspectiva": "Procesos Internos",
+        "Obj. BSC": "P2",
+        "KPI": "% controles MSPI implementados sobre hoja de ruta aprobada",
+        "Tipo KRI": "Eficacia",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0,
+        "Valor Actual": 0,
+        "Meta 2026": 0.25,
+        "Meta 2027": 0.5,
+        "Meta 2028": 0.75,
+        "Meta 2029": 0.9,
+        "Umbral Crítico": 0.27,
+        "Umbral Moderado": 0.54,
+        "Frecuencia": "Trimestral",
+        "OEs Relacionados": "OE3",
+        "Iniciativas": "I-06, I-16",
+        "Fuente": "PETI 2024, Hallazgo H04, H19; MSPI no desplegado",
+        "principio_iso": "Conformidad",
+        "rol_responsable": "Oficial de Cumplimiento de TI (IT Compliance Officer)",
+        "justificacion_iso": "El KPI mide el grado de adhesión a una hoja de ruta regulatoria o de estándares (MSPI), lo cual garantiza que la organización cumple con sus obligaciones legales y normativas internas.",
+        "historico_simulado": [],
+        "valor_actual_simulado": 0
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 18,
+        "Perspectiva": "Procesos Internos",
+        "Obj. BSC": "P2",
+        "KPI": "% datos clínicos sensibles protegidos con criptografía activa",
+        "Tipo KRI": "Eficacia",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0,
+        "Valor Actual": 0,
+        "Meta 2026": 0.2,
+        "Meta 2027": 0.5,
+        "Meta 2028": 0.75,
+        "Meta 2029": 0.9,
+        "Umbral Crítico": 0.23,
+        "Umbral Moderado": 0.5,
+        "Frecuencia": "Trimestral",
+        "OEs Relacionados": "OE3",
+        "Iniciativas": "I-06, I-16",
+        "Fuente": "PETI 2024, Hallazgo H19; Seguridad 3.0/5",
+        "principio_iso": "Conformidad",
+        "rol_responsable": "Oficial de Protección de Datos (DPO) / CISO",
+        "justificacion_iso": "La protección de datos sensibles es una obligación legal y normativa, por lo que su control se enmarca en el principio de Conformidad (Compliance) al asegurar que el uso de TI cumple con los requisitos legales y regulatorios aplicables.",
+        "historico_simulado": [],
+        "valor_actual_simulado": 0
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 19,
+        "Perspectiva": "Procesos Internos",
+        "Obj. BSC": "P2",
+        "KPI": "N.º incidentes de seguridad con impacto en sistemas clínicos",
+        "Tipo KRI": "Efectividad",
+        "Unidad": "Numero",
+        "Tipo": "MIN",
+        "Línea Base": null,
+        "Valor Actual": null,
+        "Meta 2026": 2,
+        "Meta 2027": 1,
+        "Meta 2028": 0,
+        "Meta 2029": 0,
+        "Umbral Crítico": 3,
+        "Umbral Moderado": 1,
+        "Frecuencia": "Mensual",
+        "OEs Relacionados": "OE3",
+        "Iniciativas": "I-06, I-16",
+        "Fuente": "PETI 2024, Tabla 20, ST08; sin SIEM ni gestión formal",
+        "principio_iso": "Conformidad",
+        "rol_responsable": "CISO (Chief Information Security Officer)",
+        "justificacion_iso": "El KPI mide la incidencia de riesgos de seguridad que comprometen la integridad y disponibilidad de activos críticos, lo cual es responsabilidad directa del CISO para asegurar el cumplimiento normativo y la mitigación de brechas.",
+        "historico_simulado": [],
+        "valor_actual_simulado": null
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 20,
+        "Perspectiva": "Procesos Internos",
+        "Obj. BSC": "P2",
+        "KPI": "MTTR ante incidente mayor (horas)",
+        "Tipo KRI": "Eficiencia",
+        "Unidad": "Horas",
+        "Tipo": "MIN",
+        "Línea Base": null,
+        "Valor Actual": null,
+        "Meta 2026": 6,
+        "Meta 2027": 5,
+        "Meta 2028": 4,
+        "Meta 2029": 3,
+        "Umbral Crítico": 5,
+        "Umbral Moderado": 4,
+        "Frecuencia": "Mensual",
+        "OEs Relacionados": "OE3",
+        "Iniciativas": "I-06, I-16",
+        "Fuente": "PETI 2024, Tabla 13; backups Veeam sin MTTR documentado",
+        "principio_iso": "Rendimiento",
+        "rol_responsable": "Gerente de Operaciones de TI (IT Operations Manager)",
+        "justificacion_iso": "El MTTR (Mean Time To Repair) es un indicador clave de desempeño que mide la eficacia y eficiencia en la restauración de servicios, alineándose con el principio de Rendimiento al garantizar que TI contribuya adecuadamente al éxito del negocio bajo niveles de servicio aceptables.",
+        "historico_simulado": [],
+        "valor_actual_simulado": null
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 21,
+        "Perspectiva": "Procesos Internos",
+        "Obj. BSC": "P3",
+        "KPI": "% cumplimiento POA TI bajo modelo de gobierno formalizado",
+        "Tipo KRI": "Eficacia",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0.93,
+        "Valor Actual": 0.93,
+        "Meta 2026": 0.75,
+        "Meta 2027": 0.8,
+        "Meta 2028": 0.85,
+        "Meta 2029": 0.9,
+        "Umbral Crítico": 0.54,
+        "Umbral Moderado": 0.72,
+        "Frecuencia": "Anual",
+        "OEs Relacionados": "OE1, OE5",
+        "Iniciativas": "I-03, I-07, I-15",
+        "Fuente": "PETI 2024, Tabla 6, ObTI_08; 93% en 2023",
+        "principio_iso": "Estrategia",
+        "rol_responsable": "CIO (Chief Information Officer)",
+        "justificacion_iso": "El cumplimiento del POA (Plan Operativo Anual) bajo un modelo de gobierno formalizado es una función estratégica que asegura que las inversiones y actividades de TI estén alineadas con los objetivos de negocio y la dirección establecida por la alta gerencia.",
+        "historico_simulado": [
+            {
+                "periodo": "2024-01-01",
+                "valor": 0.93
+            },
+            {
+                "periodo": "2025-01-01",
+                "valor": 0.93
+            },
+            {
+                "periodo": "2026-01-01",
+                "valor": 0.93
+            }
+        ],
+        "valor_actual_simulado": 0.93
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 22,
+        "Perspectiva": "Procesos Internos",
+        "Obj. BSC": "P3",
+        "KPI": "Nivel madurez gobierno TI (COBIT/MIPG, escala 1–5)",
+        "Tipo KRI": "Efectividad",
+        "Unidad": "Puntos (1–5)",
+        "Tipo": "MAX",
+        "Línea Base": 2.4,
+        "Valor Actual": 2.4,
+        "Meta 2026": 3,
+        "Meta 2027": 3.5,
+        "Meta 2028": 4,
+        "Meta 2029": 4,
+        "Umbral Crítico": 2.2,
+        "Umbral Moderado": 3.2,
+        "Frecuencia": "Anual",
+        "OEs Relacionados": "OE1, OE5",
+        "Iniciativas": "I-07, I-15",
+        "Fuente": "PETI 2024, Tabla 24; Gobierno TI: 2.4/5",
+        "principio_iso": "Estrategia",
+        "rol_responsable": "Comité de Gobierno de TI",
+        "justificacion_iso": "El nivel de madurez mide la alineación de las capacidades de TI con las necesidades del negocio, siendo fundamental para la planificación estratégica y la priorización de las inversiones bajo el marco ISO/IEC 38500.",
+        "historico_simulado": [
+            {
+                "periodo": "2024-01-01",
+                "valor": 2.4
+            },
+            {
+                "periodo": "2025-01-01",
+                "valor": 2.41
+            },
+            {
+                "periodo": "2026-01-01",
+                "valor": 2.39
+            }
+        ],
+        "valor_actual_simulado": 2.39
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 23,
+        "Perspectiva": "Procesos Internos",
+        "Obj. BSC": "P3",
+        "KPI": "% sesiones Comité Gobierno TI realizadas vs. programadas",
+        "Tipo KRI": "Eficiencia",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0,
+        "Valor Actual": 0,
+        "Meta 2026": 0.8,
+        "Meta 2027": 0.85,
+        "Meta 2028": 0.9,
+        "Meta 2029": 0.9,
+        "Umbral Crítico": 0.45,
+        "Umbral Moderado": 0.68,
+        "Frecuencia": "Trimestral",
+        "OEs Relacionados": "OE1",
+        "Iniciativas": "I-07, I-15",
+        "Fuente": "PETI 2024, Hallazgo H14; Comité inexistente",
+        "principio_iso": "Responsabilidad",
+        "rol_responsable": "Consejo de Administración / Comité de Dirección",
+        "justificacion_iso": "La realización de sesiones del Comité de Gobierno de TI es un mecanismo de supervisión directa y rendición de cuentas que asegura que los órganos de gobierno cumplan con su obligación de dirigir y monitorear el uso de las TI.",
+        "historico_simulado": [],
+        "valor_actual_simulado": 0
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 24,
+        "Perspectiva": "Procesos Internos",
+        "Obj. BSC": "P4",
+        "KPI": "% servidores con SO obsoleto migrados o reemplazados",
+        "Tipo KRI": "Eficacia",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0,
+        "Valor Actual": 0,
+        "Meta 2026": 0.3,
+        "Meta 2027": 0.65,
+        "Meta 2028": 0.9,
+        "Meta 2029": 1,
+        "Umbral Crítico": 0.25,
+        "Umbral Moderado": 0.55,
+        "Frecuencia": "Trimestral",
+        "OEs Relacionados": "OE3, OE4",
+        "Iniciativas": "I-05, I-13",
+        "Fuente": "PETI 2024, Tabla 13; WS2003/2008/2012 en producción",
+        "principio_iso": "Rendimiento",
+        "rol_responsable": "Gerente de Infraestructura TI / CTO",
+        "justificacion_iso": "El indicador evalúa la eficacia de la actualización de la infraestructura tecnológica para garantizar la continuidad operativa y la optimización del rendimiento del centro de datos.",
+        "historico_simulado": [],
+        "valor_actual_simulado": 0
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 25,
+        "Perspectiva": "Procesos Internos",
+        "Obj. BSC": "P4",
+        "KPI": "Desviación promedio cronograma por migración servidor (días)",
+        "Tipo KRI": "Eficiencia",
+        "Unidad": "Días",
+        "Tipo": "MIN",
+        "Línea Base": null,
+        "Valor Actual": null,
+        "Meta 2026": 10,
+        "Meta 2027": 7,
+        "Meta 2028": 5,
+        "Meta 2029": 5,
+        "Umbral Crítico": 8,
+        "Umbral Moderado": 6,
+        "Frecuencia": "Trimestral",
+        "OEs Relacionados": "OE3, OE4",
+        "Iniciativas": "I-05",
+        "Fuente": "PETI 2024, Tabla 43, IT002; proyecto no iniciado",
+        "principio_iso": "Rendimiento",
+        "rol_responsable": "Gerente de Proyectos TI (PMO)",
+        "justificacion_iso": "El KPI mide la eficiencia en la ejecución de un proyecto crítico de infraestructura, evaluando la capacidad de cumplimiento respecto a la planificación establecida, lo cual impacta directamente en el desempeño operativo y la entrega de valor de TI.",
+        "historico_simulado": [],
+        "valor_actual_simulado": null
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 26,
+        "Perspectiva": "Procesos Internos",
+        "Obj. BSC": "P4",
+        "KPI": "% reducción costos mantenimiento equipos obsoletos año a año",
+        "Tipo KRI": "Efectividad",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0,
+        "Valor Actual": 0,
+        "Meta 2026": 0.05,
+        "Meta 2027": 0.07,
+        "Meta 2028": 0.1,
+        "Meta 2029": 0.25,
+        "Umbral Crítico": 0.15,
+        "Umbral Moderado": 0.19,
+        "Frecuencia": "Anual",
+        "OEs Relacionados": "OE3, OE4",
+        "Iniciativas": "I-05, I-13",
+        "Fuente": "PETI 2024, Tabla 46; $421.4M COP base mantenimiento 2025",
+        "principio_iso": "Rendimiento",
+        "rol_responsable": "CIO (Chief Information Officer)",
+        "justificacion_iso": "El KPI mide la eficiencia en la gestión de activos y la optimización de recursos financieros, lo cual es fundamental para asegurar que las inversiones en TI generen valor y resultados sostenibles para el negocio según el principio de Rendimiento.",
+        "historico_simulado": [],
+        "valor_actual_simulado": 0
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 27,
+        "Perspectiva": "Procesos Internos",
+        "Obj. BSC": "P5",
+        "KPI": "% procesos con gestión documental digitalizada (SGDEA)",
+        "Tipo KRI": "Eficacia",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0,
+        "Valor Actual": 0,
+        "Meta 2026": 0.15,
+        "Meta 2027": 0.4,
+        "Meta 2028": 0.8,
+        "Meta 2029": 0.9,
+        "Umbral Crítico": 0.225,
+        "Umbral Moderado": 0.495,
+        "Frecuencia": "Trimestral",
+        "OEs Relacionados": "OE4",
+        "Iniciativas": "I-08",
+        "Fuente": "PETI 2024, Tabla 20, ST22; SGDEA no implementado",
+        "principio_iso": "Estrategia",
+        "rol_responsable": "CIO (Chief Information Officer)",
+        "justificacion_iso": "La gestión documental digitalizada es un habilitador estratégico para la optimización de procesos y la madurez digital; dado que el valor actual es 0, el indicador no presenta ejecución ni progreso según las reglas establecidas.",
+        "historico_simulado": [],
+        "valor_actual_simulado": 0
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 28,
+        "Perspectiva": "Procesos Internos",
+        "Obj. BSC": "P5",
+        "KPI": "Tiempo promedio recuperación documental vs. línea base manual (% reducción)",
+        "Tipo KRI": "Eficiencia",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0,
+        "Valor Actual": 0,
+        "Meta 2026": 0.25,
+        "Meta 2027": 0.4,
+        "Meta 2028": 0.65,
+        "Meta 2029": 0.75,
+        "Umbral Crítico": 0.45,
+        "Umbral Moderado": 0.56,
+        "Frecuencia": "Trimestral",
+        "OEs Relacionados": "OE4",
+        "Iniciativas": "I-08",
+        "Fuente": "PETI 2024, Tabla 20, ST22; sin métricas operativas",
+        "principio_iso": "Rendimiento",
+        "rol_responsable": "CIO (Chief Information Officer)",
+        "justificacion_iso": "El KPI mide la eficiencia operativa en los procesos de recuperación de información, lo cual es fundamental para asegurar que los activos tecnológicos brinden los beneficios esperados en el rendimiento del negocio.",
+        "historico_simulado": [],
+        "valor_actual_simulado": 0
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 29,
+        "Perspectiva": "Procesos Internos",
+        "Obj. BSC": "P5",
+        "KPI": "% cumplimiento normativo trazabilidad historia clínica electrónica",
+        "Tipo KRI": "Efectividad",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0.3,
+        "Valor Actual": 0.3,
+        "Meta 2026": 0.45,
+        "Meta 2027": 0.65,
+        "Meta 2028": 0.85,
+        "Meta 2029": 0.95,
+        "Umbral Crítico": 0.332,
+        "Umbral Moderado": 0.618,
+        "Frecuencia": "Anual",
+        "OEs Relacionados": "OE4",
+        "Iniciativas": "I-08",
+        "Fuente": "PETI 2024, Tabla 24; Madurez datos 2.8/5",
+        "principio_iso": "Conformidad",
+        "rol_responsable": "Oficial de Cumplimiento (Compliance Officer) / CISO",
+        "justificacion_iso": "El KPI mide el grado de apego a los estándares legales y técnicos en la gestión de registros clínicos, lo cual es fundamental para asegurar que las TI cumplen con las regulaciones sectoriales y de protección de datos.",
+        "historico_simulado": [
+            {
+                "periodo": "2024-01-01",
+                "valor": 0.3
+            },
+            {
+                "periodo": "2025-01-01",
+                "valor": 0.31
+            },
+            {
+                "periodo": "2026-01-01",
+                "valor": 0.29
+            }
+        ],
+        "valor_actual_simulado": 0.29
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 30,
+        "Perspectiva": "Aprendizaje y Crec.",
+        "Obj. BSC": "A1",
+        "KPI": "% personal clínico y adm. con formación TI completada y evaluada",
+        "Tipo KRI": "Eficacia",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0.15,
+        "Valor Actual": 0.15,
+        "Meta 2026": 0.4,
+        "Meta 2027": 0.6,
+        "Meta 2028": 0.75,
+        "Meta 2029": 0.85,
+        "Umbral Crítico": 0.255,
+        "Umbral Moderado": 0.51,
+        "Frecuencia": "Anual",
+        "OEs Relacionados": "OE5",
+        "Iniciativas": "I-09",
+        "Fuente": "PETI 2024, Tabla 24; Uso y apropiación 1.2/5",
+        "principio_iso": "Comportamiento Humano",
+        "rol_responsable": "Director de Recursos Humanos / CIO",
+        "justificacion_iso": "El principio de Comportamiento Humano asegura que las políticas de TI respeten las necesidades de las personas. La capacitación es un habilitador crítico para la adopción tecnológica, siendo responsabilidad de la dirección alinear las competencias del personal con los objetivos de gobierno TI.",
+        "historico_simulado": [
+            {
+                "periodo": "2024-01-01",
+                "valor": 0.15
+            },
+            {
+                "periodo": "2025-01-01",
+                "valor": 0.16
+            },
+            {
+                "periodo": "2026-01-01",
+                "valor": 0.15
+            }
+        ],
+        "valor_actual_simulado": 0.15
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 31,
+        "Perspectiva": "Aprendizaje y Crec.",
+        "Obj. BSC": "A1",
+        "KPI": "Índice de apropiación tecnológica (encuesta pre/post, escala 1–5)",
+        "Tipo KRI": "Efectividad",
+        "Unidad": "Puntos (1–5)",
+        "Tipo": "MAX",
+        "Línea Base": 1.8,
+        "Valor Actual": 1.8,
+        "Meta 2026": 2.5,
+        "Meta 2027": 3.2,
+        "Meta 2028": 3.8,
+        "Meta 2029": 4.2,
+        "Umbral Crítico": 1.9,
+        "Umbral Moderado": 2.9,
+        "Frecuencia": "Trimestral",
+        "OEs Relacionados": "OE5",
+        "Iniciativas": "I-09",
+        "Fuente": "PETI 2024, Hallazgo H05; sin estrategia gestión cambio",
+        "principio_iso": "Comportamiento Humano",
+        "rol_responsable": "Director de Recursos Humanos / CIO",
+        "justificacion_iso": "El índice de apropiación tecnológica mide la adopción y competencia del talento humano frente a las nuevas herramientas, siendo un pilar crítico para asegurar que la inversión en TI genere valor a través de su uso efectivo.",
+        "historico_simulado": [
+            {
+                "periodo": "2024-01-01",
+                "valor": 1.8
+            },
+            {
+                "periodo": "2024-04-01",
+                "valor": 1.81
+            },
+            {
+                "periodo": "2024-07-01",
+                "valor": 1.79
+            },
+            {
+                "periodo": "2024-10-01",
+                "valor": 1.8
+            },
+            {
+                "periodo": "2025-01-01",
+                "valor": 1.81
+            },
+            {
+                "periodo": "2025-04-01",
+                "valor": 1.79
+            },
+            {
+                "periodo": "2025-07-01",
+                "valor": 1.8
+            },
+            {
+                "periodo": "2025-10-01",
+                "valor": 1.81
+            },
+            {
+                "periodo": "2026-01-01",
+                "valor": 1.8
+            },
+            {
+                "periodo": "2026-04-01",
+                "valor": 1.79
+            }
+        ],
+        "valor_actual_simulado": 1.79
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 32,
+        "Perspectiva": "Aprendizaje y Crec.",
+        "Obj. BSC": "A1",
+        "KPI": "% formación impartida vía plataforma virtual F04 vs. presencial",
+        "Tipo KRI": "Eficiencia",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0.2,
+        "Valor Actual": 0.2,
+        "Meta 2026": 0.4,
+        "Meta 2027": 0.6,
+        "Meta 2028": 0.7,
+        "Meta 2029": 0.75,
+        "Umbral Crítico": 0.262,
+        "Umbral Moderado": 0.488,
+        "Frecuencia": "Anual",
+        "OEs Relacionados": "OE5",
+        "Iniciativas": "I-09",
+        "Fuente": "PETI 2024, Tabla 20, ST09; Moodle con uso incipiente",
+        "principio_iso": "Comportamiento Humano",
+        "rol_responsable": "Director de Recursos Humanos / Gerente de Capacitación",
+        "justificacion_iso": "El KPI evalúa la adopción de modalidades de aprendizaje digital, reflejando la adecuación de las competencias y hábitos del personal hacia el uso de tecnologías, alineado con el principio de Comportamiento Humano de ISO 38500.",
+        "historico_simulado": [
+            {
+                "periodo": "2024-01-01",
+                "valor": 0.2
+            },
+            {
+                "periodo": "2025-01-01",
+                "valor": 0.2
+            },
+            {
+                "periodo": "2026-01-01",
+                "valor": 0.2
+            }
+        ],
+        "valor_actual_simulado": 0.2
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 33,
+        "Perspectiva": "Aprendizaje y Crec.",
+        "Obj. BSC": "A2",
+        "KPI": "N.º dashboards o reportes analíticos activos consultados regularmente",
+        "Tipo KRI": "Eficacia",
+        "Unidad": "Numero",
+        "Tipo": "MAX",
+        "Línea Base": 1,
+        "Valor Actual": 1,
+        "Meta 2026": 2,
+        "Meta 2027": 4,
+        "Meta 2028": 7,
+        "Meta 2029": 10,
+        "Umbral Crítico": 2,
+        "Umbral Moderado": 6,
+        "Frecuencia": "Trimestral",
+        "OEs Relacionados": "OE4, OE5",
+        "Iniciativas": "I-10",
+        "Fuente": "PETI 2024, Tabla 8; SAGA HEALTH como único tool",
+        "principio_iso": "Rendimiento",
+        "rol_responsable": "Chief Data Officer (CDO)",
+        "justificacion_iso": "El KPI mide la utilidad y adopción de activos de información, lo cual es fundamental para asegurar que las inversiones en TI generen valor y resultados tangibles para la organización conforme al principio de Rendimiento.",
+        "historico_simulado": [
+            {
+                "periodo": "2024-01-01",
+                "valor": 1
+            },
+            {
+                "periodo": "2024-04-01",
+                "valor": 1
+            },
+            {
+                "periodo": "2024-07-01",
+                "valor": 1
+            },
+            {
+                "periodo": "2024-10-01",
+                "valor": 1
+            },
+            {
+                "periodo": "2025-01-01",
+                "valor": 1
+            },
+            {
+                "periodo": "2025-04-01",
+                "valor": 1
+            },
+            {
+                "periodo": "2025-07-01",
+                "valor": 1
+            },
+            {
+                "periodo": "2025-10-01",
+                "valor": 1
+            },
+            {
+                "periodo": "2026-01-01",
+                "valor": 1
+            },
+            {
+                "periodo": "2026-04-01",
+                "valor": 1
+            }
+        ],
+        "valor_actual_simulado": 1
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 34,
+        "Perspectiva": "Aprendizaje y Crec.",
+        "Obj. BSC": "A2",
+        "KPI": "% decisiones de gestión hospitalaria soportadas por datos estructurados",
+        "Tipo KRI": "Efectividad",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0.12,
+        "Valor Actual": 0.12,
+        "Meta 2026": 0.25,
+        "Meta 2027": 0.4,
+        "Meta 2028": 0.6,
+        "Meta 2029": 0.75,
+        "Umbral Crítico": 0.188,
+        "Umbral Moderado": 0.412,
+        "Frecuencia": "Trimestral",
+        "OEs Relacionados": "OE4, OE5",
+        "Iniciativas": "I-10",
+        "Fuente": "PETI 2024, Tabla 26, D02; Hallazgo H08",
+        "principio_iso": "Estrategia",
+        "rol_responsable": "CIO (Chief Information Officer)",
+        "justificacion_iso": "La toma de decisiones basada en datos es un componente estratégico de la Gobernanza de TI, alineando los activos de información con los objetivos de negocio y la eficiencia operativa hospitalaria.",
+        "historico_simulado": [
+            {
+                "periodo": "2024-01-01",
+                "valor": 0.12
+            },
+            {
+                "periodo": "2024-04-01",
+                "valor": 0.11
+            },
+            {
+                "periodo": "2024-07-01",
+                "valor": 0.13
+            },
+            {
+                "periodo": "2024-10-01",
+                "valor": 0.12
+            },
+            {
+                "periodo": "2025-01-01",
+                "valor": 0.12
+            },
+            {
+                "periodo": "2025-04-01",
+                "valor": 0.13
+            },
+            {
+                "periodo": "2025-07-01",
+                "valor": 0.11
+            },
+            {
+                "periodo": "2025-10-01",
+                "valor": 0.12
+            },
+            {
+                "periodo": "2026-01-01",
+                "valor": 0.12
+            },
+            {
+                "periodo": "2026-04-01",
+                "valor": 0.12
+            }
+        ],
+        "valor_actual_simulado": 0.12
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 35,
+        "Perspectiva": "Aprendizaje y Crec.",
+        "Obj. BSC": "A2",
+        "KPI": "Tiempo promedio incorporación nueva fuente de datos al ecosistema analítico (días)",
+        "Tipo KRI": "Eficiencia",
+        "Unidad": "Semanas",
+        "Tipo": "MIN",
+        "Línea Base": null,
+        "Valor Actual": null,
+        "Meta 2026": 12,
+        "Meta 2027": 8,
+        "Meta 2028": 6,
+        "Meta 2029": 4,
+        "Umbral Crítico": 6,
+        "Umbral Moderado": 5,
+        "Frecuencia": "Trimestral",
+        "OEs Relacionados": "OE4, OE5",
+        "Iniciativas": "I-10",
+        "Fuente": "PETI 2024, Tabla 24; Madurez Integración 2.7/5",
+        "principio_iso": "Rendimiento",
+        "rol_responsable": "CDO (Chief Data Officer) / Gerente de Arquitectura de Datos",
+        "justificacion_iso": "El KPI mide la eficiencia operativa en la entrega de valor de negocio mediante la integración de activos de datos, lo cual es fundamental para asegurar que las TI respalden las necesidades actuales y futuras de la organización.",
+        "historico_simulado": [],
+        "valor_actual_simulado": null
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 36,
+        "Perspectiva": "Aprendizaje y Crec.",
+        "Obj. BSC": "A3",
+        "KPI": "% roles críticos TI cubiertos con perfil especializado",
+        "Tipo KRI": "Eficacia",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0.35,
+        "Valor Actual": 0.35,
+        "Meta 2026": 0.6,
+        "Meta 2027": 0.75,
+        "Meta 2028": 0.9,
+        "Meta 2029": 1,
+        "Umbral Crítico": 0.35,
+        "Umbral Moderado": 0.65,
+        "Frecuencia": "Anual",
+        "OEs Relacionados": "OE1, OE2, OE3, OE4, OE5",
+        "Iniciativas": "I-11, I-15",
+        "Fuente": "PETI 2024, Hallazgo H51; equipo TI reducido",
+        "principio_iso": "Comportamiento Humano",
+        "rol_responsable": "Chief Information Officer (CIO) / Director de Recursos Humanos",
+        "justificacion_iso": "El indicador evalúa la suficiencia de competencias técnicas críticas, alineándose con el principio de Comportamiento Humano que exige que las políticas y decisiones de TI respeten las necesidades de las personas y aseguren que las capacidades del personal sean adecuadas para los objetivos de la organización.",
+        "historico_simulado": [
+            {
+                "periodo": "2024-01-01",
+                "valor": 0.35
+            },
+            {
+                "periodo": "2025-01-01",
+                "valor": 0.36
+            },
+            {
+                "periodo": "2026-01-01",
+                "valor": 0.35
+            }
+        ],
+        "valor_actual_simulado": 0.35
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 37,
+        "Perspectiva": "Aprendizaje y Crec.",
+        "Obj. BSC": "A3",
+        "KPI": "% incidentes TI resueltos usando base de conocimiento interna",
+        "Tipo KRI": "Efectividad",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0,
+        "Valor Actual": 0,
+        "Meta 2026": 0.15,
+        "Meta 2027": 0.3,
+        "Meta 2028": 0.5,
+        "Meta 2029": 0.6,
+        "Umbral Crítico": 0.15,
+        "Umbral Moderado": 0.33,
+        "Frecuencia": "Mensual",
+        "OEs Relacionados": "OE1, OE5",
+        "Iniciativas": "I-11",
+        "Fuente": "PETI 2024, Tabla 20, ST21; GLPI sin parametrizar",
+        "principio_iso": "Rendimiento",
+        "rol_responsable": "Gerente de Servicios TI (IT Service Manager)",
+        "justificacion_iso": "El KPI mide la eficiencia operativa y la capacidad de autoservicio de la organización, elementos críticos para asegurar que las TI entreguen valor y cumplan con los niveles de servicio establecidos bajo el principio de Rendimiento.",
+        "historico_simulado": [],
+        "valor_actual_simulado": 0
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 38,
+        "Perspectiva": "Aprendizaje y Crec.",
+        "Obj. BSC": "A3",
+        "KPI": "Ratio horas resolución interna vs. consultoría externa (índice autogestión)",
+        "Tipo KRI": "Eficiencia",
+        "Unidad": "Ratio h-int/h-ext",
+        "Tipo": "MAX",
+        "Línea Base": 0.6,
+        "Valor Actual": 0.6,
+        "Meta 2026": 1,
+        "Meta 2027": 1.5,
+        "Meta 2028": 2.5,
+        "Meta 2029": 3,
+        "Umbral Crítico": 1,
+        "Umbral Moderado": 2,
+        "Frecuencia": "Trimestral",
+        "OEs Relacionados": "OE1, OE5",
+        "Iniciativas": "I-11",
+        "Fuente": "PETI 2024, Tabla 46; GO002 $548M vs. GO004+GO012 $134M",
+        "principio_iso": "Adquisición",
+        "rol_responsable": "CIO (Chief Information Officer)",
+        "justificacion_iso": "La gestión de la proporción entre recursos internos y externos impacta directamente en las decisiones de sourcing, la optimización de costes y la transferencia de conocimiento técnico, elementos clave del principio de Adquisición según ISO 38500.",
+        "historico_simulado": [
+            {
+                "periodo": "2024-01-01",
+                "valor": 0.6
+            },
+            {
+                "periodo": "2024-04-01",
+                "valor": 0.61
+            },
+            {
+                "periodo": "2024-07-01",
+                "valor": 0.59
+            },
+            {
+                "periodo": "2024-10-01",
+                "valor": 0.6
+            },
+            {
+                "periodo": "2025-01-01",
+                "valor": 0.6
+            },
+            {
+                "periodo": "2025-04-01",
+                "valor": 0.59
+            },
+            {
+                "periodo": "2025-07-01",
+                "valor": 0.61
+            },
+            {
+                "periodo": "2025-10-01",
+                "valor": 0.6
+            },
+            {
+                "periodo": "2026-01-01",
+                "valor": 0.6
+            },
+            {
+                "periodo": "2026-04-01",
+                "valor": 0.6
+            }
+        ],
+        "valor_actual_simulado": 0.6
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 39,
+        "Perspectiva": "Finanzas",
+        "Obj. BSC": "F1",
+        "KPI": "% proyectos TI con ficha presupuestal completa",
+        "Tipo KRI": "Eficiencia",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0,
+        "Valor Actual": 0,
+        "Meta 2026": 0.5,
+        "Meta 2027": 0.7,
+        "Meta 2028": 0.85,
+        "Meta 2029": 1,
+        "Umbral Crítico": 0.3,
+        "Umbral Moderado": 0.6,
+        "Frecuencia": "Trimestral",
+        "OEs Relacionados": "OE1, OE5",
+        "Iniciativas": "I-12, I-15",
+        "Fuente": "PETI 2024, Tabla 24; Madurez Costos TI 1.0/5",
+        "principio_iso": "Adquisición",
+        "rol_responsable": "Gerente de Finanzas TI / PMO Manager",
+        "justificacion_iso": "El KPI mide el rigor en la planificación financiera de los proyectos, un componente crítico del principio de Adquisición para asegurar la inversión adecuada y la transparencia presupuestaria.",
+        "historico_simulado": [],
+        "valor_actual_simulado": 0
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 40,
+        "Perspectiva": "Finanzas",
+        "Obj. BSC": "F1",
+        "KPI": "% ejecución presupuestal TI sin desviación superior al 15%",
+        "Tipo KRI": "Eficacia",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0,
+        "Valor Actual": 0,
+        "Meta 2026": 0.85,
+        "Meta 2027": 0.88,
+        "Meta 2028": 0.92,
+        "Meta 2029": 0.95,
+        "Umbral Crítico": 0.38,
+        "Umbral Moderado": 0.67,
+        "Frecuencia": "Trimestral",
+        "OEs Relacionados": "OE1, OE5",
+        "Iniciativas": "I-12, I-15",
+        "Fuente": "PETI 2024, Hallazgo H28; sin seguimiento por proyecto",
+        "principio_iso": "Rendimiento",
+        "rol_responsable": "CIO / Director de TI",
+        "justificacion_iso": "El KPI mide la capacidad de TI para ejecutar su presupuesto conforme a lo planificado, lo cual es un indicador directo de la eficiencia operativa y el control financiero necesario para garantizar que los recursos de TI entreguen el valor esperado.",
+        "historico_simulado": [],
+        "valor_actual_simulado": 0
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 41,
+        "Perspectiva": "Finanzas",
+        "Obj. BSC": "F1",
+        "KPI": "Nivel madurez gestión de costos TI (escala 1–5)",
+        "Tipo KRI": "Efectividad",
+        "Unidad": "Puntos (1–5)",
+        "Tipo": "MAX",
+        "Línea Base": 1,
+        "Valor Actual": 1,
+        "Meta 2026": 1.8,
+        "Meta 2027": 2.5,
+        "Meta 2028": 3,
+        "Meta 2029": 3.5,
+        "Umbral Crítico": 1.4,
+        "Umbral Moderado": 2.3,
+        "Frecuencia": "Anual",
+        "OEs Relacionados": "OE1, OE5",
+        "Iniciativas": "I-12",
+        "Fuente": "BSC TI HDPUV v4; Madurez costos: 1.0",
+        "principio_iso": "Estrategia",
+        "rol_responsable": "CIO (Chief Information Officer)",
+        "justificacion_iso": "La gestión de costos TI es un componente fundamental de la estrategia financiera y de sostenibilidad del modelo de gobierno, alineando los recursos tecnológicos con las necesidades de negocio.",
+        "historico_simulado": [
+            {
+                "periodo": "2024-01-01",
+                "valor": 1
+            },
+            {
+                "periodo": "2025-01-01",
+                "valor": 1.01
+            },
+            {
+                "periodo": "2026-01-01",
+                "valor": 0.99
+            }
+        ],
+        "valor_actual_simulado": 0.99
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 42,
+        "Perspectiva": "Finanzas",
+        "Obj. BSC": "F2",
+        "KPI": "% reducción costos operativos TI año a año",
+        "Tipo KRI": "Eficiencia",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0,
+        "Valor Actual": 0,
+        "Meta 2026": 0.05,
+        "Meta 2027": 0.05,
+        "Meta 2028": 0.1,
+        "Meta 2029": 0.1,
+        "Umbral Crítico": 0.05,
+        "Umbral Moderado": 0.08,
+        "Frecuencia": "Anual",
+        "OEs Relacionados": "OE2, OE4",
+        "Iniciativas": "I-05, I-11, I-13",
+        "Fuente": "PETI 2024, Tabla 46; $3,121M COP base operativa 2025",
+        "principio_iso": "Rendimiento",
+        "rol_responsable": "CIO (Chief Information Officer)",
+        "justificacion_iso": "El KPI mide la eficiencia en la gestión de costos operativos, lo cual está directamente alineado con el principio de Rendimiento que exige que el uso de los recursos de TI sea óptimo y genere valor para el negocio.",
+        "historico_simulado": [],
+        "valor_actual_simulado": 0
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 43,
+        "Perspectiva": "Finanzas",
+        "Obj. BSC": "F2",
+        "KPI": "N.º contratos TI renegociados o consolidados",
+        "Tipo KRI": "Eficacia",
+        "Unidad": "Numero",
+        "Tipo": "MAX",
+        "Línea Base": 0,
+        "Valor Actual": 0,
+        "Meta 2026": 2,
+        "Meta 2027": 4,
+        "Meta 2028": 5,
+        "Meta 2029": 6,
+        "Umbral Crítico": 2,
+        "Umbral Moderado": 3,
+        "Frecuencia": "Anual",
+        "OEs Relacionados": "OE2, OE4",
+        "Iniciativas": "I-13",
+        "Fuente": "PETI 2024, Tabla 46; GO006, GO014, GO015, GO016 identificados",
+        "principio_iso": "Adquisición",
+        "rol_responsable": "CIO (Chief Information Officer)",
+        "justificacion_iso": "El KPI se clasifica en el principio de Adquisición ya que evalúa la gestión eficiente de los contratos de TI, asegurando que los recursos tecnológicos se adquieran y optimicen de forma adecuada bajo una estrategia de consolidación. Dado que el Valor Actual es 0, no existe actividad medible para generar un historial.",
+        "historico_simulado": [],
+        "valor_actual_simulado": 0
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 44,
+        "Perspectiva": "Finanzas",
+        "Obj. BSC": "F2",
+        "KPI": "% servicios TI migrados a nube con reducción verificada de costo",
+        "Tipo KRI": "Efectividad",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0,
+        "Valor Actual": 0,
+        "Meta 2026": 0.1,
+        "Meta 2027": 0.15,
+        "Meta 2028": 0.25,
+        "Meta 2029": 0.35,
+        "Umbral Crítico": 0.105,
+        "Umbral Moderado": 0.21,
+        "Frecuencia": "Anual",
+        "OEs Relacionados": "OE2, OE4",
+        "Iniciativas": "I-05, I-13",
+        "Fuente": "PETI 2024, Tabla 13; 100% on-premise, Hallazgo H09",
+        "principio_iso": "Rendimiento",
+        "rol_responsable": "CIO (Chief Information Officer)",
+        "justificacion_iso": "El KPI mide la eficiencia operativa y el ahorro de costos derivado de la estrategia de migración tecnológica, lo cual es un indicador directo de la capacidad de TI para generar valor sostenible.",
+        "historico_simulado": [],
+        "valor_actual_simulado": 0
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 45,
+        "Perspectiva": "Finanzas",
+        "Obj. BSC": "F3",
+        "KPI": "% riesgos financieros TI con plan de mitigación activo y aprobado",
+        "Tipo KRI": "Eficacia",
+        "Unidad": "%",
+        "Tipo": "MAX",
+        "Línea Base": 0.2,
+        "Valor Actual": 0.2,
+        "Meta 2026": 0.8,
+        "Meta 2027": 0.9,
+        "Meta 2028": 0.95,
+        "Meta 2029": 1,
+        "Umbral Crítico": 0.35,
+        "Umbral Moderado": 0.65,
+        "Frecuencia": "Trimestral",
+        "OEs Relacionados": "OE3",
+        "Iniciativas": "I-06, I-14, I-16",
+        "Fuente": "PETI 2024, Tabla 24; Madurez Riesgos 1.0/5",
+        "principio_iso": "Conformidad",
+        "rol_responsable": "Oficial de Riesgos TI (IT Risk Officer)",
+        "justificacion_iso": "El principio de Conformidad asegura que TI cumpla con las leyes, regulaciones y políticas internas. Monitorear riesgos financieros con planes de mitigación aprobados es un control directo de cumplimiento normativo y gestión de riesgos.",
+        "historico_simulado": [
+            {
+                "periodo": "2024-01-01",
+                "valor": 0.2
+            },
+            {
+                "periodo": "2024-04-01",
+                "valor": 0.21
+            },
+            {
+                "periodo": "2024-07-01",
+                "valor": 0.19
+            },
+            {
+                "periodo": "2024-10-01",
+                "valor": 0.2
+            },
+            {
+                "periodo": "2025-01-01",
+                "valor": 0.2
+            },
+            {
+                "periodo": "2025-04-01",
+                "valor": 0.21
+            },
+            {
+                "periodo": "2025-07-01",
+                "valor": 0.19
+            },
+            {
+                "periodo": "2025-10-01",
+                "valor": 0.2
+            },
+            {
+                "periodo": "2026-01-01",
+                "valor": 0.2
+            },
+            {
+                "periodo": "2026-04-01",
+                "valor": 0.2
+            }
+        ],
+        "valor_actual_simulado": 0.2
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 46,
+        "Perspectiva": "Finanzas",
+        "Obj. BSC": "F3",
+        "KPI": "N.º interrupciones de servicio por falla de proveedor externo crítico",
+        "Tipo KRI": "Efectividad",
+        "Unidad": "Numero",
+        "Tipo": "MIN",
+        "Línea Base": null,
+        "Valor Actual": null,
+        "Meta 2026": 3,
+        "Meta 2027": 1,
+        "Meta 2028": 0,
+        "Meta 2029": 0,
+        "Umbral Crítico": 3,
+        "Umbral Moderado": 1,
+        "Frecuencia": "Mensual",
+        "OEs Relacionados": "OE3",
+        "Iniciativas": "I-14",
+        "Fuente": "PETI 2024, Tabla 28, A05; dependencia externa identificada",
+        "principio_iso": "Adquisición",
+        "rol_responsable": "Gerente de Suministros TI / Vendor Manager",
+        "justificacion_iso": "El KPI mide la resiliencia operativa ligada directamente a la cadena de suministro y proveedores externos, cuya gestión contractual y de rendimiento es responsabilidad del área de Adquisición bajo el marco ISO 38500.",
+        "historico_simulado": [],
+        "valor_actual_simulado": null
+    },
+    {
+        "__tipo": "kpi",
+        "row_number": 47,
+        "Perspectiva": "Finanzas",
+        "Obj. BSC": "F3",
+        "KPI": "Tiempo promedio activación plan contingencia desde identificación riesgo (días)",
+        "Tipo KRI": "Eficiencia",
+        "Unidad": "Días",
+        "Tipo": "MIN",
+        "Línea Base": null,
+        "Valor Actual": null,
+        "Meta 2026": 15,
+        "Meta 2027": 10,
+        "Meta 2028": 7,
+        "Meta 2029": 7,
+        "Umbral Crítico": 11,
+        "Umbral Moderado": 9,
+        "Frecuencia": "Mensual",
+        "OEs Relacionados": "OE3",
+        "Iniciativas": "I-14",
+        "Fuente": "PETI 2024, Tabla 24; Madurez Riesgos 1.0/5",
+        "principio_iso": "Rendimiento",
+        "rol_responsable": "Gerente de Riesgos TI / CISO",
+        "justificacion_iso": "El indicador mide la capacidad operativa y la eficacia en la respuesta ante riesgos materiales, alineándose con el principio de Rendimiento al garantizar que las TI sean aptas para apoyar la continuidad del negocio.",
+        "historico_simulado": [],
+        "valor_actual_simulado": null
+    },
+    {
+        "__tipo": "contexto",
+        "Objetivo Estratégico": "OE1",
+        "Descripción": "Fortalecer gobierno y gestión TI",
+        "Descripción OE": "Fortalecer gobierno y gestión TI",
+        "Ruta Estratégica": "F1 → A3 → P3 → C1 | P3 → C2",
+        "Objetivos BSC Involucrados": "F1, A3, P3, C1, C2",
+        "Iniciativas Habilitadoras": "I-12, I-15, I-11, I-07, I-03, I-09"
+    },
+    {
+        "__tipo": "contexto",
+        "Objetivo Estratégico": "OE2",
+        "Descripción": "Consolidar sistemas interoperables, seguros e integrados",
+        "Descripción OE": "Consolidar sistemas interoperables, seguros e integrados",
+        "Ruta Estratégica": "F2 → F1 → A3 → P1 → C1",
+        "Objetivos BSC Involucrados": "F2, F1, A3, P1, C1",
+        "Iniciativas Habilitadoras": "I-13, I-12, I-11, I-04, I-03, I-15"
+    },
+    {
+        "__tipo": "contexto",
+        "Objetivo Estratégico": "OE3",
+        "Descripción": "Fortalecer ciberseguridad y resiliencia tecnológica",
+        "Descripción OE": "Fortalecer ciberseguridad y resiliencia tecnológica",
+        "Ruta Estratégica": "F3 → A3 → P4 → P2 | P2 → C1 | P2 → C2",
+        "Objetivos BSC Involucrados": "F3, A3, P4, P2, C1, C2",
+        "Iniciativas Habilitadoras": "I-14, I-06, I-16, I-11, I-05, I-13"
+    },
+    {
+        "__tipo": "contexto",
+        "Objetivo Estratégico": "OE4",
+        "Descripción": "Impulsar transformación digital e innovación",
+        "Descripción OE": "Impulsar transformación digital e innovación",
+        "Ruta Estratégica": "F2 → A1 → P5 → C4 | F2 → A3 → P4 → C3",
+        "Objetivos BSC Involucrados": "F2, A1, A3, P5, P4, C4, C3",
+        "Iniciativas Habilitadoras": "I-13, I-09, I-08, I-01, I-05, I-11, I-10"
+    },
+    {
+        "__tipo": "contexto",
+        "Objetivo Estratégico": "OE5",
+        "Descripción": "Fortalecer gestión del conocimiento y capacidades digitales",
+        "Descripción OE": "Fortalecer gestión del conocimiento y capacidades digitales",
+        "Ruta Estratégica": "F1 → A2 → P3 → C2 | F2 → A3 → P3 → C2",
+        "Objetivos BSC Involucrados": "F1, F2, A2, A3, P3, C2",
+        "Iniciativas Habilitadoras": "I-12, I-10, I-15, I-11, I-07, I-09"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 2,
+        "ID": "I-01",
+        "Nombre Iniciativa": "Plataforma Telepsiquiatría Integrada al HIS",
+        "Objetivo(s) BSC": "C3",
+        "Descripción Resumida": "Teleconsulta psiquiátrica integrada al HOSVITAL-HIS; cubre zonas rurales Valle del Cauca",
+        "Presupuesto (COP)": 651000000,
+        "Período": "01/01/2026 – 01/12/2029",
+        "Objetivos Estratégicos": "OE4"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 3,
+        "ID": "I-02",
+        "Nombre Iniciativa": "Portal del Paciente y Trámites Digitales sin Papel",
+        "Objetivo(s) BSC": "C4",
+        "Descripción Resumida": "Portal web/app móvil: autogestión citas, resultados, admisión digital, PQRSD electrónica",
+        "Presupuesto (COP)": 260400000,
+        "Período": "01/01/2026 – 01/12/2029",
+        "Objetivos Estratégicos": "OE4"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 4,
+        "ID": "I-03",
+        "Nombre Iniciativa": "Consolidación de SLAs Formales con Áreas Misionales",
+        "Objetivo(s) BSC": "C1, P3",
+        "Descripción Resumida": "SLAs formales entre TI y áreas misionales con tablero de monitoreo en tiempo real",
+        "Presupuesto (COP)": 117600000,
+        "Período": "01/01/2026 – 01/12/2029",
+        "Objetivos Estratégicos": "OE1, OE2, OE3, OE5"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 5,
+        "ID": "I-04",
+        "Nombre Iniciativa": "Integración e Interoperabilidad HIS–KACTUS bajo HL7/FHIR",
+        "Objetivo(s) BSC": "P1",
+        "Descripción Resumida": "Bus integración HL7 v2/FHIR R4 para HIS, KACTUS-HCM, SIGDOCS y sistemas auxiliares",
+        "Presupuesto (COP)": 1200000000,
+        "Período": "01/01/2026 – 01/12/2029",
+        "Objetivos Estratégicos": "OE2"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 6,
+        "ID": "I-05",
+        "Nombre Iniciativa": "Modernización Infraestructura: Migración Servidores Obsoletos",
+        "Objetivo(s) BSC": "P4, F2",
+        "Descripción Resumida": "Migración WS2003/2008/2012 a nube híbrida; segmentación red crítica asistencial",
+        "Presupuesto (COP)": 430000000,
+        "Período": "01/01/2026 – 01/12/2029",
+        "Objetivos Estratégicos": "OE2, OE3, OE4"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 7,
+        "ID": "I-06",
+        "Nombre Iniciativa": "Implementación MSPI y Ciberseguridad Activa",
+        "Objetivo(s) BSC": "P2, F3",
+        "Descripción Resumida": "MSPI MinTIC: criptografía, gestión vulnerabilidades, respuesta a incidentes",
+        "Presupuesto (COP)": 651000000,
+        "Período": "01/01/2026 – 01/12/2029",
+        "Objetivos Estratégicos": "OE3"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 8,
+        "ID": "I-07",
+        "Nombre Iniciativa": "Gobierno TI alineado MIPG–ISO 38500: Comité y POA",
+        "Objetivo(s) BSC": "P3",
+        "Descripción Resumida": "Comité Gobierno TI con participación directiva, POA bajo MIPG, metodología federada",
+        "Presupuesto (COP)": 280000000,
+        "Período": "01/01/2026 – 01/12/2029",
+        "Objetivos Estratégicos": "OE1, OE5"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 9,
+        "ID": "I-08",
+        "Nombre Iniciativa": "SGDEA – Sistema de Gestión Documental Electrónica",
+        "Objetivo(s) BSC": "P5, C4",
+        "Descripción Resumida": "SGDEA conforme AGN integrado al HIS: historia clínica electrónica sin papel",
+        "Presupuesto (COP)": 740000000,
+        "Período": "01/01/2026 – 01/12/2029",
+        "Objetivos Estratégicos": "OE4"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 10,
+        "ID": "I-09",
+        "Nombre Iniciativa": "Programa Gestión del Cambio y Apropiación Digital",
+        "Objetivo(s) BSC": "A1, C2",
+        "Descripción Resumida": "Rutas formación digital por perfil en Moodle (F04); evaluación pre/post apropiación",
+        "Presupuesto (COP)": 750000000,
+        "Período": "01/01/2026 – 01/12/2029",
+        "Objetivos Estratégicos": "OE1, OE5"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 11,
+        "ID": "I-10",
+        "Nombre Iniciativa": "Ecosistema Analítica, Big Data e IA para Decisión Clínica",
+        "Objetivo(s) BSC": "A2",
+        "Descripción Resumida": "Ecosistema datos: fuentes HIS/estadística/SGDEA, dashboards BI, modelos IA predictiva",
+        "Presupuesto (COP)": 1850000000,
+        "Período": "01/01/2026 – 01/12/2029",
+        "Objetivos Estratégicos": "OE4, OE5"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 12,
+        "ID": "I-11",
+        "Nombre Iniciativa": "Fortalecimiento Equipo TI: Perfiles Especializados y Base de Conocimiento",
+        "Objetivo(s) BSC": "A3, F2",
+        "Descripción Resumida": "Perfiles especializados: seguridad, interoperabilidad, analítica, gobierno TI; knowledge base",
+        "Presupuesto (COP)": 230000000,
+        "Período": "01/01/2026 – 01/12/2029",
+        "Objetivos Estratégicos": "OE1, OE2, OE3, OE4, OE5"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 13,
+        "ID": "I-12",
+        "Nombre Iniciativa": "Sistema de Planificación, Seguimiento y Control Presupuestal TI",
+        "Objetivo(s) BSC": "F1",
+        "Descripción Resumida": "Fichas presupuestales por proyecto, tablero financiero TI, seguimiento semestral MIPG",
+        "Presupuesto (COP)": 151200000,
+        "Período": "01/01/2026 – 01/12/2029",
+        "Objetivos Estratégicos": "OE1, OE5"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 14,
+        "ID": "I-13",
+        "Nombre Iniciativa": "Optimización Contratos TI y Migración a Nube Híbrida",
+        "Objetivo(s) BSC": "F2, P4",
+        "Descripción Resumida": "Renegociación contratos fotocopiado ($89M), mantenimiento ($196M), conectividad; nube híbrida",
+        "Presupuesto (COP)": 239400000,
+        "Período": "01/01/2026 – 01/12/2029",
+        "Objetivos Estratégicos": "OE2, OE3, OE4"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 15,
+        "ID": "I-14",
+        "Nombre Iniciativa": "Gestión de Riesgos Financieros TI: Dependencias y Contingencias",
+        "Objetivo(s) BSC": "F3",
+        "Descripción Resumida": "Mapeo semestral riesgos financieros TI; planes contingencia activables en ≤10 días",
+        "Presupuesto (COP)": 88200000,
+        "Período": "01/01/2026 – 01/12/2029",
+        "Objetivos Estratégicos": "OE3"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 16,
+        "ID": "I-15",
+        "Nombre Iniciativa": "Modelo Federado de Gobierno y Gestión Estratégica TI (MIPG–COBIT)",
+        "Objetivo(s) BSC": "C1, P3, F1, A3",
+        "Descripción Resumida": "Gobernanza TI federada: participación directiva, POA como instrumento ejecución, PETI planeación",
+        "Presupuesto (COP)": 369600000,
+        "Período": "01/01/2026 – 01/12/2029",
+        "Objetivos Estratégicos": "OE1, OE2, OE3, OE4, OE5"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 17,
+        "ID": "I-16",
+        "Nombre Iniciativa": "Política de Seguridad Digital y Privacidad de la Información (MSPI Integral)",
+        "Objetivo(s) BSC": "C1, P2, F3",
+        "Descripción Resumida": "MSPI MinTIC integral: política, controles técnicos, criptografía, identidades, monitoreo, BCP",
+        "Presupuesto (COP)": 651000000,
+        "Período": "01/01/2026 – 01/12/2029",
+        "Objetivos Estratégicos": "OE1, OE2, OE3"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 2,
+        "ID": "C1",
+        "Objetivo": "Garantizar alta disponibilidad de sistemas críticos mediante SLAs formales y monitoreo continuo"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 3,
+        "ID": "C2",
+        "Objetivo": "Mejorar la experiencia y satisfacción del personal con los servicios y soporte TI"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 4,
+        "ID": "C3",
+        "Objetivo": "Ampliar cobertura de salud mental mediante telemedicina / telepsiquiatría integrada al HIS"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 5,
+        "ID": "C4",
+        "Objetivo": "Digitalizar trámites institucionales y reducir fricciones en la experiencia del paciente"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 6,
+        "ID": "P1",
+        "Objetivo": "Integrar e interoperar HIS, KACTUS-HCM y sistemas auxiliares"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 7,
+        "ID": "P2",
+        "Objetivo": "Implementar ciberseguridad activa, MSPI y continuidad operativa de sistemas clínicos"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 8,
+        "ID": "P3",
+        "Objetivo": "Consolidar el gobierno de TI: participación directiva, seguimiento estratégico y POA"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 9,
+        "ID": "P4",
+        "Objetivo": "Modernizar infraestructura tecnológica: migrar servidores obsoletos y segmentar red crítica"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 10,
+        "ID": "P5",
+        "Objetivo": "Implementar gestión documental electrónica (SGDEA) en procesos clínicos y administrativos"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 11,
+        "ID": "A1",
+        "Objetivo": "Desarrollar competencias digitales del personal y lograr apropiación efectiva de los nuevos sistemas TI"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 12,
+        "ID": "A2",
+        "Objetivo": "Construir capacidades de analítica de datos e inteligencia artificial para la decisión clínica y de gestión"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 13,
+        "ID": "A3",
+        "Objetivo": "Fortalecer el equipo TI con perfiles especializados y consolidar una cultura de gestión del conocimiento"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 14,
+        "ID": "F1",
+        "Objetivo": "Construir capacidad de planificación, seguimiento y control presupuestal de proyectos TI"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 15,
+        "ID": "F2",
+        "Objetivo": "Optimizar costos operativos TI mediante nube, digitalización y consolidación de contratos"
+    },
+    {
+        "__tipo": "contexto",
+        "row_number": 16,
+        "ID": "F3",
+        "Objetivo": "Gestionar riesgos financieros TI: dependencias de terceros y restricciones presupuestales institucionales"
+    }
+]

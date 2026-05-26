@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\juano\\\\Documents\\\\GitHub\\\\dashboard\\\\dashboard iso\\\\iso-dashboard\\\\src\" -Force | ForEach-Object { $_.FullName })",
-      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\juano\\\\Documents\\\\GitHub\\\\dashboard\\\\dashboard iso\\\\iso-dashboard\\\\src\\\\components\" -Force | ForEach-Object { $_.Name })",
-      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\juano\\\\Documents\\\\GitHub\\\\dashboard\\\\dashboard iso\\\\iso-dashboard\\\\src\\\\data\" -Force | ForEach-Object { $_.Name })"
-    ]
-  }
-}
