@@ -1,10 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm install *)",
-      "Bash(copy \"c:\\\\Users\\\\juano\\\\Documents\\\\GitHub\\\\dashboard\\\\dashboard iso\\\\dashboard_data.json\" \"c:\\\\Users\\\\juano\\\\Documents\\\\GitHub\\\\dashboard\\\\dashboard iso\\\\iso-dashboard\\\\src\\\\data\\\\dashboard_data.json\")",
-      "Bash(npm run *)",
-      "Bash(node -e \"const d = require\\('./src/data/dashboard_data.json'\\)[0]; console.log\\('KPIs sample:', JSON.stringify\\(d.kpis[0], null, 2\\)\\); console.log\\('Iniciativas sample:', JSON.stringify\\(d.iniciativas?.slice\\(0,2\\), null, 2\\)\\)\")"
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\juano\\\\Documents\\\\GitHub\\\\dashboard\\\\dashboard iso\\\\iso-dashboard\\\\src\" -Force | ForEach-Object { $_.FullName })",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\juano\\\\Documents\\\\GitHub\\\\dashboard\\\\dashboard iso\\\\iso-dashboard\\\\src\\\\components\" -Force | ForEach-Object { $_.Name })",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\juano\\\\Documents\\\\GitHub\\\\dashboard\\\\dashboard iso\\\\iso-dashboard\\\\src\\\\data\" -Force | ForEach-Object { $_.Name })"
     ]
   }
 }
