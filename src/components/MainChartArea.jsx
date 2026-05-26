@@ -1,7 +1,8 @@
+import { useState } from 'react'
 import {
   LineChart, Line, BarChart, Bar,
   XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, ReferenceLine,
+  ResponsiveContainer, ReferenceLine, Brush,
 } from 'recharts'
 import { useDashboard } from '../context/DashboardContext'
 import { BarChart2, TrendingUp } from 'lucide-react'
@@ -15,7 +16,7 @@ function Tooltip_({ active, payload, label, unit, meta }) {
       <p className="text-slate-400 mb-1">{label}</p>
       <p className="text-white font-bold text-sm">{payload[0].value} {unit}</p>
       {meta != null && (
-        <p className="text-slate-500 mt-0.5">Meta 2029: {meta} {unit}</p>
+        <p className="text-slate-500 mt-0.5">Meta: {meta} {unit}</p>
       )}
     </div>
   )
@@ -30,6 +31,9 @@ export default function MainChartArea() {
     setPeriodFilter,
     activePrinciple,
   } = useDashboard()
+
+  const [yZoom, setYZoom] = useState(20)
+  const [metaYear, setMetaYear] = useState('2029')
 
   if (!selectedKpi) {
     return (
@@ -53,8 +57,24 @@ export default function MainChartArea() {
   const chartData  = periodFilter === '6m' ? historico.slice(-6) : historico
   const color      = SEM_COLOR[selectedKpi.semaforo] ?? '#3b82f6'
   const useBar     = chartData.length <= 4
-  const metaScaled = selectedKpi['Meta 2029'] !== null && selectedKpi['Meta 2029'] !== undefined ? selectedKpi['Meta 2029'] * mult : null
+  const metaRaw = selectedKpi[`Meta ${metaYear}`]
+  const metaScaled = metaRaw !== null && metaRaw !== undefined ? metaRaw * mult : null
   const valSimScaled = selectedKpi.valor_actual_simulado !== null && selectedKpi.valor_actual_simulado !== undefined ? selectedKpi.valor_actual_simulado * mult : null
+
+  const yDomain = (() => {
+    const vals = chartData.map(d => d.valor).filter(v => v != null)
+    if (metaScaled != null) vals.push(metaScaled)
+    if (vals.length === 0) return ['auto', 'auto']
+    const min = Math.min(...vals)
+    const max = Math.max(...vals)
+    const range = max - min || Math.abs(max) * 0.1 || 1
+    const pad = range * (0.05 + (yZoom / 100) * 1.5)
+    const dec = isPct ? 1 : 2
+    return [
+      parseFloat((min - pad).toFixed(dec)),
+      parseFloat((max + pad).toFixed(dec)),
+    ]
+  })()
 
   return (
     <div className="bg-[#111e35] rounded-xl border border-slate-800 overflow-hidden">
@@ -75,15 +95,43 @@ export default function MainChartArea() {
           </div>
         </div>
 
-        <select
-          value={periodFilter}
-          onChange={e => setPeriodFilter(e.target.value)}
-          className="text-xs bg-[#0b1829] border border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-300
-                     focus:outline-none focus:border-blue-500 shrink-0"
-        >
-          <option value="6m">Últimos 6 períodos</option>
-          <option value="all">Todo el histórico</option>
-        </select>
+        <div className="flex items-center gap-2 shrink-0">
+          {/* Meta year selector */}
+          <div className="flex items-center gap-1">
+            <span className="text-[9px] text-slate-500 uppercase tracking-wider mr-0.5">Meta</span>
+            {['2026', '2027', '2028', '2029'].map(year => {
+              const hasVal = selectedKpi[`Meta ${year}`] != null
+              const isActive = metaYear === year
+              return (
+                <button
+                  key={year}
+                  onClick={() => hasVal && setMetaYear(year)}
+                  disabled={!hasVal}
+                  className="text-[10px] px-1.5 py-0.5 rounded font-medium transition-colors"
+                  style={{
+                    background:  isActive ? '#1d4ed8' : 'rgba(30,41,59,0.8)',
+                    color:       isActive ? '#fff' : hasVal ? '#94a3b8' : '#334155',
+                    border:      `1px solid ${isActive ? '#3b82f6' : '#334155'}`,
+                    cursor:      hasVal ? 'pointer' : 'default',
+                  }}
+                >
+                  {year}
+                </button>
+              )
+            })}
+          </div>
+
+          {/* Period filter */}
+          <select
+            value={periodFilter}
+            onChange={e => setPeriodFilter(e.target.value)}
+            className="text-xs bg-[#0b1829] border border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-300
+                       focus:outline-none focus:border-blue-500"
+          >
+            <option value="6m">Últimos 6 períodos</option>
+            <option value="all">Todo el histórico</option>
+          </select>
+        </div>
       </div>
 
       {/* Metric strip */}
@@ -96,7 +144,7 @@ export default function MainChartArea() {
             color: '#f1f5f9',
           },
           {
-            label: 'Meta 2029',
+            label: `Meta ${metaYear}`,
             value: metaScaled !== null ? Number(metaScaled.toFixed(isPct ? 1 : 2)) : '—',
             unit:  selectedKpi.Unidad,
             color: '#94a3b8',
@@ -119,45 +167,84 @@ export default function MainChartArea() {
       </div>
 
       {/* Chart */}
-      <div className="px-2 pt-4 pb-2">
-        {chartData.length > 0 ? (
-          <ResponsiveContainer width="100%" height={200}>
-            {useBar ? (
-              <BarChart data={chartData} margin={{ top: 4, right: 8, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
-                <XAxis dataKey="periodo" tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} />
-                {metaScaled != null && (
-                  <ReferenceLine y={metaScaled} stroke="#22c55e" strokeDasharray="4 2" strokeOpacity={0.5} />
-                )}
-                <Tooltip content={<Tooltip_ unit={selectedKpi.Unidad} meta={metaScaled} />} cursor={false} />
-                <Bar dataKey="valor" fill={color} radius={[4, 4, 0, 0]} maxBarSize={40} />
-              </BarChart>
-            ) : (
-              <LineChart data={chartData} margin={{ top: 4, right: 8, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
-                <XAxis dataKey="periodo" tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} />
-                {metaScaled != null && (
-                  <ReferenceLine y={metaScaled} stroke="#22c55e" strokeDasharray="4 2" strokeOpacity={0.5} />
-                )}
-                <Tooltip content={<Tooltip_ unit={selectedKpi.Unidad} meta={metaScaled} />} />
-                <Line
-                  type="monotone"
-                  dataKey="valor"
-                  stroke={color}
-                  strokeWidth={2}
-                  dot={{ fill: color, r: 3, strokeWidth: 0 }}
-                  activeDot={{ r: 5, strokeWidth: 0 }}
-                />
-              </LineChart>
-            )}
-          </ResponsiveContainer>
-        ) : (
-          <div className="h-[200px] flex items-center justify-center text-slate-600 text-sm">
-            Sin datos históricos disponibles
-          </div>
-        )}
+      <div className="pt-4 pb-2 flex gap-1">
+        {/* Y-axis zoom slider (vertical, left) */}
+        <div className="flex flex-col items-center justify-center shrink-0 pl-2" style={{ width: 28 }}>
+          <span className="text-[8px] text-slate-600 select-none">+</span>
+          <input
+            type="range"
+            min={0}
+            max={100}
+            value={yZoom}
+            onChange={e => setYZoom(Number(e.target.value))}
+            title={`Zoom Y: ${yZoom}%`}
+            style={{
+              transform: 'rotate(-90deg)',
+              width: 140,
+              cursor: 'pointer',
+              accentColor: '#3b82f6',
+            }}
+          />
+          <span className="text-[8px] text-slate-600 select-none">−</span>
+        </div>
+
+        {/* Chart area */}
+        <div className="flex-1 pr-2">
+          {chartData.length > 0 ? (
+            <ResponsiveContainer width="100%" height={240}>
+              {useBar ? (
+                <BarChart data={chartData} margin={{ top: 4, right: 8, left: -20, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+                  <XAxis dataKey="periodo" tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} domain={yDomain} />
+                  {metaScaled != null && (
+                    <ReferenceLine y={metaScaled} stroke="#22c55e" strokeDasharray="4 2" strokeOpacity={0.5} />
+                  )}
+                  <Tooltip content={<Tooltip_ unit={selectedKpi.Unidad} meta={metaScaled} />} cursor={false} />
+                  <Bar dataKey="valor" fill={color} radius={[4, 4, 0, 0]} maxBarSize={40} />
+                  <Brush
+                    dataKey="periodo"
+                    height={18}
+                    stroke="#1e293b"
+                    fill="#0b1829"
+                    travellerWidth={6}
+                    tick={{ fontSize: 8, fill: '#475569' }}
+                  />
+                </BarChart>
+              ) : (
+                <LineChart data={chartData} margin={{ top: 4, right: 8, left: -20, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+                  <XAxis dataKey="periodo" tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} domain={yDomain} />
+                  {metaScaled != null && (
+                    <ReferenceLine y={metaScaled} stroke="#22c55e" strokeDasharray="4 2" strokeOpacity={0.5} />
+                  )}
+                  <Tooltip content={<Tooltip_ unit={selectedKpi.Unidad} meta={metaScaled} />} />
+                  <Line
+                    type="monotone"
+                    dataKey="valor"
+                    stroke={color}
+                    strokeWidth={2}
+                    dot={{ fill: color, r: 3, strokeWidth: 0 }}
+                    activeDot={{ r: 5, strokeWidth: 0 }}
+                  />
+                  <Brush
+                    dataKey="periodo"
+                    height={18}
+                    stroke="#1e293b"
+                    fill="#0b1829"
+                    travellerWidth={6}
+                    tick={{ fontSize: 8, fill: '#475569' }}
+                  />
+                </LineChart>
+              )}
+            </ResponsiveContainer>
+          ) : (
+            <div className="h-[240px] flex items-center justify-center text-slate-600 text-sm">
+              Sin datos históricos disponibles
+            </div>
+          )}
+        </div>
       </div>
 
       {/* KPI pills */}

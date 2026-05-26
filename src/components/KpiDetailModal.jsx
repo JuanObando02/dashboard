@@ -79,6 +79,21 @@ export default function KpiDetailModal({ kpi, onClose }) {
   const metaScaled  = kpi['Meta 2029'] !== null && kpi['Meta 2029'] !== undefined ? kpi['Meta 2029'] * mult : null
   const valSimScaled = kpi.valor_actual_simulado !== null && kpi.valor_actual_simulado !== undefined ? kpi.valor_actual_simulado * mult : null
 
+  const yDomain = useMemo(() => {
+    const vals = historico.map(d => d.valor).filter(v => v != null)
+    if (metaScaled != null) vals.push(metaScaled)
+    if (vals.length === 0) return ['auto', 'auto']
+    const min = Math.min(...vals)
+    const max = Math.max(...vals)
+    const range = max - min
+    const pad = range < 0.001 ? Math.abs(max) * 0.05 || 1 : range * 0.2
+    const dec = isPct ? 1 : 2
+    return [
+      parseFloat((min - pad).toFixed(dec)),
+      parseFloat((max + pad).toFixed(dec)),
+    ]
+  }, [historico, metaScaled, isPct])
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
@@ -148,7 +163,7 @@ export default function KpiDetailModal({ kpi, onClose }) {
                     <BarChart data={historico} margin={{ top: 4, right: 8, left: -20, bottom: 0 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
                       <XAxis dataKey="periodo" tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} />
-                      <YAxis tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} />
+                      <YAxis tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} domain={yDomain} />
                       {metaScaled != null && (
                         <ReferenceLine y={metaScaled} stroke="#22c55e" strokeDasharray="4 2" strokeOpacity={0.5} />
                       )}
@@ -159,7 +174,7 @@ export default function KpiDetailModal({ kpi, onClose }) {
                     <LineChart data={historico} margin={{ top: 4, right: 8, left: -20, bottom: 0 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
                       <XAxis dataKey="periodo" tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} />
-                      <YAxis tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} />
+                      <YAxis tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} domain={yDomain} />
                       {metaScaled != null && (
                         <ReferenceLine y={metaScaled} stroke="#22c55e" strokeDasharray="4 2" strokeOpacity={0.5} />
                       )}
