@@ -59,7 +59,7 @@ export default function MainChartArea() {
   const useBar     = chartData.length <= 4
   const metaRaw = selectedKpi[`Meta ${metaYear}`]
   const metaScaled = metaRaw !== null && metaRaw !== undefined ? metaRaw * mult : null
-  const valSimScaled = selectedKpi.valor_actual_simulado !== null && selectedKpi.valor_actual_simulado !== undefined ? selectedKpi.valor_actual_simulado * mult : null
+  const valSimScaled = selectedKpi['Valor Actual'] !== null && selectedKpi['Valor Actual'] !== undefined ? selectedKpi['Valor Actual'] * mult : null
 
   const yDomain = (() => {
     const vals = chartData.map(d => d.valor).filter(v => v != null)

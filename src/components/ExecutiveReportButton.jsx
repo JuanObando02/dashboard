@@ -85,7 +85,7 @@ export default function ExecutiveReportButton() {
     const rows = filteredKpis.map(k => {
       const isPct = k.Unidad === '%'
       const mult = isPct ? 100 : 1
-      const valSimScaled = k.valor_actual_simulado != null ? k.valor_actual_simulado * mult : null
+      const valSimScaled = k['Valor Actual'] != null ? k['Valor Actual'] * mult : null
       const metaScaled = k['Meta 2029'] != null ? k['Meta 2029'] * mult : null
 
       return [

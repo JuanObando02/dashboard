@@ -35,7 +35,7 @@ export default function KpiCard({ kpi, onDetail }) {
   const isPct = kpi.Unidad === '%'
   const mult = isPct ? 100 : 1
 
-  const rawVal = kpi.valor_actual_simulado ?? kpi['Valor Actual']
+  const rawVal = kpi['Valor Actual']
   const valorActual = rawVal !== null && rawVal !== undefined ? rawVal * mult : null
   const meta = kpi['Meta 2029'] !== null && kpi['Meta 2029'] !== undefined ? kpi['Meta 2029'] * mult : null
   const pct = kpi.cumplimiento_pct ?? 0

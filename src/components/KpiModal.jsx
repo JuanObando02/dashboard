@@ -59,7 +59,7 @@ export default function KpiModal({ kpi, onClose, iniciativas = [] }) {
     valor: h.valor !== null && h.valor !== undefined ? h.valor * mult : null
   }))
   const meta = kpi['Meta 2029'] !== null && kpi['Meta 2029'] !== undefined ? kpi['Meta 2029'] * mult : null
-  const valSim = kpi.valor_actual_simulado !== null && kpi.valor_actual_simulado !== undefined ? kpi.valor_actual_simulado * mult : null
+  const valSim = kpi['Valor Actual'] !== null && kpi['Valor Actual'] !== undefined ? kpi['Valor Actual'] * mult : null
 
   const useBar = historico.length <= 4
   const ChartComp = useBar ? BarChart : LineChart

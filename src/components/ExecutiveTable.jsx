@@ -60,7 +60,7 @@ export default function ExecutiveTable() {
 
                 const isPct = kpi.Unidad === '%'
                 const mult = isPct ? 100 : 1
-                const valSimScaled = kpi.valor_actual_simulado !== null && kpi.valor_actual_simulado !== undefined ? kpi.valor_actual_simulado * mult : null
+                const valSimScaled = kpi['Valor Actual'] !== null && kpi['Valor Actual'] !== undefined ? kpi['Valor Actual'] * mult : null
                 const metaScaled = kpi['Meta 2029'] !== null && kpi['Meta 2029'] !== undefined ? kpi['Meta 2029'] * mult : null
 
                 return (

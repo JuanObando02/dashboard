@@ -45,7 +45,7 @@ export function DashboardProvider({ children }) {
   const allKpis = useMemo(() => {
     return kpisRaw.map(k => {
       const valorActual = k['Valor Actual']
-      const valSim = k.valor_actual_simulado
+      const valSim = k['Valor Actual']
       const meta = k['Meta 2029']
       const critico = k['Umbral Crítico']
       const moderado = k['Umbral Moderado']
