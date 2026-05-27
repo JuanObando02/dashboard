@@ -54,7 +54,8 @@ export default function MainChartArea() {
     periodo: h.periodo,
     valor: h.valor !== null && h.valor !== undefined ? h.valor * mult : null
   }))
-  const chartData  = periodFilter === '6m' ? historico.slice(-6) : historico
+  const chartData  = periodFilter === 'all' ? historico
+    : historico.slice(-parseInt(periodFilter))
   const color      = SEM_COLOR[selectedKpi.semaforo] ?? '#3b82f6'
   const useBar     = chartData.length <= 4
   const metaRaw = selectedKpi[`Meta ${metaYear}`]
@@ -70,8 +71,9 @@ export default function MainChartArea() {
     const range = max - min || Math.abs(max) * 0.1 || 1
     const pad = range * (0.05 + (yZoom / 100) * 1.5)
     const dec = isPct ? 1 : 2
+    const lower = parseFloat((min - pad).toFixed(dec))
     return [
-      parseFloat((min - pad).toFixed(dec)),
+      min >= 0 ? Math.max(0, lower) : lower,
       parseFloat((max + pad).toFixed(dec)),
     ]
   })()
@@ -128,7 +130,9 @@ export default function MainChartArea() {
             className="text-xs bg-[#0b1829] border border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-300
                        focus:outline-none focus:border-blue-500"
           >
-            <option value="6m">Últimos 6 períodos</option>
+            <option value="3">Últimos 3 períodos</option>
+            <option value="6">Últimos 6 períodos</option>
+            <option value="12">Últimos 12 períodos</option>
             <option value="all">Todo el histórico</option>
           </select>
         </div>
@@ -169,23 +173,47 @@ export default function MainChartArea() {
       {/* Chart */}
       <div className="pt-4 pb-2 flex gap-1">
         {/* Y-axis zoom slider (vertical, left) */}
-        <div className="flex flex-col items-center justify-center shrink-0 pl-2" style={{ width: 28 }}>
-          <span className="text-[8px] text-slate-600 select-none">+</span>
-          <input
-            type="range"
-            min={0}
-            max={100}
-            value={yZoom}
-            onChange={e => setYZoom(Number(e.target.value))}
-            title={`Zoom Y: ${yZoom}%`}
-            style={{
-              transform: 'rotate(-90deg)',
-              width: 140,
-              cursor: 'pointer',
-              accentColor: '#3b82f6',
-            }}
-          />
-          <span className="text-[8px] text-slate-600 select-none">−</span>
+        <div className="flex flex-col items-center shrink-0 pl-1 py-1 gap-1.5" style={{ width: 34, height: 240 }}>
+          {/* + button */}
+          <button
+            onClick={() => setYZoom(z => Math.min(100, z + 10))}
+            className="w-6 h-6 rounded-full flex items-center justify-center transition-all shrink-0"
+            style={{ background: 'rgba(59,130,246,0.12)', border: '1px solid rgba(59,130,246,0.35)', color: '#60a5fa' }}
+            title="Ampliar eje Y"
+          >
+            <span className="text-xs font-bold leading-none">+</span>
+          </button>
+
+          {/* slider track area */}
+          <div className="relative flex-1 flex items-center justify-center w-full">
+            <input
+              type="range"
+              min={0}
+              max={100}
+              value={yZoom}
+              onChange={e => setYZoom(Number(e.target.value))}
+              style={{
+                position: 'absolute',
+                transform: 'rotate(-90deg)',
+                width: 140,
+                cursor: 'pointer',
+                accentColor: '#3b82f6',
+              }}
+            />
+          </div>
+
+          {/* value label */}
+          <span className="text-[9px] font-mono text-slate-500 shrink-0 leading-none">{yZoom}%</span>
+
+          {/* − button */}
+          <button
+            onClick={() => setYZoom(z => Math.max(0, z - 10))}
+            className="flex items-center justify-center rounded transition-all shrink-0"
+            style={{ width: 24, height: 18, background: 'rgba(59,130,246,0.12)', border: '1px solid rgba(59,130,246,0.35)', color: '#60a5fa' }}
+            title="Comprimir eje Y"
+          >
+            <span className="text-xs font-bold leading-none">−</span>
+          </button>
         </div>
 
         {/* Chart area */}

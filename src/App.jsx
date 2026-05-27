@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { DashboardProvider } from './context/DashboardContext'
 import Header from './components/Header'
 import IsoPrincipleCards from './components/IsoPrincipleCards'
@@ -7,6 +8,8 @@ import PerspectiveHealthCard from './components/PerspectiveHealthCard'
 import SmartSearch from './components/SmartSearch'
 import GapAnalysisBar from './components/GapAnalysisBar'
 import rawData from './data/Gobierno_TI_data.json'
+import MaturityRadar from './components/MaturityRadar'
+import { Database, BrainCircuit, Construction } from 'lucide-react'
 
 const metadata = {
   nombre: "Hospital Departamental Psiquiátrico Universitario del Valle",
@@ -14,28 +17,74 @@ const metadata = {
   fecha_actualizacion: "2026-05-24"
 }
 
+function ComingSoon({ icon: Icon, title, description }) {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 text-center px-4">
+      <div className="rounded-2xl p-5" style={{ background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.2)' }}>
+        <Icon size={56} className="text-blue-400" strokeWidth={1.2} />
+      </div>
+      <div className="space-y-2 max-w-sm">
+        <h2 className="text-xl font-bold text-white">{title}</h2>
+        <p className="text-slate-400 text-sm leading-relaxed">{description}</p>
+      </div>
+      <div className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium" style={{ background: 'rgba(234,179,8,0.1)', border: '1px solid rgba(234,179,8,0.25)', color: '#eab308' }}>
+        <Construction size={13} />
+        En desarrollo
+      </div>
+    </div>
+  )
+}
+
 export default function App() {
+  const [activeTab, setActiveTab] = useState('ti')
+
   return (
     <DashboardProvider>
       <div className="min-h-screen" style={{ background: '#0b1829', color: '#f1f5f9' }}>
-        <Header metadata={metadata} />
+        <Header metadata={metadata} activeTab={activeTab} onTabChange={setActiveTab} />
 
-        <main className="max-w-screen-2xl mx-auto px-4 sm:px-6 py-6 space-y-5">
-          <SmartSearch />
-          <IsoPrincipleCards />
+        {activeTab === 'ti' && (
+          <main className="max-w-screen-2xl mx-auto px-4 sm:px-6 py-6 space-y-5">
+            <SmartSearch />
 
-          <div className="grid grid-cols-1 xl:grid-cols-[1fr_340px] gap-5 items-start">
-            {/* Left column */}
-            <div className="space-y-5">
-              <MainChartArea />
-              <GapAnalysisBar />
-              <ExecutiveTable />
+            <div className="grid grid-cols-1 xl:grid-cols-[1fr_340px] gap-5 items-start">
+              {/* Left column */}
+              <div className="space-y-5">
+                <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-5 items-start">
+                  <MaturityRadar />
+                  <MainChartArea />
+                </div>
+                <ExecutiveTable />
+              </div>
+
+              {/* Right column */}
+              <div className="space-y-4 xl:sticky xl:top-24">
+                <IsoPrincipleCards />
+                <PerspectiveHealthCard />
+              </div>
             </div>
+          </main>
+        )}
 
-            {/* Right column */}
-            <PerspectiveHealthCard />
-          </div>
-        </main>
+        {activeTab === 'datos' && (
+          <main className="max-w-screen-2xl mx-auto px-4 sm:px-6 py-6">
+            <ComingSoon
+              icon={Database}
+              title="Gobierno de Datos"
+              description="Panel de gestión y calidad de datos institucionales. Aquí se visualizarán métricas de gobierno de datos, linaje, calidad y cumplimiento normativo."
+            />
+          </main>
+        )}
+
+        {activeTab === 'ia' && (
+          <main className="max-w-screen-2xl mx-auto px-4 sm:px-6 py-6">
+            <ComingSoon
+              icon={BrainCircuit}
+              title="Gobierno de IA"
+              description="Marco de gobernanza para modelos e iniciativas de inteligencia artificial. Aquí se gestionarán riesgos, ética, transparencia y cumplimiento de los sistemas de IA."
+            />
+          </main>
+        )}
       </div>
     </DashboardProvider>
   )

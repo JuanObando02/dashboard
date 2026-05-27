@@ -1,36 +1,96 @@
-import { Building2, CalendarDays, ShieldCheck } from 'lucide-react'
+import { CalendarDays, ShieldCheck, Monitor, Database, BrainCircuit } from 'lucide-react'
 import ExecutiveReportButton from './ExecutiveReportButton'
 
-export default function Header({ metadata }) {
+const TABS = [
+  { id: 'ti', label: 'Gobierno de TI', icon: Monitor },
+  { id: 'datos', label: 'Gobierno de Datos', icon: Database },
+  { id: 'ia', label: 'Gobierno de IA', icon: BrainCircuit },
+]
+
+export default function Header({ metadata, activeTab, onTabChange }) {
+  const { globalCounts } = useDashboard()
   const nombre = metadata?.nombre ?? 'Hospital'
   const modelo = metadata?.modelo_gobierno ?? 'ISO 38500 & BSC'
   const fecha = metadata?.fecha_actualizacion ?? '—'
 
   return (
-    <header className="bg-gradient-to-r from-[#0f2d52] to-[#1e4d8c] text-white shadow-lg">
-      <div className="px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-        <div className="flex items-start gap-3">
-          <div className="bg-white/10 rounded-lg p-2 mt-0.5">
-            <Building2 size={28} className="text-blue-200" />
+    <header className="sticky top-0 z-50 shadow-lg" style={{ background: 'linear-gradient(to right, #0f2d52, #1e4d8c)' }}>
+      <div className="px-6 py-3 flex items-center gap-4">
+
+        {/* Left: logo + name */}
+        <div className="flex items-center gap-3 flex-shrink-0">
+          <div className="rounded-lg p-1 bg-white flex-shrink-0 flex items-center justify-center" style={{ width: 46, height: 46 }}>
+            <img
+              src="https://psiquiatricocali.gov.co/wp/wp-content/uploads/2023/11/logo-HPVC-1.png"
+              alt="Logo"
+              style={{ maxWidth: 38, maxHeight: 38, objectFit: 'contain' }}
+            />
           </div>
           <div>
-            <h1 className="text-lg font-bold leading-tight">{nombre}</h1>
-            <div className="flex items-center gap-2 mt-0.5">
-              <ShieldCheck size={14} className="text-blue-300" />
-              <span className="text-sm text-blue-200 font-medium">{modelo}</span>
+            <h1 className="text-base font-bold leading-tight text-white">{nombre}</h1>
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <ShieldCheck size={12} className="text-blue-300" />
+              <span className="text-xs text-blue-200 font-medium">{modelo}</span>
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-3 self-start md:self-auto">
+
+        {/* Center: folder tabs */}
+        <div className="flex items-center gap-1 flex-1">
+          {TABS.map(({ id, label, icon: Icon }) => {
+            const isActive = activeTab === id
+            return (
+              <button
+                key={id}
+                onClick={() => onTabChange(id)}
+                className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold transition-all duration-150 outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
+                style={{
+                  borderRadius: '8px 8px 0 0',
+                  background: isActive ? '#0b1829' : 'rgba(255,255,255,0.06)',
+                  color: isActive ? '#60a5fa' : 'rgba(255,255,255,0.5)',
+                  border: '1px solid',
+                  borderColor: isActive ? 'rgba(96,165,250,0.35)' : 'rgba(255,255,255,0.1)',
+                  borderBottom: isActive ? '1px solid #0b1829' : '1px solid rgba(255,255,255,0.1)',
+                  boxShadow: isActive ? '0 -2px 8px rgba(96,165,250,0.15)' : 'none',
+                  paddingBottom: isActive ? '10px' : '8px',
+                }}
+              >
+                <Icon size={13} />
+                {label}
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Right: semáforo + button + date */}
+        <div className="flex items-center gap-3 flex-shrink-0">
+          <div className="flex items-center gap-2">
+            {SEM_BADGES.map(({ key, label, dot, bg, border }) => (
+              <div
+                key={key}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg"
+                style={{ background: bg, border: `1px solid ${border}` }}
+              >
+                <span className="w-2 h-2 rounded-full shrink-0" style={{ background: dot }} />
+                <span className="text-xs font-bold" style={{ color: dot }}>
+                  {globalCounts?.[key] ?? '—'}
+                </span>
+                <span className="text-[10px] text-white/60 hidden sm:inline">{label}</span>
+              </div>
+            ))}
+          </div>
+
           <ExecutiveReportButton />
-          <div className="flex items-center gap-2 bg-white/10 rounded-lg px-4 py-2">
-            <CalendarDays size={16} className="text-blue-300" />
+
+          <div className="flex items-center gap-2 bg-white/10 rounded-lg px-3 py-1.5">
+            <CalendarDays size={14} className="text-blue-300" />
             <div>
-              <p className="text-xs text-blue-300 leading-none">Última actualización</p>
-              <p className="text-sm font-semibold">{fecha}</p>
+              <p className="text-[10px] text-blue-300 leading-none">Última actualización</p>
+              <p className="text-xs font-semibold text-white">{fecha}</p>
             </div>
           </div>
         </div>
+
       </div>
     </header>
   )

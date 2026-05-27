@@ -48,6 +48,13 @@ export function DashboardProvider({ children }) {
       const meta = k['Meta 2029']
       const critico = k['Umbral Crítico']
       const moderado = k['Umbral Moderado']
+      const [activePrinciple, setActivePrinciple] = useState(null)
+      const [selectedKpiIdx, setSelectedKpiIdx] = useState(0)
+      const [periodFilter, setPeriodFilter] = useState('all')
+      const [searchQuery, setSearchQuery] = useState('')
+      const [roleFilter, setRoleFilter] = useState('')
+      const [perspectiveFilter, setPerspectiveFilter] = useState('')
+      const [statusFilter, setStatusFilter] = useState('')
 
       let semaforo = 'rojo'
       if (valorActual !== null && valorActual !== undefined && moderado !== null && critico !== null) {
@@ -88,6 +95,21 @@ export function DashboardProvider({ children }) {
     })
   }, [])
 
+  const _data = useMemo(
+    () => rawData ? buildData(rawData) : { iniciativas: [], objetivos_estrategicos: [] },
+    [rawData]
+  )
+
+  const madurezData = useMemo(
+    () => rawData ? rawData.filter(k => k.__tipo === 'MADUREZ') : [],
+    [rawData]
+  )
+
+  const allKpis = useMemo(
+    () => rawData ? rawData.filter(k => k.__tipo !== 'MADUREZ').map(normalizeKpi) : [],
+    [rawData]
+  )
+
   const uniqueRoles = useMemo(
     () => [...new Set(allKpis.map(k => k.rol_responsable).filter(Boolean))].sort(),
     [allKpis]
@@ -122,6 +144,7 @@ export function DashboardProvider({ children }) {
     <Ctx.Provider value={{
       data: _data,
       allKpis,
+      madurezData,
       filteredKpis,
       selectedKpi,
       setSelectedKpiIdx,

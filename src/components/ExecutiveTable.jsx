@@ -16,9 +16,21 @@ const PERSP_COLORS = {
   'Finanzas':            { bg: 'rgba(16,185,129,0.12)', color: '#6ee7b7' },
 }
 
+const STATUS_FILTERS = [
+  { value: '',         label: 'Todos',     dot: '#64748b' },
+  { value: 'rojo',     label: 'Crítico',   dot: '#ef4444' },
+  { value: 'amarillo', label: 'Moderado',  dot: '#eab308' },
+  { value: 'verde',    label: 'Normal',    dot: '#22c55e' },
+]
+
 export default function ExecutiveTable() {
   const { filteredKpis, selectedKpi, setSelectedKpiIdx } = useDashboard()
   const [modalKpi, setModalKpi] = useState(null)
+  const [statusFilter, setStatusFilter] = useState('')
+
+  const displayKpis = statusFilter
+    ? filteredKpis.filter(k => k.semaforo === statusFilter)
+    : filteredKpis
 
   if (filteredKpis.length === 0) {
     return (
@@ -35,9 +47,28 @@ export default function ExecutiveTable() {
         {/* Table header bar */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800">
           <h2 className="text-sm font-semibold text-slate-200">Tablero Ejecutivo de KPIs</h2>
-          <span className="text-[10px] text-slate-500 bg-slate-800 px-2 py-0.5 rounded-full">
-            {filteredKpis.length} indicadores
-          </span>
+          <div className="flex items-center gap-2">
+            {/* Status filter */}
+            <div className="flex items-center gap-1">
+              {STATUS_FILTERS.map(({ value, label, dot }) => (
+                <button
+                  key={value}
+                  onClick={() => setStatusFilter(value)}
+                  className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium transition-all"
+                  style={statusFilter === value
+                    ? { background: value ? `${dot}25` : 'rgba(100,116,139,0.25)', color: value ? dot : '#94a3b8', border: `1px solid ${value ? dot : '#475569'}50` }
+                    : { background: 'transparent', color: '#475569', border: '1px solid transparent' }
+                  }
+                >
+                  {value && <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: dot }} />}
+                  {label}
+                </button>
+              ))}
+            </div>
+            <span className="text-[10px] text-slate-500 bg-slate-800 px-2 py-0.5 rounded-full">
+              {displayKpis.length} indicadores
+            </span>
+          </div>
         </div>
 
         <div className="overflow-x-auto scrollbar-thin">
@@ -53,7 +84,7 @@ export default function ExecutiveTable() {
               </tr>
             </thead>
             <tbody>
-              {filteredKpis.map((kpi, i) => {
+              {displayKpis.map((kpi, i) => {
                 const sem      = SEM[kpi.semaforo] ?? SEM.rojo
                 const pColor   = PERSP_COLORS[kpi.Perspectiva] ?? { bg: 'rgba(100,116,139,0.1)', color: '#94a3b8' }
                 const isActive = kpi === selectedKpi
