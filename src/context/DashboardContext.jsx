@@ -134,7 +134,9 @@ export function DashboardProvider({ children }) {
   useEffect(() => {
     fetch('/app/data/Gobierno_TI_data.json')
       .then(r => {
-        if (r.ok) return r.json()
+        const isJson = r.headers.get('content-type')?.includes('application/json')
+        if (r.ok && isJson) return r.json()
+        
         return fetch('/data/Gobierno_TI_data.json').then(r2 => {
           if (!r2.ok) throw new Error(`HTTP ${r2.status} — ${r2.url}`)
           return r2.json()
