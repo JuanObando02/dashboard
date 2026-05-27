@@ -13,7 +13,7 @@ function serveDataPlugin() {
     configureServer(server) {
       server.middlewares.use('/data', async (req, res) => {
         try {
-          const fileName = (req.url ?? '/').replace(/^\//, '') || 'Gobierno_TI_data.json'
+          const fileName = (req.url ?? '/').split('?')[0].replace(/^\//, '') || 'Gobierno_TI_data.json'
           const filePath = join(process.cwd(), 'data', fileName)
           const content  = await readFile(filePath, 'utf-8')
           res.setHeader('Content-Type', 'application/json; charset=utf-8')
