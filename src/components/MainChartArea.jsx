@@ -25,11 +25,8 @@ function Tooltip_({ active, payload, label, unit, meta }) {
 export default function MainChartArea() {
   const {
     selectedKpi,
-    filteredKpis,
-    setSelectedKpiIdx,
     periodFilter,
     setPeriodFilter,
-    activePrinciple,
   } = useDashboard()
 
   const [yZoom, setYZoom] = useState(20)
@@ -97,7 +94,20 @@ export default function MainChartArea() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex flex-col items-end gap-1.5 shrink-0">
+          {/* Period filter */}
+          <select
+            value={periodFilter}
+            onChange={e => setPeriodFilter(e.target.value)}
+            className="text-xs bg-[#0b1829] border border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-300
+                       focus:outline-none focus:border-blue-500"
+          >
+            <option value="3">Últimos 3 períodos</option>
+            <option value="6">Últimos 6 períodos</option>
+            <option value="12">Últimos 12 períodos</option>
+            <option value="all">Todo el histórico</option>
+          </select>
+
           {/* Meta year selector */}
           <div className="flex items-center gap-1">
             <span className="text-[9px] text-slate-500 uppercase tracking-wider mr-0.5">Meta</span>
@@ -122,19 +132,6 @@ export default function MainChartArea() {
               )
             })}
           </div>
-
-          {/* Period filter */}
-          <select
-            value={periodFilter}
-            onChange={e => setPeriodFilter(e.target.value)}
-            className="text-xs bg-[#0b1829] border border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-300
-                       focus:outline-none focus:border-blue-500"
-          >
-            <option value="3">Últimos 3 períodos</option>
-            <option value="6">Últimos 6 períodos</option>
-            <option value="12">Últimos 12 períodos</option>
-            <option value="all">Todo el histórico</option>
-          </select>
         </div>
       </div>
 
@@ -275,40 +272,6 @@ export default function MainChartArea() {
         </div>
       </div>
 
-      {/* KPI pills */}
-      {filteredKpis.length > 1 && (
-        <div className="px-4 pb-3 flex flex-wrap gap-1.5">
-          {filteredKpis.slice(0, 20).map((k, i) => {
-            const isSelected = k === selectedKpi
-            return (
-              <button
-                key={i}
-                onClick={() => setSelectedKpiIdx(i)}
-                title={k.KPI}
-                className="text-[10px] px-2 py-0.5 rounded-md border transition-colors"
-                style={{
-                  background:   isSelected ? '#1d4ed8' : '#1e293b',
-                  borderColor:  isSelected ? '#3b82f6' : '#334155',
-                  color:        isSelected ? '#fff' : '#94a3b8',
-                }}
-              >
-                {k['Obj. BSC']} – K{i + 1}
-              </button>
-            )
-          })}
-          {filteredKpis.length > 20 && (
-            <span className="text-[10px] text-slate-500 self-center">
-              +{filteredKpis.length - 20} más
-            </span>
-          )}
-        </div>
-      )}
-
-      {!activePrinciple && (
-        <p className="px-4 pb-3 text-[10px] text-slate-600">
-          Filtra por principio ISO para navegar entre KPIs relacionados
-        </p>
-      )}
     </div>
   )
 }

@@ -5,6 +5,7 @@ import {
 } from 'recharts'
 import { Hexagon, CalendarDays } from 'lucide-react'
 import { useDashboard } from '../context/DashboardContext'
+import MaturityDetailModal from './MaturityDetailModal'
 
 const COLORS = ['#3b82f6', '#f59e0b']
 
@@ -82,9 +83,27 @@ function LevelBadge({ record }) {
   )
 }
 
+function ClickableTick({ x, y, payload, cx, onSectionClick }) {
+  const anchor = Math.abs(x - cx) < 10 ? 'middle' : x > cx ? 'start' : 'end'
+  return (
+    <text
+      x={x}
+      y={y}
+      textAnchor={anchor}
+      fill="#64748b"
+      fontSize={9}
+      style={{ cursor: 'pointer', userSelect: 'none' }}
+      onClick={() => onSectionClick(payload.value)}
+    >
+      {payload.value}
+    </text>
+  )
+}
+
 export default function MaturityRadar() {
   const { madurezData } = useDashboard()
   const [activeIdx, setActiveIdx] = useState(0)
+  const [selectedSection, setSelectedSection] = useState(null)
 
   if (!madurezData?.length) return null
 
@@ -174,7 +193,7 @@ export default function MaturityRadar() {
             <PolarGrid stroke="#1e293b" />
             <PolarAngleAxis
               dataKey="seccion"
-              tick={{ fill: '#64748b', fontSize: 9 }}
+              tick={(props) => <ClickableTick {...props} onSectionClick={setSelectedSection} />}
             />
             {madurezData.map((m, i) => (
               <Radar
@@ -202,7 +221,11 @@ export default function MaturityRadar() {
         {record.radar.map(r => {
           const barColor = r.pct >= 70 ? '#22c55e' : r.pct >= 50 ? '#eab308' : '#ef4444'
           return (
-            <div key={r.seccion}>
+            <div
+              key={r.seccion}
+              onClick={() => setSelectedSection(r.seccion)}
+              className="cursor-pointer rounded-lg px-1.5 py-1 -mx-1.5 transition-colors hover:bg-white/[0.03]"
+            >
               <div className="flex justify-between text-[10px] mb-0.5">
                 <span className="text-slate-400 truncate">{r.seccion}</span>
                 <span className="font-semibold tabular-nums shrink-0 ml-2" style={{ color: barColor }}>
@@ -219,6 +242,15 @@ export default function MaturityRadar() {
           )
         })}
       </div>
+
+      {/* Modal */}
+      {selectedSection && (
+        <MaturityDetailModal
+          record={record}
+          sectionName={selectedSection}
+          onClose={() => setSelectedSection(null)}
+        />
+      )}
     </div>
   )
 }

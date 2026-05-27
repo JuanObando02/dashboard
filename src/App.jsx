@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { DashboardProvider } from './context/DashboardContext'
+import { useDashboard, DashboardProvider } from './context/DashboardContext'
 import Header from './components/Header'
 import IsoPrincipleCards from './components/IsoPrincipleCards'
 import MainChartArea from './components/MainChartArea'
@@ -9,11 +9,50 @@ import SmartSearch from './components/SmartSearch'
 import GapAnalysisBar from './components/GapAnalysisBar'
 import MaturityRadar from './components/MaturityRadar'
 import { Database, BrainCircuit, Construction } from 'lucide-react'
+import GeminiPanel from './components/GeminiPanel'
 
 const metadata = {
   nombre: "Hospital Departamental Psiquiátrico Universitario del Valle",
   modelo_gobierno: "ISO 38500 & Balanced Scorecard",
   fecha_actualizacion: "2026-05-27"
+}
+
+function KpiPillsBar() {
+  const { filteredKpis, selectedKpi, setSelectedKpiIdx, activePrinciple } = useDashboard()
+
+  if (!activePrinciple && filteredKpis.length === 0) return null
+
+  return (
+    <div className="rounded-xl px-3 py-2.5 flex flex-wrap gap-1.5" style={{ background: '#111e35', border: '1px solid #1e293b' }}>
+      {filteredKpis.length > 1 ? (
+        <>
+          {filteredKpis.slice(0, 20).map((k, i) => {
+            const isSelected = k === selectedKpi
+            return (
+              <button
+                key={i}
+                onClick={() => setSelectedKpiIdx(i)}
+                title={k.KPI}
+                className="text-[10px] px-2 py-0.5 rounded-md border transition-colors"
+                style={{
+                  background:  isSelected ? '#1d4ed8' : '#1e293b',
+                  borderColor: isSelected ? '#3b82f6' : '#334155',
+                  color:       isSelected ? '#fff' : '#94a3b8',
+                }}
+              >
+                {k['Obj. BSC']} – K{i + 1}
+              </button>
+            )
+          })}
+          {filteredKpis.length > 20 && (
+            <span className="text-[10px] text-slate-500 self-center">+{filteredKpis.length - 20} más</span>
+          )}
+        </>
+      ) : (
+        <p className="text-[10px] text-slate-600">Filtra por principio ISO para navegar entre KPIs</p>
+      )}
+    </div>
+  )
 }
 
 function ComingSoon({ icon: Icon, title, description }) {
@@ -46,13 +85,18 @@ export default function App() {
           <main className="max-w-screen-2xl mx-auto px-4 sm:px-6 py-6 space-y-5">
             <SmartSearch />
 
-            <div className="grid grid-cols-1 xl:grid-cols-[1fr_340px] gap-5 items-start">
+            <div className="grid grid-cols-1 xl:grid-cols-[1fr_480px] gap-5 items-start">
               {/* Left column */}
               <div className="space-y-5">
                 <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-5 items-start">
                   <MaturityRadar />
-                  <MainChartArea />
+                  <div className="space-y-3">
+                    <GeminiPanel />
+                    <MainChartArea />
+                    <KpiPillsBar />
+                  </div>
                 </div>
+
                 <ExecutiveTable />
               </div>
 

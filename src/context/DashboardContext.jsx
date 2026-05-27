@@ -1,12 +1,12 @@
 import { createContext, useContext, useState, useMemo, useEffect } from 'react'
 
 export const ISO_PRINCIPLES = [
-  { id: 'Responsabilidad',       iconName: 'Shield',       hex: '#3b82f6' },
-  { id: 'Estrategia',            iconName: 'Target',       hex: '#8b5cf6' },
-  { id: 'Adquisición',           iconName: 'Package',      hex: '#f97316' },
-  { id: 'Rendimiento',           iconName: 'TrendingUp',   hex: '#10b981' },
-  { id: 'Conformidad',           iconName: 'CheckCircle2', hex: '#06b6d4' },
-  { id: 'Comportamiento Humano', iconName: 'Users',        hex: '#ec4899' },
+  { id: 'Responsabilidad',       iconName: 'Shield',       hex: '#3b82f6', hdpuv: ['Honestidad', 'Compromiso y Diligencia', 'Servicios'] },
+  { id: 'Estrategia',            iconName: 'Target',       hex: '#8b5cf6', hdpuv: ['Conocimiento', 'Compromiso'] },
+  { id: 'Adquisición',           iconName: 'Package',      hex: '#f97316', hdpuv: ['Honestidad', 'Diligencia', 'Servicio'] },
+  { id: 'Rendimiento',           iconName: 'TrendingUp',   hex: '#10b981', hdpuv: ['Diligencia', 'Servicio', 'Compromiso'] },
+  { id: 'Conformidad',           iconName: 'CheckCircle2', hex: '#06b6d4', hdpuv: ['Honestidad', 'Seguridad'] },
+  { id: 'Comportamiento Humano', iconName: 'Users',        hex: '#ec4899', hdpuv: ['Respeto', 'Justicia e Inclusión', 'Humanización'] },
 ]
 
 function normalizeKpi(k) {
