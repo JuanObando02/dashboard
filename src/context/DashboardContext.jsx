@@ -25,6 +25,15 @@ function normalizeKpi(k) {
     valor:   m.valor ?? null,
   }))
 
+  // Soporta formato nuevo (k.auditoria) y formato antiguo (k.ultima_auditoria)
+  const rawAuditoria = k.auditoria ?? k.ultima_auditoria ?? null
+  const auditoria = rawAuditoria ? {
+    ...rawAuditoria,
+    plan_accion: typeof rawAuditoria.plan_accion === 'string'
+      ? (() => { try { return JSON.parse(rawAuditoria.plan_accion) } catch { return [] } })()
+      : (rawAuditoria.plan_accion ?? []),
+  } : null
+
   return {
     ...k,
     KPI:                k.kpi,
@@ -47,6 +56,7 @@ function normalizeKpi(k) {
     semaforo,
     cumplimiento_pct,
     presupuesto_cop,
+    auditoria,
   }
 }
 
@@ -131,14 +141,21 @@ export function DashboardProvider({ children }) {
   const [statusFilter, setStatusFilter]             = useState('')
 
   useEffect(() => {
-    const timestamp = new Date().getTime();
+    const timestamp = new Date().getTime()
     fetch(`/data/Gobierno_TI_data.json?t=${timestamp}`)
       .then(r => {
         if (!r.ok) throw new Error(`HTTP ${r.status} — ${r.url}`)
         return r.json()
       })
-      .then(data => { setRawData(data); setLoading(false) })
-      .catch(err  => { setLoadError(err.message); setLoading(false) })
+      .then(raw => {
+        // Soporta formato nuevo [{"data":[...]}] y formato plano antiguo [...]
+        const data = Array.isArray(raw) && raw.length > 0 && raw[0]?.data
+          ? raw[0].data
+          : raw
+        setRawData(data)
+        setLoading(false)
+      })
+      .catch(err => { setLoadError(err.message); setLoading(false) })
   }, [])
 
   const _data = useMemo(
@@ -152,8 +169,9 @@ export function DashboardProvider({ children }) {
   )
 
   const allKpis = useMemo(
-    () => rawData ? rawData.filter(k => k.__tipo !== 'MADUREZ').map(normalizeKpi) : [],
-
+    () => rawData
+      ? rawData.filter(k => k.__tipo !== 'MADUREZ' && (k.kpi || k.KPI)).map(normalizeKpi)
+      : [],
     [rawData]
   )
 
@@ -168,7 +186,8 @@ export function DashboardProvider({ children }) {
   )
 
   const globalCounts = useMemo(() => {
-    const fromData = rawData?.[0]?.resumen_global
+    // resumen_global puede estar en cada KPI (nuevo formato) o en el primer item del array plano
+    const fromData = allKpis[0]?.resumen_global ?? rawData?.[0]?.resumen_global
     if (fromData) return fromData
     return {
       total_kpis: allKpis.length,
