@@ -130,12 +130,15 @@ export function DashboardProvider({ children }) {
   const [perspectiveFilter, setPerspectiveFilter]   = useState('')
   const [statusFilter, setStatusFilter]             = useState('')
 
-  // Carga el JSON en runtime desde /data/ (dev: servido por Vite plugin; prod: Nginx)
+  // Intenta cargar desde /app/data/ (VPS) y si falla hace fallback a /data/ (local/proyecto)
   useEffect(() => {
-    fetch('/data/Gobierno_TI_data.json')
+    fetch('/app/data/Gobierno_TI_data.json')
       .then(r => {
-        if (!r.ok) throw new Error(`HTTP ${r.status} — ${r.url}`)
-        return r.json()
+        if (r.ok) return r.json()
+        return fetch('/data/Gobierno_TI_data.json').then(r2 => {
+          if (!r2.ok) throw new Error(`HTTP ${r2.status} — ${r2.url}`)
+          return r2.json()
+        })
       })
       .then(data => { setRawData(data); setLoading(false) })
       .catch(err  => { setLoadError(err.message); setLoading(false) })
