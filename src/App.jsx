@@ -7,14 +7,13 @@ import ExecutiveTable from './components/ExecutiveTable'
 import PerspectiveHealthCard from './components/PerspectiveHealthCard'
 import SmartSearch from './components/SmartSearch'
 import GapAnalysisBar from './components/GapAnalysisBar'
-import rawData from './data/Gobierno_TI_data.json'
 import MaturityRadar from './components/MaturityRadar'
 import { Database, BrainCircuit, Construction } from 'lucide-react'
 
 const metadata = {
   nombre: "Hospital Departamental Psiquiátrico Universitario del Valle",
   modelo_gobierno: "ISO 38500 & Balanced Scorecard",
-  fecha_actualizacion: "2026-05-24"
+  fecha_actualizacion: "2026-05-27"
 }
 
 function ComingSoon({ icon: Icon, title, description }) {

@@ -1,17 +1,24 @@
 import { CalendarDays, ShieldCheck, Monitor, Database, BrainCircuit } from 'lucide-react'
 import ExecutiveReportButton from './ExecutiveReportButton'
+import { useDashboard } from '../context/DashboardContext'
+
+const SEM_BADGES = [
+  { key: 'criticos',  label: 'Crítico',  dot: '#ef4444', bg: 'rgba(239,68,68,0.15)',  border: 'rgba(239,68,68,0.35)'  },
+  { key: 'moderados', label: 'Moderado', dot: '#eab308', bg: 'rgba(234,179,8,0.15)',  border: 'rgba(234,179,8,0.35)'  },
+  { key: 'normales',  label: 'Normal',   dot: '#22c55e', bg: 'rgba(34,197,94,0.15)',  border: 'rgba(34,197,94,0.35)'  },
+]
 
 const TABS = [
-  { id: 'ti', label: 'Gobierno de TI', icon: Monitor },
+  { id: 'ti',    label: 'Gobierno de TI',    icon: Monitor },
   { id: 'datos', label: 'Gobierno de Datos', icon: Database },
-  { id: 'ia', label: 'Gobierno de IA', icon: BrainCircuit },
+  { id: 'ia',    label: 'Gobierno de IA',    icon: BrainCircuit },
 ]
 
 export default function Header({ metadata, activeTab, onTabChange }) {
   const { globalCounts } = useDashboard()
   const nombre = metadata?.nombre ?? 'Hospital'
   const modelo = metadata?.modelo_gobierno ?? 'ISO 38500 & BSC'
-  const fecha = metadata?.fecha_actualizacion ?? '—'
+  const fecha  = metadata?.fecha_actualizacion ?? '—'
 
   return (
     <header className="sticky top-0 z-50 shadow-lg" style={{ background: 'linear-gradient(to right, #0f2d52, #1e4d8c)' }}>

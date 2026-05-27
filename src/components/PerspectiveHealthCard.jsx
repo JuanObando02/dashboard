@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
-import { TrendingUp, TrendingDown, Minus, Activity } from 'lucide-react'
-import { useDashboard } from '../context/DashboardContext'
+import { TrendingUp, TrendingDown, Minus, Activity, Shield, Target, Package, CheckCircle2, Users } from 'lucide-react'
+import { useDashboard, ISO_PRINCIPLES } from '../context/DashboardContext'
+import KpiDetailModal from './KpiDetailModal'
 
 const PERSPECTIVAS = [
   { id: 'Clientes', short: 'CLI', hex: '#3b82f6' },
@@ -8,6 +9,8 @@ const PERSPECTIVAS = [
   { id: 'Aprendizaje y Crec.', short: 'APR', hex: '#f59e0b' },
   { id: 'Finanzas', short: 'FIN', hex: '#10b981' },
 ]
+
+const ICON_MAP = { Shield, Target, Package, TrendingUp, CheckCircle2, Users }
 
 function Bar_({ pct, color }) {
   return (
@@ -20,8 +23,7 @@ function Bar_({ pct, color }) {
   )
 }
 
-export default function PerspectiveHealthCard() {
-  const { allKpis } = useDashboard()
+function BscHealthView({ allKpis }) {
   const [active, setActive] = useState('Clientes')
 
   const pkpis = useMemo(
@@ -42,7 +44,6 @@ export default function PerspectiveHealthCard() {
   const pctOk = total > 0 ? Math.round((verdes / total) * 100) : 0
   const pctAmar = total > 0 ? Math.round((amar / total) * 100) : 0
 
-  // Avg trend: delta between last and first historico value
   const avgDelta = useMemo(() => {
     const deltas = pkpis
       .filter(k => (k.historico_simulado?.length ?? 0) >= 2)
@@ -64,16 +65,7 @@ export default function PerspectiveHealthCard() {
   const trendColor = avgDelta > 0.5 ? '#22c55e' : avgDelta < -0.5 ? '#ef4444' : '#94a3b8'
 
   return (
-    <div
-      className="rounded-xl border overflow-hidden xl:sticky xl:top-20"
-      style={{ background: '#111e35', borderColor: '#1e293b' }}
-    >
-      {/* Title */}
-      <div className="flex items-center gap-2 px-4 py-3 border-b" style={{ borderColor: '#1e293b' }}>
-        <Activity size={14} className="text-blue-400" />
-        <h2 className="text-sm font-semibold text-slate-200">Salud por Perspectiva BSC</h2>
-      </div>
-
+    <>
       {/* Perspective selector */}
       <div className="grid grid-cols-4 gap-1.5 p-3 border-b" style={{ borderColor: '#1e293b' }}>
         {PERSPECTIVAS.map(p => (
