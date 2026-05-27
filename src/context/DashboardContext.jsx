@@ -1,92 +1,152 @@
-import { createContext, useContext, useState, useMemo } from 'react'
-import rawData from '../data/Gobierno_TI_data.json'
-
-const kpisRaw = rawData.filter(d => d.__tipo === 'kpi')
-const contextRaw = rawData.filter(d => d.__tipo === 'contexto')
-
-const iniciativas = contextRaw.filter(x => x.ID && x.ID.startsWith('I-'))
-const objetivos_estrategicos = []
-const seenOes = new Set()
-contextRaw.forEach(x => {
-  const oeId = x["Objetivo Estratégico"]
-  const desc = x["Descripción"] || x["Descripción OE"]
-  if (oeId && desc && !seenOes.has(oeId)) {
-    seenOes.add(oeId)
-    objetivos_estrategicos.push({
-      "Objetivo Estratégico": oeId,
-      "Descripción": desc
-    })
-  }
-})
-
-const _data = {
-  iniciativas,
-  objetivos_estrategicos
-}
+import { createContext, useContext, useState, useMemo, useEffect } from 'react'
 
 export const ISO_PRINCIPLES = [
-  { id: 'Responsabilidad', iconName: 'Shield', hex: '#3b82f6' },
-  { id: 'Estrategia', iconName: 'Target', hex: '#8b5cf6' },
-  { id: 'Adquisición', iconName: 'Package', hex: '#f97316' },
-  { id: 'Rendimiento', iconName: 'TrendingUp', hex: '#10b981' },
-  { id: 'Conformidad', iconName: 'CheckCircle2', hex: '#06b6d4' },
-  { id: 'Comportamiento Humano', iconName: 'Users', hex: '#ec4899' },
+  { id: 'Responsabilidad',       iconName: 'Shield',       hex: '#3b82f6' },
+  { id: 'Estrategia',            iconName: 'Target',       hex: '#8b5cf6' },
+  { id: 'Adquisición',           iconName: 'Package',      hex: '#f97316' },
+  { id: 'Rendimiento',           iconName: 'TrendingUp',   hex: '#10b981' },
+  { id: 'Conformidad',           iconName: 'CheckCircle2', hex: '#06b6d4' },
+  { id: 'Comportamiento Humano', iconName: 'Users',        hex: '#ec4899' },
 ]
+
+function normalizeKpi(k) {
+  const semaforo       = (k.estado_codigo ?? 'ROJO').toLowerCase()
+  const cumplimiento_pct = k.cumplimiento_meta_pct ?? 0
+
+  const totalBudget = (k.contexto?.iniciativas ?? []).reduce(
+    (sum, i) => sum + (i.presupuesto ?? 0), 0
+  )
+  const presupuesto_cop = totalBudget > 0
+    ? `$${totalBudget.toLocaleString('en-US')}`
+    : '—'
+
+  const historico_simulado = (k.mediciones ?? []).map(m => ({
+    periodo: m.fecha ? m.fecha.substring(0, 7) : '',
+    valor:   m.valor ?? null,
+  }))
+
+  return {
+    ...k,
+    KPI:                k.kpi,
+    Perspectiva:        k.perspectiva,
+    'Obj. BSC':         k.obj_bsc,
+    Unidad:             k.unidad,
+    'Valor Actual':     k.valor_actual,
+    'Meta 2026':        k.meta_2026,
+    'Meta 2027':        null,
+    'Meta 2028':        null,
+    'Meta 2029':        k.meta_2026,
+    Tipo:               k.tipo,
+    Frecuencia:         k.frecuencia,
+    Fuente:             k.contexto?.fuente?.descripcion ?? null,
+    rol_responsable:    k.responsable,
+    Iniciativas:        (k.contexto?.iniciativas ?? []).map(i => i.id).join(', '),
+    'OEs Relacionados': (k.contexto?.objetivos_estrategicos ?? []).map(oe => oe.id).join(', '),
+    historico_simulado,
+    semaforo,
+    cumplimiento_pct,
+    presupuesto_cop,
+  }
+}
+
+function buildData(rawData) {
+  const seenInits = new Set()
+  const iniciativas = []
+  rawData.forEach(k => {
+    ;(k.contexto?.iniciativas ?? []).forEach(ini => {
+      if (!seenInits.has(ini.id)) {
+        seenInits.add(ini.id)
+        iniciativas.push({
+          ID:                     ini.id,
+          'Nombre Iniciativa':    ini.nombre,
+          'Presupuesto (COP)':    ini.presupuesto,
+          'Período':              `${ini.inicio} – ${ini.fin}`,
+          'Objetivo(s) BSC':      ini.obj_bsc,
+          'Objetivos Estratégicos': '',
+          'Descripción Resumida':   '',
+        })
+      }
+    })
+  })
+
+  const seenOes = new Set()
+  const objetivos_estrategicos = []
+  rawData.forEach(k => {
+    ;(k.contexto?.objetivos_estrategicos ?? []).forEach(oe => {
+      if (!seenOes.has(oe.id)) {
+        seenOes.add(oe.id)
+        objetivos_estrategicos.push({
+          'Objetivo Estratégico': oe.id,
+          'Descripción':          oe.nombre,
+        })
+      }
+    })
+  })
+
+  return { iniciativas, objetivos_estrategicos }
+}
+
+function LoadingScreen() {
+  return (
+    <div className="min-h-screen flex items-center justify-center" style={{ background: '#0b1829' }}>
+      <div className="text-center space-y-3">
+        <div
+          className="w-10 h-10 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto"
+        />
+        <p className="text-slate-400 text-sm">Cargando datos del dashboard…</p>
+      </div>
+    </div>
+  )
+}
+
+function ErrorScreen({ error }) {
+  return (
+    <div className="min-h-screen flex items-center justify-center" style={{ background: '#0b1829' }}>
+      <div className="text-center space-y-2 max-w-sm px-4">
+        <p className="text-red-400 font-semibold text-sm">Error al cargar datos</p>
+        <p className="text-slate-500 text-xs font-mono break-all">{error}</p>
+        <p className="text-slate-600 text-xs mt-1">
+          Verifica que el archivo exista en{' '}
+          <code className="text-slate-500">data/Gobierno_TI_data.json</code>
+        </p>
+      </div>
+    </div>
+  )
+}
 
 const Ctx = createContext(null)
 
 export function DashboardProvider({ children }) {
+  const [rawData,   setRawData]   = useState(null)
+  const [loading,   setLoading]   = useState(true)
+  const [loadError, setLoadError] = useState(null)
+
   const [activePrinciple, setActivePrinciple] = useState(null)
-  const [selectedKpiIdx, setSelectedKpiIdx] = useState(0)
-  const [periodFilter, setPeriodFilter] = useState('6m')
-  const [searchQuery, setSearchQuery] = useState('')
-  const [roleFilter, setRoleFilter] = useState('')
+  const [selectedKpiIdx, setSelectedKpiIdx]   = useState(0)
+  const [periodFilter, setPeriodFilter]       = useState('6m')
+  const [searchQuery, setSearchQuery]         = useState('')
+  const [roleFilter, setRoleFilter]           = useState('')
 
-  const allKpis = useMemo(() => {
-    return kpisRaw.map(k => {
-      const valorActual = k['Valor Actual']
-      const meta = k['Meta 2029']
-      const critico = k['Umbral Crítico']
-      const moderado = k['Umbral Moderado']
-
-      let semaforo = 'rojo'
-      if (valorActual !== null && valorActual !== undefined && moderado !== null && critico !== null) {
-        if (k.Tipo === 'MIN') {
-          if (valorActual <= moderado) semaforo = 'verde'
-          else if (valorActual <= critico) semaforo = 'amarillo'
-          else semaforo = 'rojo'
-        } else {
-          if (valorActual >= moderado) semaforo = 'verde'
-          else if (valorActual >= critico) semaforo = 'amarillo'
-          else semaforo = 'rojo'
-        }
-      }
-
-      let cumplimiento_pct = 0
-      if (valorActual !== null && valorActual !== undefined && meta) {
-        if (k.Tipo === 'MIN') {
-          cumplimiento_pct = Math.round((meta / valorActual) * 100)
-        } else {
-          cumplimiento_pct = Math.round((valorActual / meta) * 100)
-        }
-      }
-
-      // Compute budget
-      const initIds = (k.Iniciativas ?? '').split(',').map(s => s.trim()).filter(Boolean)
-      const totalBudget = initIds.reduce((sum, id) => {
-        const ini = iniciativas.find(i => i.ID === id)
-        return sum + (ini ? (ini["Presupuesto (COP)"] || 0) : 0)
-      }, 0)
-      const presupuesto_cop = totalBudget > 0 ? `$${totalBudget.toLocaleString('en-US')}` : '—'
-
-      return {
-        ...k,
-        semaforo,
-        cumplimiento_pct,
-        presupuesto_cop
-      }
-    })
+  // Carga el JSON en runtime desde /data/ (dev: servido por Vite plugin; prod: Nginx)
+  useEffect(() => {
+    fetch('/data/Gobierno_TI_data.json')
+      .then(r => {
+        if (!r.ok) throw new Error(`HTTP ${r.status} — ${r.url}`)
+        return r.json()
+      })
+      .then(data => { setRawData(data); setLoading(false) })
+      .catch(err  => { setLoadError(err.message); setLoading(false) })
   }, [])
+
+  const _data = useMemo(
+    () => rawData ? buildData(rawData) : { iniciativas: [], objetivos_estrategicos: [] },
+    [rawData]
+  )
+
+  const allKpis = useMemo(
+    () => rawData ? rawData.map(normalizeKpi) : [],
+    [rawData]
+  )
 
   const uniqueRoles = useMemo(
     () => [...new Set(allKpis.map(k => k.rol_responsable).filter(Boolean))].sort(),
@@ -110,13 +170,16 @@ export function DashboardProvider({ children }) {
     return kpis
   }, [activePrinciple, allKpis, searchQuery, roleFilter])
 
-  const safeIdx = selectedKpiIdx < filteredKpis.length ? selectedKpiIdx : 0
+  const safeIdx     = selectedKpiIdx < filteredKpis.length ? selectedKpiIdx : 0
   const selectedKpi = filteredKpis[safeIdx] ?? null
 
   function togglePrinciple(id) {
     setActivePrinciple(prev => (prev === id ? null : id))
     setSelectedKpiIdx(0)
   }
+
+  if (loading)   return <LoadingScreen />
+  if (loadError) return <ErrorScreen error={loadError} />
 
   return (
     <Ctx.Provider value={{

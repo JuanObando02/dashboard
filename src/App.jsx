@@ -6,12 +6,11 @@ import ExecutiveTable from './components/ExecutiveTable'
 import PerspectiveHealthCard from './components/PerspectiveHealthCard'
 import SmartSearch from './components/SmartSearch'
 import GapAnalysisBar from './components/GapAnalysisBar'
-import rawData from './data/Gobierno_TI_data.json'
 
 const metadata = {
   nombre: "Hospital Departamental Psiquiátrico Universitario del Valle",
   modelo_gobierno: "ISO 38500 & Balanced Scorecard",
-  fecha_actualizacion: "2026-05-24"
+  fecha_actualizacion: "2026-05-27"
 }
 
 export default function App() {
