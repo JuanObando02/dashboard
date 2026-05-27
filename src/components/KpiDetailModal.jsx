@@ -76,12 +76,16 @@ export default function KpiDetailModal({ kpi, onClose }) {
 
   const useBar      = historico.length <= 4
   const chartColor  = sem.dot
-  const metaScaled  = kpi['Meta 2029'] !== null && kpi['Meta 2029'] !== undefined ? kpi['Meta 2029'] * mult : null
-  const valSimScaled = kpi['Valor Actual'] !== null && kpi['Valor Actual'] !== undefined ? kpi['Valor Actual'] * mult : null
+  const metaScaled       = kpi['Meta 2029'] != null ? kpi['Meta 2029'] * mult : null
+  const meta2026Scaled   = kpi['Meta 2026'] != null ? kpi['Meta 2026'] * mult : null
+  const lineaBaseScaled  = kpi.linea_base_2025 != null ? kpi.linea_base_2025 * mult : null
+  const valSimScaled     = kpi['Valor Actual'] != null ? kpi['Valor Actual'] * mult : null
 
   const yDomain = useMemo(() => {
     const vals = historico.map(d => d.valor).filter(v => v != null)
-    if (metaScaled != null) vals.push(metaScaled)
+    if (metaScaled != null)      vals.push(metaScaled)
+    if (meta2026Scaled != null)  vals.push(meta2026Scaled)
+    if (lineaBaseScaled != null) vals.push(lineaBaseScaled)
     if (vals.length === 0) return ['auto', 'auto']
     const min = Math.min(...vals)
     const max = Math.max(...vals)
@@ -92,7 +96,7 @@ export default function KpiDetailModal({ kpi, onClose }) {
       parseFloat((min - pad).toFixed(dec)),
       parseFloat((max + pad).toFixed(dec)),
     ]
-  }, [historico, metaScaled, isPct])
+  }, [historico, metaScaled, meta2026Scaled, lineaBaseScaled, isPct])
 
   return (
     <div
@@ -262,8 +266,14 @@ export default function KpiDetailModal({ kpi, onClose }) {
                       <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
                       <XAxis dataKey="periodo" tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} />
                       <YAxis tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} domain={yDomain} />
+                      {lineaBaseScaled != null && (
+                        <ReferenceLine y={lineaBaseScaled} stroke="#64748b" strokeDasharray="3 3" strokeOpacity={0.6} label={{ value: 'Base', position: 'insideTopRight', fontSize: 8, fill: '#64748b' }} />
+                      )}
+                      {meta2026Scaled != null && (
+                        <ReferenceLine y={meta2026Scaled} stroke="#3b82f6" strokeDasharray="4 2" strokeOpacity={0.6} label={{ value: '2026', position: 'insideTopRight', fontSize: 8, fill: '#3b82f6' }} />
+                      )}
                       {metaScaled != null && (
-                        <ReferenceLine y={metaScaled} stroke="#22c55e" strokeDasharray="4 2" strokeOpacity={0.5} />
+                        <ReferenceLine y={metaScaled} stroke="#22c55e" strokeDasharray="4 2" strokeOpacity={0.6} label={{ value: '2029', position: 'insideTopRight', fontSize: 8, fill: '#22c55e' }} />
                       )}
                       <Tooltip content={<ChartTooltip unit={kpi.Unidad} />} cursor={false} />
                       <Bar dataKey="valor" fill={chartColor} radius={[3, 3, 0, 0]} maxBarSize={30} />
@@ -273,8 +283,14 @@ export default function KpiDetailModal({ kpi, onClose }) {
                       <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
                       <XAxis dataKey="periodo" tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} />
                       <YAxis tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} domain={yDomain} />
+                      {lineaBaseScaled != null && (
+                        <ReferenceLine y={lineaBaseScaled} stroke="#64748b" strokeDasharray="3 3" strokeOpacity={0.6} label={{ value: 'Base', position: 'insideTopRight', fontSize: 8, fill: '#64748b' }} />
+                      )}
+                      {meta2026Scaled != null && (
+                        <ReferenceLine y={meta2026Scaled} stroke="#3b82f6" strokeDasharray="4 2" strokeOpacity={0.6} label={{ value: '2026', position: 'insideTopRight', fontSize: 8, fill: '#3b82f6' }} />
+                      )}
                       {metaScaled != null && (
-                        <ReferenceLine y={metaScaled} stroke="#22c55e" strokeDasharray="4 2" strokeOpacity={0.5} />
+                        <ReferenceLine y={metaScaled} stroke="#22c55e" strokeDasharray="4 2" strokeOpacity={0.6} label={{ value: '2029', position: 'insideTopRight', fontSize: 8, fill: '#22c55e' }} />
                       )}
                       <Tooltip content={<ChartTooltip unit={kpi.Unidad} />} />
                       <Line
@@ -328,6 +344,7 @@ export default function KpiDetailModal({ kpi, onClose }) {
                 ['Frecuencia',     kpi.Frecuencia],
                 ['Responsable',    kpi.rol_responsable],
                 ['Presupuesto',    kpi.presupuesto_cop],
+                ['Línea base 2025', kpi.linea_base_2025 != null ? `${Number((kpi.linea_base_2025 * mult).toFixed(isPct ? 1 : 2))} ${kpi.Unidad ?? ''}`.trim() : null],
                 ['Fuente',         kpi.Fuente, true],
                 ['OEs relacionados', kpi['OEs Relacionados']],
               ].map(([l, v, full]) => v ? (

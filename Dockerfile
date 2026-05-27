@@ -24,7 +24,7 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 # dist/data/Gobierno_TI_data.json queda disponible en /data/Gobierno_TI_data.json
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-EXPOSE 5173
+EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
 
