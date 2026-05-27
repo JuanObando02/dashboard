@@ -1,4 +1,4 @@
-import { Building2, CalendarDays, ShieldCheck } from 'lucide-react'
+import { CalendarDays, ShieldCheck } from 'lucide-react'
 import ExecutiveReportButton from './ExecutiveReportButton'
 import { useDashboard } from '../context/DashboardContext'
 
@@ -18,8 +18,12 @@ export default function Header({ metadata }) {
     <header className="bg-gradient-to-r from-[#0f2d52] to-[#1e4d8c] text-white shadow-lg">
       <div className="px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
         <div className="flex items-start gap-3">
-          <div className="bg-white/10 rounded-lg p-2 mt-0.5">
-            <Building2 size={28} className="text-blue-200" />
+          <div className="rounded-lg p-1 mt-0.5 bg-white flex items-center justify-center" style={{ width: 52, height: 52 }}>
+            <img
+              src="https://psiquiatricocali.gov.co/wp/wp-content/uploads/2023/11/logo-HPVC-1.png"
+              alt="Logo Hospital Psiquiátrico Universitario del Valle"
+              style={{ maxWidth: 44, maxHeight: 44, objectFit: 'contain' }}
+            />
           </div>
           <div>
             <h1 className="text-lg font-bold leading-tight">{nombre}</h1>

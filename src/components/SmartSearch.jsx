@@ -45,7 +45,7 @@ export default function SmartSearch() {
     roleFilter, setRoleFilter,
     uniqueRoles, setSelectedKpiIdx,
     perspectiveFilter, setPerspectiveFilter,
-    statusFilter, setStatusFilter,
+    statusFilter, applyStatusFilter,
     uniquePerspectives,
   } = useDashboard()
 
@@ -85,11 +85,7 @@ export default function SmartSearch() {
 
   function clearAll() {
     setInputValue('')
-    setSearchQuery('')
-    setRoleFilter('')
-    setPerspectiveFilter('')
-    setStatusFilter('')
-    setSelectedKpiIdx(0)
+    applyStatusFilter('')
     inputRef.current?.focus()
   }
 
@@ -166,7 +162,7 @@ export default function SmartSearch() {
       {/* Estado filter */}
       <FilterSelect
         value={statusFilter}
-        onChange={v => { setStatusFilter(v); setSelectedKpiIdx(0) }}
+        onChange={v => applyStatusFilter(v)}
         placeholder="Estado"
         options={STATUS_OPTIONS}
       />

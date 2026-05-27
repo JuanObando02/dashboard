@@ -206,6 +206,15 @@ export function DashboardProvider({ children }) {
     setSelectedKpiIdx(0)
   }
 
+  function applyStatusFilter(status) {
+    setStatusFilter(status)
+    setActivePrinciple(null)
+    setSearchQuery('')
+    setRoleFilter('')
+    setPerspectiveFilter('')
+    setSelectedKpiIdx(0)
+  }
+
   if (loading)   return <LoadingScreen />
   if (loadError) return <ErrorScreen error={loadError} />
 
@@ -229,6 +238,7 @@ export function DashboardProvider({ children }) {
       setPerspectiveFilter,
       statusFilter,
       setStatusFilter,
+      applyStatusFilter,
       uniquePerspectives,
       globalCounts,
     }}>
