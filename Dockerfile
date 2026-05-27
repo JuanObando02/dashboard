@@ -12,7 +12,7 @@ COPY . .
 
 # Copiar data/ → public/data/ para que Vite lo incluya en dist/ como archivo estático.
 # En producción se sobreescribe con un volume mount sin necesidad de reconstruir.
-RUN mkdir -p public/data && cp data/*.json public/data/
+RUN mkdir -p public/data && cp data/*.json public/data/ || true
 
 RUN npm run build
 
