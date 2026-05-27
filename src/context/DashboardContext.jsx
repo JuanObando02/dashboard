@@ -131,7 +131,8 @@ export function DashboardProvider({ children }) {
   const [statusFilter, setStatusFilter]             = useState('')
 
   useEffect(() => {
-    fetch('/data/Gobierno_TI_data.json')
+    const timestamp = new Date().getTime();
+    fetch(`/data/Gobierno_TI_data.json?t=${timestamp}`)
       .then(r => {
         if (!r.ok) throw new Error(`HTTP ${r.status} — ${r.url}`)
         return r.json()
