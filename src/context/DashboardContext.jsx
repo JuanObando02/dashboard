@@ -121,11 +121,13 @@ export function DashboardProvider({ children }) {
   const [loading,   setLoading]   = useState(true)
   const [loadError, setLoadError] = useState(null)
 
-  const [activePrinciple, setActivePrinciple] = useState(null)
-  const [selectedKpiIdx, setSelectedKpiIdx]   = useState(0)
-  const [periodFilter, setPeriodFilter]       = useState('6m')
-  const [searchQuery, setSearchQuery]         = useState('')
-  const [roleFilter, setRoleFilter]           = useState('')
+  const [activePrinciple, setActivePrinciple]       = useState(null)
+  const [selectedKpiIdx, setSelectedKpiIdx]         = useState(0)
+  const [periodFilter, setPeriodFilter]             = useState('6m')
+  const [searchQuery, setSearchQuery]               = useState('')
+  const [roleFilter, setRoleFilter]                 = useState('')
+  const [perspectiveFilter, setPerspectiveFilter]   = useState('')
+  const [statusFilter, setStatusFilter]             = useState('')
 
   // Carga el JSON en runtime desde /data/ (dev: servido por Vite plugin; prod: Nginx)
   useEffect(() => {
@@ -153,6 +155,22 @@ export function DashboardProvider({ children }) {
     [allKpis]
   )
 
+  const uniquePerspectives = useMemo(
+    () => [...new Set(allKpis.map(k => k.Perspectiva).filter(Boolean))].sort(),
+    [allKpis]
+  )
+
+  const globalCounts = useMemo(() => {
+    const fromData = rawData?.[0]?.resumen_global
+    if (fromData) return fromData
+    return {
+      total_kpis: allKpis.length,
+      criticos:   allKpis.filter(k => k.semaforo === 'rojo').length,
+      moderados:  allKpis.filter(k => k.semaforo === 'amarillo').length,
+      normales:   allKpis.filter(k => k.semaforo === 'verde').length,
+    }
+  }, [rawData, allKpis])
+
   const filteredKpis = useMemo(() => {
     let kpis = activePrinciple
       ? allKpis.filter(k => k.principio_iso === activePrinciple)
@@ -167,8 +185,17 @@ export function DashboardProvider({ children }) {
         k.rol_responsable?.toLowerCase().includes(q)
       )
     }
+
+    if (perspectiveFilter) {
+      kpis = kpis.filter(k => k.Perspectiva === perspectiveFilter)
+    }
+
+    if (statusFilter) {
+      kpis = kpis.filter(k => k.semaforo === statusFilter)
+    }
+
     return kpis
-  }, [activePrinciple, allKpis, searchQuery, roleFilter])
+  }, [activePrinciple, allKpis, searchQuery, roleFilter, perspectiveFilter, statusFilter])
 
   const safeIdx     = selectedKpiIdx < filteredKpis.length ? selectedKpiIdx : 0
   const selectedKpi = filteredKpis[safeIdx] ?? null
@@ -197,6 +224,12 @@ export function DashboardProvider({ children }) {
       roleFilter,
       setRoleFilter,
       uniqueRoles,
+      perspectiveFilter,
+      setPerspectiveFilter,
+      statusFilter,
+      setStatusFilter,
+      uniquePerspectives,
+      globalCounts,
     }}>
       {children}
     </Ctx.Provider>

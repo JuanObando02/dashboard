@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { X, ChevronDown, ChevronUp, Target, Zap, Shield } from 'lucide-react'
+import { X, ChevronDown, ChevronUp, Target, Zap, Shield, TrendingUp, TrendingDown, Minus, AlertTriangle, AlertCircle, Clock, User } from 'lucide-react'
 import {
   LineChart, Line, BarChart, Bar,
   XAxis, YAxis, CartesianGrid, Tooltip,
@@ -124,6 +124,21 @@ export default function KpiDetailModal({ kpi, onClose }) {
               <span className="text-[10px] text-blue-300 bg-white/10 px-2 py-0.5 rounded-full">
                 {kpi.Perspectiva} · {kpi['Obj. BSC']}
               </span>
+              {kpi.tendencia && (() => {
+                const up   = kpi.tendencia === 'Mejorando'
+                const flat = kpi.tendencia === 'Estable'
+                const Icon = flat ? Minus : up ? TrendingUp : TrendingDown
+                const color = flat ? '#94a3b8' : up ? '#4ade80' : '#f87171'
+                return (
+                  <span
+                    className="flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full"
+                    style={{ background: `${color}22`, color }}
+                  >
+                    <Icon size={10} />
+                    {kpi.tendencia}
+                  </span>
+                )
+              })()}
             </div>
             <h2 className="text-sm font-bold text-white leading-snug">{kpi.KPI}</h2>
           </div>
@@ -137,8 +152,91 @@ export default function KpiDetailModal({ kpi, onClose }) {
 
         {/* Scrollable body */}
         <div className="flex-1 overflow-y-auto scrollbar-thin">
+          {/* AI Audit Alert */}
+          {kpi.auditoria && (kpi.semaforo === 'rojo' || kpi.semaforo === 'amarillo') && (() => {
+            const isRojo    = kpi.semaforo === 'rojo'
+            const alertColor = isRojo ? '#ef4444' : '#eab308'
+            const alertBg    = isRojo ? 'rgba(239,68,68,0.08)' : 'rgba(234,179,8,0.08)'
+            const alertBorder = isRojo ? 'rgba(239,68,68,0.3)' : 'rgba(234,179,8,0.3)'
+            const AlertIcon   = isRojo ? AlertTriangle : AlertCircle
+            const { hallazgo, impacto_operacional, causa_probable, plan_accion, plazo_revision, responsable_seguimiento } = kpi.auditoria
+            return (
+              <div className="mx-5 mt-4 mb-0 rounded-xl border overflow-hidden" style={{ borderColor: alertBorder, background: alertBg }}>
+                {/* Alert header */}
+                <div
+                  className="flex items-center gap-2 px-4 py-2.5 border-b"
+                  style={{ borderColor: alertBorder, background: isRojo ? 'rgba(239,68,68,0.12)' : 'rgba(234,179,8,0.12)' }}
+                >
+                  <AlertIcon size={14} style={{ color: alertColor }} className="shrink-0" />
+                  <span className="text-xs font-bold uppercase tracking-wider" style={{ color: alertColor }}>
+                    Auditoría IA — {kpi.auditoria.nivel_alerta}
+                  </span>
+                </div>
+
+                <div className="px-4 py-3 space-y-3 text-xs">
+                  {/* Hallazgo */}
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-wider mb-1" style={{ color: alertColor }}>Hallazgo</p>
+                    <p className="text-slate-300 leading-relaxed">{hallazgo}</p>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {/* Impacto */}
+                    <div className="rounded-lg px-3 py-2.5" style={{ background: 'rgba(0,0,0,0.2)', border: `1px solid ${alertBorder}` }}>
+                      <p className="text-[10px] font-semibold uppercase tracking-wider mb-1 text-slate-400">Impacto Operacional</p>
+                      <p className="text-slate-300 leading-relaxed">{impacto_operacional}</p>
+                    </div>
+                    {/* Causa */}
+                    <div className="rounded-lg px-3 py-2.5" style={{ background: 'rgba(0,0,0,0.2)', border: `1px solid ${alertBorder}` }}>
+                      <p className="text-[10px] font-semibold uppercase tracking-wider mb-1 text-slate-400">Causa Probable</p>
+                      <p className="text-slate-300 leading-relaxed">{causa_probable}</p>
+                    </div>
+                  </div>
+
+                  {/* Plan de acción */}
+                  {plan_accion?.length > 0 && (
+                    <div>
+                      <p className="text-[10px] font-semibold uppercase tracking-wider mb-2" style={{ color: alertColor }}>Plan de Acción</p>
+                      <ol className="space-y-1.5">
+                        {plan_accion.map((paso, i) => (
+                          <li key={i} className="flex gap-2">
+                            <span
+                              className="shrink-0 w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold mt-0.5"
+                              style={{ background: alertColor, color: '#fff' }}
+                            >
+                              {i + 1}
+                            </span>
+                            <span className="text-slate-300 leading-relaxed">{paso}</span>
+                          </li>
+                        ))}
+                      </ol>
+                    </div>
+                  )}
+
+                  {/* Plazo & Responsable */}
+                  <div className="flex flex-wrap gap-3 pt-1 border-t" style={{ borderColor: alertBorder }}>
+                    {plazo_revision && (
+                      <span className="flex items-center gap-1.5 text-[10px]" style={{ color: alertColor }}>
+                        <Clock size={11} />
+                        <span className="text-slate-400">Plazo:</span>
+                        <span className="font-semibold">{plazo_revision}</span>
+                      </span>
+                    )}
+                    {responsable_seguimiento && (
+                      <span className="flex items-center gap-1.5 text-[10px] text-slate-400">
+                        <User size={11} />
+                        <span>Responsable:</span>
+                        <span className="font-semibold text-slate-300">{responsable_seguimiento}</span>
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )
+          })()}
+
           {/* Metrics */}
-          <div className="grid grid-cols-3 border-b" style={{ borderColor: '#1e293b' }}>
+          <div className="grid grid-cols-3 border-b mt-4" style={{ borderColor: '#1e293b' }}>
             {[
               { label: 'Valor Actual', value: valSimScaled !== null ? `${Number(valSimScaled.toFixed(isPct ? 1 : 2))} ${kpi.Unidad ?? ''}` : '—', color: '#f1f5f9' },
               { label: 'Meta 2029',    value: metaScaled !== null ? `${Number(metaScaled.toFixed(isPct ? 1 : 2))} ${kpi.Unidad ?? ''}` : '—',             color: '#94a3b8' },
