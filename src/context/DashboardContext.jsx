@@ -130,17 +130,11 @@ export function DashboardProvider({ children }) {
   const [perspectiveFilter, setPerspectiveFilter]   = useState('')
   const [statusFilter, setStatusFilter]             = useState('')
 
-  // Intenta cargar desde /app/data/ (VPS) y si falla hace fallback a /data/ (local/proyecto)
   useEffect(() => {
-    fetch('/app/data/Gobierno_TI_data.json')
+    fetch('/data/Gobierno_TI_data.json')
       .then(r => {
-        const isJson = r.headers.get('content-type')?.includes('application/json')
-        if (r.ok && isJson) return r.json()
-        
-        return fetch('/data/Gobierno_TI_data.json').then(r2 => {
-          if (!r2.ok) throw new Error(`HTTP ${r2.status} — ${r2.url}`)
-          return r2.json()
-        })
+        if (!r.ok) throw new Error(`HTTP ${r.status} — ${r.url}`)
+        return r.json()
       })
       .then(data => { setRawData(data); setLoading(false) })
       .catch(err  => { setLoadError(err.message); setLoading(false) })
