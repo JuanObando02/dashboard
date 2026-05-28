@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
 
 // TODO: mover a variable de entorno antes de producción
-const GEMINI_API_KEY = 'AIzaSyAWZlugp2egLcPU6fhLa9Qg5YM33gi6GYQ'
+const GEMINI_API_KEY = 'AIzaSyBFrQWMBg_sIStf3KoKysY-fw_FMaYm24E'
 
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY)
 
