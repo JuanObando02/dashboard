@@ -64,3 +64,15 @@ option {
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
+
+/* ─── Auto-play progress bar ─── */
+@keyframes autoplay-fill {
+  from { width: 0% }
+  to   { width: 100% }
+}
+.autoplay-bar {
+  height: 2px;
+  background: linear-gradient(90deg, #3b82f6, #6366f1);
+  border-radius: 0 2px 2px 0;
+  animation: autoplay-fill var(--autoplay-ms, 7000ms) linear forwards;
+}

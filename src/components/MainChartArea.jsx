@@ -27,10 +27,16 @@ export default function MainChartArea() {
     selectedKpi,
     periodFilter,
     setPeriodFilter,
+    setAutoPlayHovered,
+    autoPlayMs,
   } = useDashboard()
 
   const [yZoom, setYZoom] = useState(20)
   const [metaYear, setMetaYear] = useState('2029')
+  const [hovered, setHovered] = useState(false)
+
+  function handleMouseEnter() { setHovered(true);  setAutoPlayHovered(true)  }
+  function handleMouseLeave() { setHovered(false); setAutoPlayHovered(false) }
 
   if (!selectedKpi) {
     return (
@@ -76,7 +82,22 @@ export default function MainChartArea() {
   })()
 
   return (
-    <div className="bg-[#111e35] rounded-xl border border-slate-800 overflow-hidden">
+    <div
+      className="bg-[#111e35] rounded-xl border border-slate-800 overflow-hidden"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      {/* Auto-play progress bar */}
+      <div style={{ height: 2, background: '#1e293b' }}>
+        <div
+          key={selectedKpi.KPI}
+          className="autoplay-bar"
+          style={{
+            '--autoplay-ms': `${autoPlayMs}ms`,
+            animationPlayState: hovered ? 'paused' : 'running',
+          }}
+        />
+      </div>
       {/* Header */}
       <div className="flex flex-wrap items-start justify-between gap-3 px-4 py-3 border-b border-slate-800">
         <div className="flex items-start gap-2 flex-1 min-w-0">

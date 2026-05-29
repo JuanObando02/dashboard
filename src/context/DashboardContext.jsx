@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useMemo, useEffect } from 'react'
+import { createContext, useContext, useState, useMemo, useEffect, useRef } from 'react'
 
 export const ISO_PRINCIPLES = [
   { id: 'Responsabilidad',       iconName: 'Shield',       hex: '#3b82f6', hdpuv: ['Honestidad', 'Compromiso y Diligencia', 'Servicios'] },
@@ -240,6 +240,46 @@ export function DashboardProvider({ children }) {
     setSelectedKpiIdx(0)
   }
 
+  // ── Auto-play ──────────────────────────────────────────────────
+  const AUTOPLAY_MS      = 12000
+  const RESUME_HOVER_MS  = 4000
+  const RESUME_INTERACT_MS = 12000
+
+  const filteredLenRef = useRef(0)
+  const apRef = useRef({ paused: false, hovered: false, resumeTimer: null })
+
+  useEffect(() => { filteredLenRef.current = filteredKpis.length }, [filteredKpis])
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      const { paused, hovered } = apRef.current
+      const len = filteredLenRef.current
+      if (!paused && !hovered && len > 1) {
+        setSelectedKpiIdx(prev => (prev + 1) % len)
+      }
+    }, AUTOPLAY_MS)
+    return () => clearInterval(id)
+  }, [])
+
+  function pauseAutoPlay(ms = RESUME_INTERACT_MS) {
+    apRef.current.paused = true
+    clearTimeout(apRef.current.resumeTimer)
+    apRef.current.resumeTimer = setTimeout(() => {
+      apRef.current.paused = false
+    }, ms)
+  }
+
+  function setAutoPlayHovered(val) {
+    apRef.current.hovered = val
+    clearTimeout(apRef.current.resumeTimer)
+    if (!val) {
+      apRef.current.resumeTimer = setTimeout(() => {
+        apRef.current.paused = false
+      }, RESUME_HOVER_MS)
+    }
+  }
+  // ───────────────────────────────────────────────────────────────
+
   if (loading)   return <LoadingScreen />
   if (loadError) return <ErrorScreen error={loadError} />
 
@@ -267,6 +307,9 @@ export function DashboardProvider({ children }) {
       applyStatusFilter,
       uniquePerspectives,
       globalCounts,
+      pauseAutoPlay,
+      setAutoPlayHovered,
+      autoPlayMs: 12000,
     }}>
       {children}
     </Ctx.Provider>

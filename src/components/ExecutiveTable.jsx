@@ -24,7 +24,7 @@ const STATUS_FILTERS = [
 ]
 
 export default function ExecutiveTable() {
-  const { filteredKpis, selectedKpi, setSelectedKpiIdx } = useDashboard()
+  const { filteredKpis, selectedKpi, setSelectedKpiIdx, pauseAutoPlay } = useDashboard()
   const [modalKpi, setModalKpi] = useState(null)
   const [statusFilter, setStatusFilter] = useState('')
 
@@ -71,9 +71,9 @@ export default function ExecutiveTable() {
           </div>
         </div>
 
-        <div className="overflow-x-auto scrollbar-thin">
+        <div className="overflow-auto" style={{ maxHeight: 420 }}>
           <table className="w-full text-xs">
-            <thead>
+            <thead className="sticky top-0 z-10" style={{ background: '#111e35' }}>
               <tr className="border-b border-slate-800 text-[10px] uppercase tracking-wider text-slate-500">
                 <th className="text-left px-4 py-2.5 font-medium">KPI / Perspectiva</th>
                 <th className="text-right px-3 py-2.5 font-medium whitespace-nowrap">Val. Actual</th>
@@ -97,7 +97,7 @@ export default function ExecutiveTable() {
                 return (
                   <tr
                     key={i}
-                    onClick={() => setSelectedKpiIdx(i)}
+                    onClick={() => { setSelectedKpiIdx(i); pauseAutoPlay() }}
                     className="border-b border-slate-800/60 cursor-pointer transition-colors"
                     style={{ background: isActive ? 'rgba(29,78,216,0.06)' : undefined }}
                     onMouseEnter={e  => { if (!isActive) e.currentTarget.style.background = 'rgba(30,41,59,0.5)' }}

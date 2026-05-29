@@ -18,7 +18,7 @@ const metadata = {
 }
 
 function KpiPillsBar() {
-  const { filteredKpis, selectedKpi, setSelectedKpiIdx, activePrinciple } = useDashboard()
+  const { filteredKpis, selectedKpi, setSelectedKpiIdx, activePrinciple, pauseAutoPlay } = useDashboard()
 
   if (!activePrinciple && filteredKpis.length === 0) return null
 
@@ -31,7 +31,7 @@ function KpiPillsBar() {
             return (
               <button
                 key={i}
-                onClick={() => setSelectedKpiIdx(i)}
+                onClick={() => { setSelectedKpiIdx(i); pauseAutoPlay() }}
                 title={k.KPI}
                 className="text-[10px] px-2 py-0.5 rounded-md border transition-colors"
                 style={{
