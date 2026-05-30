@@ -9,7 +9,7 @@ import SmartSearch from './components/SmartSearch'
 import GapAnalysisBar from './components/GapAnalysisBar'
 import MaturityRadar from './components/MaturityRadar'
 import { Database, BrainCircuit, Construction } from 'lucide-react'
-import GeminiPanel from './components/GeminiPanel'
+import IniciativasPanel from './components/IniciativasPanel'
 
 const metadata = {
   nombre: "Hospital Departamental Psiquiátrico Universitario del Valle",
@@ -21,36 +21,47 @@ function KpiPillsBar() {
   const { filteredKpis, selectedKpi, setSelectedKpiIdx, activePrinciple, pauseAutoPlay } = useDashboard()
 
   if (!activePrinciple && filteredKpis.length === 0) return null
+  if (filteredKpis.length === 0) return null
+
+  const selectedIdx = filteredKpis.indexOf(selectedKpi)
+  const dot = selectedKpi?.semaforo === 'verde' ? '#22c55e'
+    : selectedKpi?.semaforo === 'amarillo' ? '#eab308'
+    : '#ef4444'
 
   return (
-    <div className="rounded-xl px-3 py-2.5 flex flex-wrap gap-1.5" style={{ background: '#111e35', border: '1px solid #1e293b' }}>
-      {filteredKpis.length > 1 ? (
-        <>
-          {filteredKpis.slice(0, 20).map((k, i) => {
-            const isSelected = k === selectedKpi
-            return (
-              <button
-                key={i}
-                onClick={() => { setSelectedKpiIdx(i); pauseAutoPlay() }}
-                title={k.KPI}
-                className="text-[10px] px-2 py-0.5 rounded-md border transition-colors"
-                style={{
-                  background:  isSelected ? '#1d4ed8' : '#1e293b',
-                  borderColor: isSelected ? '#3b82f6' : '#334155',
-                  color:       isSelected ? '#fff' : '#94a3b8',
-                }}
-              >
-                {k['Obj. BSC']} – K{i + 1}
-              </button>
-            )
-          })}
-          {filteredKpis.length > 20 && (
-            <span className="text-[10px] text-slate-500 self-center">+{filteredKpis.length - 20} más</span>
-          )}
-        </>
-      ) : (
-        <p className="text-[10px] text-slate-600">Filtra por principio ISO para navegar entre KPIs</p>
+    <div className="flex items-center gap-3 rounded-xl px-3 py-2" style={{ background: '#111e35', border: '1px solid #1e293b' }}>
+      <span className="text-[10px] text-slate-600 uppercase tracking-wide shrink-0">
+        Indicador
+      </span>
+      <div className="relative flex-1">
+        <select
+          value={selectedIdx}
+          onChange={e => { setSelectedKpiIdx(Number(e.target.value)); pauseAutoPlay() }}
+          className="w-full text-xs rounded-lg pl-3 pr-8 py-1.5 appearance-none cursor-pointer transition-colors"
+          style={{
+            background: '#0b1829',
+            border: '1px solid #1e3a5f',
+            color: '#e2e8f0',
+            outline: 'none',
+          }}
+        >
+          {filteredKpis.map((k, i) => (
+            <option key={i} value={i}>
+              {k['Obj. BSC']} · {k.KPI}
+            </option>
+          ))}
+        </select>
+        <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500">▾</span>
+      </div>
+      {selectedKpi && (
+        <div className="flex items-center gap-1.5 shrink-0">
+          <span className="w-2 h-2 rounded-full" style={{ background: dot }} />
+          <span className="text-xs font-bold tabular-nums" style={{ color: dot }}>
+            {selectedKpi.cumplimiento_pct}%
+          </span>
+        </div>
       )}
+      <span className="text-[10px] text-slate-600 shrink-0">{filteredKpis.length} KPIs</span>
     </div>
   )
 }
@@ -91,7 +102,7 @@ export default function App() {
                 <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-5 items-start">
                   <MaturityRadar />
                   <div className="space-y-3">
-                    <GeminiPanel />
+                    <IniciativasPanel />
                     <MainChartArea />
                     <KpiPillsBar />
                   </div>

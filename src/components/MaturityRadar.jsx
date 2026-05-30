@@ -85,17 +85,23 @@ function LevelBadge({ record }) {
 
 function ClickableTick({ x, y, payload, cx, onSectionClick }) {
   const anchor = Math.abs(x - cx) < 10 ? 'middle' : x > cx ? 'start' : 'end'
+  const words  = payload.value.split(' ')
+  const mid    = Math.ceil(words.length / 2)
+  const line1  = words.slice(0, mid).join(' ')
+  const line2  = words.slice(mid).join(' ')
+
   return (
     <text
       x={x}
       y={y}
       textAnchor={anchor}
-      fill="#64748b"
+      fill="#94a3b8"
       fontSize={9}
       style={{ cursor: 'pointer', userSelect: 'none' }}
       onClick={() => onSectionClick(payload.value)}
     >
-      {payload.value}
+      <tspan x={x} dy={line2 ? '-0.5em' : '0'}>{line1}</tspan>
+      {line2 && <tspan x={x} dy="1.2em">{line2}</tspan>}
     </text>
   )
 }
@@ -189,7 +195,7 @@ export default function MaturityRadar() {
       {/* Radar */}
       <div className="px-2">
         <ResponsiveContainer width="100%" height={220}>
-          <RadarChart data={radarData} margin={{ top: 8, right: 16, bottom: 8, left: 16 }}>
+          <RadarChart data={radarData} margin={{ top: 18, right: 28, bottom: 18, left: 28 }}>
             <PolarGrid stroke="#1e293b" />
             <PolarAngleAxis
               dataKey="seccion"
@@ -215,9 +221,23 @@ export default function MaturityRadar() {
 
       {/* Section bars */}
       <div className="px-4 pb-4 space-y-2 border-t" style={{ borderColor: '#1e293b' }}>
-        <p className="text-[9px] uppercase tracking-wider text-slate-600 font-semibold pt-3">
-          Detalle por sección
-        </p>
+        <div className="flex items-center justify-between pt-3">
+          <p className="text-[9px] uppercase tracking-wider text-slate-600 font-semibold">
+            Detalle por sección
+          </p>
+          <div className="flex items-center gap-2">
+            {[
+              { color: '#22c55e', label: '≥70%' },
+              { color: '#eab308', label: '50–69%' },
+              { color: '#ef4444', label: '<50%' },
+            ].map(({ color, label }) => (
+              <div key={label} className="flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: color }} />
+                <span className="text-[8px] text-slate-600">{label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
         {record.radar.map(r => {
           const barColor = r.pct >= 70 ? '#22c55e' : r.pct >= 50 ? '#eab308' : '#ef4444'
           return (

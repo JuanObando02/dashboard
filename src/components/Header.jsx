@@ -53,13 +53,12 @@ export default function Header({ metadata, activeTab, onTabChange }) {
                 className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold transition-all duration-150 outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
                 style={{
                   borderRadius: '8px 8px 0 0',
-                  background: isActive ? '#0b1829' : 'rgba(255,255,255,0.06)',
-                  color: isActive ? '#60a5fa' : 'rgba(255,255,255,0.5)',
+                  background: isActive ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.04)',
+                  color: isActive ? '#fff' : 'rgba(255,255,255,0.45)',
                   border: '1px solid',
-                  borderColor: isActive ? 'rgba(96,165,250,0.35)' : 'rgba(255,255,255,0.1)',
-                  borderBottom: isActive ? '1px solid #0b1829' : '1px solid rgba(255,255,255,0.1)',
-                  boxShadow: isActive ? '0 -2px 8px rgba(96,165,250,0.15)' : 'none',
-                  paddingBottom: isActive ? '10px' : '8px',
+                  borderColor: isActive ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.07)',
+                  borderBottom: isActive ? '2px solid #60a5fa' : '1px solid transparent',
+                  boxShadow: isActive ? 'inset 0 -1px 0 #60a5fa, 0 -2px 10px rgba(96,165,250,0.12)' : 'none',
                 }}
               >
                 <Icon size={13} />

@@ -172,8 +172,28 @@ export default function MainChartArea() {
             <option value="all">Todo el histórico</option>
           </select>
 
-          {/* Meta year selector */}
-          <div className="flex items-center gap-1">
+          {/* Escala Y + Meta year — same row */}
+          <div className="flex items-center gap-3">
+            {/* Y-axis zoom */}
+            <div className="flex items-center gap-1.5">
+              <span className="text-[9px] text-slate-500 uppercase tracking-wider">Escala Y</span>
+              <button
+                onClick={() => setYZoom(z => Math.max(0, z - 10))}
+                className="w-5 h-5 rounded flex items-center justify-center text-xs font-bold transition-colors"
+                style={{ background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.25)', color: '#60a5fa' }}
+              >−</button>
+              <span className="text-[10px] font-mono text-slate-400 w-7 text-center">{yZoom}%</span>
+              <button
+                onClick={() => setYZoom(z => Math.min(100, z + 10))}
+                className="w-5 h-5 rounded flex items-center justify-center text-xs font-bold transition-colors"
+                style={{ background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.25)', color: '#60a5fa' }}
+              >+</button>
+            </div>
+
+            <div className="w-px h-4 bg-slate-700" />
+
+            {/* Meta year selector */}
+            <div className="flex items-center gap-1">
             <span className="text-[9px] text-slate-500 uppercase tracking-wider mr-0.5">Meta</span>
             {['2026', '2027', '2028', '2029'].map(year => {
               const hasVal = selectedKpi[`Meta ${year}`] != null
@@ -195,6 +215,7 @@ export default function MainChartArea() {
                 </button>
               )
             })}
+            </div>
           </div>
         </div>
       </div>
@@ -240,53 +261,8 @@ export default function MainChartArea() {
       </div>
 
       {/* Chart */}
-      <div className="pt-4 pb-2 flex gap-1">
-        {/* Y-axis zoom slider (vertical, left) */}
-        <div className="flex flex-col items-center shrink-0 pl-1 py-1 gap-1.5" style={{ width: 34, height: 240 }}>
-          {/* + button */}
-          <button
-            onClick={() => setYZoom(z => Math.min(100, z + 10))}
-            className="w-6 h-6 rounded-full flex items-center justify-center transition-all shrink-0"
-            style={{ background: 'rgba(59,130,246,0.12)', border: '1px solid rgba(59,130,246,0.35)', color: '#60a5fa' }}
-            title="Ampliar eje Y"
-          >
-            <span className="text-xs font-bold leading-none">+</span>
-          </button>
-
-          {/* slider track area */}
-          <div className="relative flex-1 flex items-center justify-center w-full">
-            <input
-              type="range"
-              min={0}
-              max={100}
-              value={yZoom}
-              onChange={e => setYZoom(Number(e.target.value))}
-              style={{
-                position: 'absolute',
-                transform: 'rotate(-90deg)',
-                width: 140,
-                cursor: 'pointer',
-                accentColor: '#3b82f6',
-              }}
-            />
-          </div>
-
-          {/* value label */}
-          <span className="text-[9px] font-mono text-slate-500 shrink-0 leading-none">{yZoom}%</span>
-
-          {/* − button */}
-          <button
-            onClick={() => setYZoom(z => Math.max(0, z - 10))}
-            className="flex items-center justify-center rounded transition-all shrink-0"
-            style={{ width: 24, height: 18, background: 'rgba(59,130,246,0.12)', border: '1px solid rgba(59,130,246,0.35)', color: '#60a5fa' }}
-            title="Comprimir eje Y"
-          >
-            <span className="text-xs font-bold leading-none">−</span>
-          </button>
-        </div>
-
-        {/* Chart area */}
-        <div className="flex-1 pr-2">
+      <div className="pt-4 pb-2">
+        <div className="pr-2">
           {chartData.length > 0 ? (
             <ResponsiveContainer width="100%" height={240}>
               {useBar ? (

@@ -81,7 +81,7 @@ function BscHealthView({ allKpis }) {
               : { background: `${p.hex}15`, borderColor: `${p.hex}40`, color: p.hex }
             }
           >
-            {p.short}
+            {p.id}
           </button>
         ))}
       </div>

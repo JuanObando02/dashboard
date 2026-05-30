@@ -114,9 +114,9 @@ export default function IsoPrincipleCards() {
 
                 {/* Icon + name */}
                 <div className="flex items-center gap-1 mb-0.5">
-                  <Icon size={13} style={{ color: isActive ? p.hex : '#475569' }} className="shrink-0" />
+                  <Icon size={14} style={{ color: isActive ? p.hex : '#475569' }} className="shrink-0" />
                   <p
-                    className="text-xs font-semibold leading-tight truncate flex-1"
+                    className="text-sm font-semibold leading-tight truncate flex-1"
                     style={{ color: isActive ? p.hex : '#94a3b8' }}
                   >
                     {p.id}
@@ -125,8 +125,8 @@ export default function IsoPrincipleCards() {
 
                 {/* HDPUV principles — fixed height so all cards align */}
                 <p
-                  className="text-[10px] leading-tight mb-1.5 overflow-hidden"
-                  style={{ color: '#475569', height: '26px' }}
+                  className="text-[11px] leading-tight mb-1.5 overflow-hidden"
+                  style={{ color: '#475569', height: '28px' }}
                 >
                   {p.hdpuv.join(' · ')}
                 </p>
@@ -139,31 +139,32 @@ export default function IsoPrincipleCards() {
                   {avg}%
                 </p>
 
-                {/* Mini semaforo bar */}
-                <div className="h-1 rounded-full overflow-hidden flex mt-1.5" style={{ background: '#0b1829' }}>
-                  {rojos     > 0 && <span style={{ width: `${(rojos     / total) * 100}%`, background: '#ef4444' }} />}
-                  {amarillos > 0 && <span style={{ width: `${(amarillos / total) * 100}%`, background: '#eab308' }} />}
-                  {verdes    > 0 && <span style={{ width: `${(verdes    / total) * 100}%`, background: '#22c55e' }} />}
-                </div>
-
-                {/* Counts */}
-                <div className="flex items-center gap-1.5 mt-1">
-                  {rojos > 0 && (
-                    <span className="flex items-center gap-0.5 text-[10px] text-slate-500">
-                      <span className="w-1 h-1 rounded-full bg-red-500 inline-block" />{rojos}
-                    </span>
-                  )}
-                  {amarillos > 0 && (
-                    <span className="flex items-center gap-0.5 text-[10px] text-slate-500">
-                      <span className="w-1 h-1 rounded-full bg-yellow-400 inline-block" />{amarillos}
-                    </span>
-                  )}
-                  {verdes > 0 && (
-                    <span className="flex items-center gap-0.5 text-[10px] text-slate-500">
-                      <span className="w-1 h-1 rounded-full bg-green-500 inline-block" />{verdes}
-                    </span>
-                  )}
-                  <span className="ml-auto text-[10px] text-slate-600">{total}</span>
+                {/* Semaforo bar + tooltip */}
+                <div className="relative group mt-1.5">
+                  <div className="h-2 rounded-full overflow-hidden flex cursor-default" style={{ background: '#0b1829' }}>
+                    {rojos     > 0 && <span style={{ width: `${(rojos     / total) * 100}%`, background: '#ef4444' }} />}
+                    {amarillos > 0 && <span style={{ width: `${(amarillos / total) * 100}%`, background: '#eab308' }} />}
+                    {verdes    > 0 && <span style={{ width: `${(verdes    / total) * 100}%`, background: '#22c55e' }} />}
+                  </div>
+                  {/* Hover tooltip */}
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-30 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-150 w-36 rounded-lg p-2.5 space-y-1.5"
+                    style={{ background: '#0b1829', border: '1px solid #1e3a5f', boxShadow: '0 8px 24px rgba(0,0,0,0.5)' }}>
+                    {[
+                      { n: rojos,     color: '#ef4444', label: 'Críticos'   },
+                      { n: amarillos, color: '#eab308', label: 'Precaución' },
+                      { n: verdes,    color: '#22c55e', label: 'Cumpliendo' },
+                    ].map(({ n, color, label }) => n > 0 && (
+                      <div key={label} className="flex items-center justify-between">
+                        <div className="flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: color }} />
+                          <span className="text-[10px] text-slate-400">{label}</span>
+                        </div>
+                        <span className="text-[10px] font-bold tabular-nums" style={{ color }}>
+                          {n}/{total}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             )

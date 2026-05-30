@@ -143,7 +143,10 @@ function buildData(rawData) {
           'Período':              `${ini.inicio} – ${ini.fin}`,
           'Objetivo(s) BSC':      ini.obj_bsc,
           'Objetivos Estratégicos': '',
-          'Descripción Resumida':   '',
+          'Descripción Resumida':   ini.descripcion ?? '',
+          inicio:                 ini.inicio ?? null,
+          fin:                    ini.fin ?? null,
+          ejecucion:              ini.ejecucion ?? null,
         })
       }
     })

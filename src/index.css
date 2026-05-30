@@ -47,6 +47,15 @@ body {
   -webkit-line-clamp: 2;
 }
 
+/* ─── Global scrollbar (Webkit) ─── */
+::-webkit-scrollbar              { width: 4px; height: 4px; }
+::-webkit-scrollbar-track        { background: transparent; }
+::-webkit-scrollbar-thumb        { background: #1e293b; border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover  { background: #334155; }
+
+/* Firefox */
+* { scrollbar-width: thin; scrollbar-color: #1e293b transparent; }
+
 .scrollbar-thin::-webkit-scrollbar        { width: 4px; height: 4px; }
 .scrollbar-thin::-webkit-scrollbar-track  { background: transparent; }
 .scrollbar-thin::-webkit-scrollbar-thumb  { background: #334155; border-radius: 9999px; }
