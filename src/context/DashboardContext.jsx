@@ -90,6 +90,7 @@ function normalizeKpi(k) {
   const historico_simulado = (k.mediciones ?? []).map(m => ({
     periodo: m.fecha ? m.fecha.substring(0, 7) : '',
     valor:   m.valor ?? null,
+    observaciones: m.observaciones ?? '',
   }))
 
   // Soporta formato nuevo (k.auditoria) y formato antiguo (k.ultima_auditoria)

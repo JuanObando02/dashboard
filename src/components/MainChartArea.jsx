@@ -5,19 +5,27 @@ import {
   ResponsiveContainer, ReferenceLine, Brush,
 } from 'recharts'
 import { useDashboard } from '../context/DashboardContext'
-import { BarChart2, TrendingUp } from 'lucide-react'
+import { BarChart2, TrendingUp, Info } from 'lucide-react'
 
 const SEM_COLOR = { verde: '#22c55e', amarillo: '#eab308', rojo: '#ef4444' }
 
 function Tooltip_({ active, payload, label, unit, meta }) {
   if (!active || !payload?.length) return null
+  const obs = payload[0].payload?.observaciones
+  const obsText = obs && obs.trim() !== '' ? obs : 'Sin obs'
   return (
-    <div className="bg-[#1e2d45] border border-slate-700 rounded-lg px-3 py-2 text-xs shadow-xl">
+    <div className="bg-[#1e2d45] border border-slate-700 rounded-lg px-3 py-2 text-xs shadow-xl max-w-[240px]">
       <p className="text-slate-400 mb-1">{label}</p>
       <p className="text-white font-bold text-sm">{payload[0].value} {unit}</p>
       {meta != null && (
         <p className="text-slate-500 mt-0.5">Meta: {meta} {unit}</p>
       )}
+      <div className="border-t border-slate-700/60 mt-1.5 pt-1.5">
+        <p className="text-[10px] text-slate-400 italic leading-relaxed">
+          <span className="font-semibold text-slate-300 not-italic block mb-0.5">Observación:</span>
+          {obsText}
+        </p>
+      </div>
     </div>
   )
 }
@@ -55,7 +63,8 @@ export default function MainChartArea() {
   const rawHistorico  = selectedKpi.historico_simulado ?? []
   const historico = rawHistorico.map(h => ({
     periodo: h.periodo,
-    valor: h.valor !== null && h.valor !== undefined ? h.valor * mult : null
+    valor: h.valor !== null && h.valor !== undefined ? h.valor * mult : null,
+    observaciones: h.observaciones ?? '',
   }))
   const chartData  = periodFilter === 'all' ? historico
     : historico.slice(-parseInt(periodFilter))
@@ -64,6 +73,31 @@ export default function MainChartArea() {
   const metaRaw = selectedKpi[`Meta ${metaYear}`]
   const metaScaled = metaRaw !== null && metaRaw !== undefined ? metaRaw * mult : null
   const valSimScaled = selectedKpi['Valor Actual'] !== null && selectedKpi['Valor Actual'] !== undefined ? selectedKpi['Valor Actual'] * mult : null
+  const hasDelta = chartData.length >= 2
+  const deltaVal = hasDelta ? (chartData[chartData.length - 1].valor - chartData[0].valor) : null
+  const cumplimientoDynamic = (() => {
+    if (metaScaled === null || valSimScaled === null || metaScaled === 0) {
+      return selectedKpi.cumplimiento_pct ?? 0
+    }
+    if (selectedKpi.Tipo === 'MIN') {
+      if (valSimScaled <= metaScaled) return 100
+      const pct = (metaScaled / valSimScaled) * 100
+      return Math.max(0, parseFloat(pct.toFixed(1)))
+    } else {
+      const pct = (valSimScaled / metaScaled) * 100
+      if (pct >= 100) return 100
+      return parseFloat(pct.toFixed(1))
+    }
+  })()
+  const isGood = deltaVal !== null && (
+    (selectedKpi.Tipo === 'MIN' && deltaVal < -0.001) ||
+    (selectedKpi.Tipo !== 'MIN' && deltaVal > 0.001)
+  )
+  const isBad = deltaVal !== null && (
+    (selectedKpi.Tipo === 'MIN' && deltaVal > 0.001) ||
+    (selectedKpi.Tipo !== 'MIN' && deltaVal < -0.001)
+  )
+  const varColor = isGood ? '#22c55e' : isBad ? '#ef4444' : '#94a3b8'
 
   const yDomain = (() => {
     const vals = chartData.map(d => d.valor).filter(v => v != null)
@@ -103,8 +137,17 @@ export default function MainChartArea() {
         <div className="flex items-start gap-2 flex-1 min-w-0">
           <TrendingUp size={15} className="text-blue-400 mt-0.5 shrink-0" />
           <div className="min-w-0">
-            <p className="text-xs text-slate-500 font-medium uppercase tracking-wider mb-0.5">
+            <p className="text-xs text-slate-500 font-medium uppercase tracking-wider mb-0.5 flex items-center gap-1.5">
               Tendencia histórica
+              <span className="relative group">
+                <Info size={11} className="text-slate-500 hover:text-slate-300 cursor-help" />
+                <span className="absolute left-0 top-5 z-20 w-64 rounded-lg p-3 text-[11px] font-normal leading-relaxed text-slate-300 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-150 normal-case"
+                  style={{ background: '#0b1829', border: '1px solid #1e3a5f', boxShadow: '0 8px 24px rgba(0,0,0,0.5)' }}>
+                  <p className="font-semibold text-white mb-1.5">Cálculos en Gráfica:</p>
+                  <p className="mb-2"><strong className="text-blue-400">Variación:</strong> Es la diferencia entre el último valor y el primero correspondientes únicamente al período seleccionado en la esquina superior derecha.</p>
+                  <p><strong className="text-blue-400">Cumplimiento:</strong> Porcentaje del valor actual con respecto a la meta del año seleccionado. Si es <strong className="text-slate-200">MIN</strong> (minimizar), es 100% si se cumple la meta o proporcional si se excede; si es <strong className="text-slate-200">MAX</strong> (maximizar), es la proporción del avance.</p>
+                </span>
+              </span>
             </p>
             <h3 className="text-sm font-semibold text-white leading-snug">
               {selectedKpi.KPI}
@@ -157,7 +200,7 @@ export default function MainChartArea() {
       </div>
 
       {/* Metric strip */}
-      <div className="grid grid-cols-3 divide-x divide-slate-800 border-b border-slate-800">
+      <div className="grid grid-cols-4 divide-x divide-slate-800 border-b border-slate-800">
         {[
           {
             label: 'Valor actual',
@@ -173,9 +216,17 @@ export default function MainChartArea() {
           },
           {
             label: 'Cumplimiento',
-            value: `${selectedKpi.cumplimiento_pct ?? 0}%`,
+            value: `${cumplimientoDynamic}%`,
             unit:  '',
             color,
+          },
+          {
+            label: periodFilter === 'all' ? 'Variación Hist.' : `Var. últ. ${periodFilter} per.`,
+            value: deltaVal !== null
+              ? `${deltaVal > 0.001 ? '+' : ''}${Number(deltaVal.toFixed(isPct ? 1 : 2))}`
+              : '—',
+            unit:  selectedKpi.Unidad,
+            color: varColor,
           },
         ].map(m => (
           <div key={m.label} className="px-4 py-3">

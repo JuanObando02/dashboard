@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { TrendingUp, TrendingDown, Minus, Activity, Shield, Target, Package, CheckCircle2, Users } from 'lucide-react'
+import { TrendingUp, TrendingDown, Minus, Activity, Shield, Target, Package, CheckCircle2, Users, Info } from 'lucide-react'
 import { useDashboard, ISO_PRINCIPLES } from '../context/DashboardContext'
 import KpiDetailModal from './KpiDetailModal'
 
@@ -91,9 +91,19 @@ function BscHealthView({ allKpis }) {
         <div className="flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: hex }} />
           <p className="text-xs font-semibold text-slate-200">{active}</p>
-          <span className="ml-auto text-[10px] text-slate-600">
-            Promedio · {total} KPIs
-          </span>
+          <div className="ml-auto flex items-center gap-1.5">
+            <span className="text-[10px] text-slate-600">Promedio · {total} KPIs</span>
+            <div className="relative group">
+              <Info size={11} className="text-slate-600 cursor-default" />
+              <div className="absolute right-0 top-5 z-20 w-56 rounded-lg p-3 text-[10px] leading-relaxed text-slate-300 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-150"
+                style={{ background: '#0b1829', border: '1px solid #1e3a5f', boxShadow: '0 8px 24px rgba(0,0,0,0.5)' }}>
+                <p className="font-semibold text-white mb-1">Cumplimiento promedio</p>
+                <p className="text-slate-400 mb-1.5">Promedio simple entre todos los KPIs de la perspectiva:</p>
+                <p className="font-mono text-blue-300">Σ C<sub>i</sub> / n</p>
+                <p className="text-slate-500 mt-1.5">donde C<sub>i</sub> = cumplimiento individual de cada KPI y n = total de KPIs.</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Two-column layout: stats on left, gauge on right */}
@@ -129,12 +139,21 @@ function BscHealthView({ allKpis }) {
             {/* Trend */}
             <div className="flex items-center gap-1.5 pt-1">
               <TrendIcon size={11} style={{ color: trendColor }} className="shrink-0" />
-              <p className="text-[10px] text-slate-500">
-                <span className="font-semibold" style={{ color: trendColor }}>
-                  {avgDelta > 0 ? '+' : ''}{avgDelta.toFixed(1)}
-                </span>{' '}
-                variación histórica prom.
-              </p>
+              <div className="text-[10px] text-slate-500 flex items-center gap-1">
+                <span>
+                  <span className="font-semibold" style={{ color: trendColor }}>
+                    {avgDelta > 0 ? '+' : ''}{avgDelta.toFixed(1)}
+                  </span>{' '}
+                  variación histórica prom.
+                </span>
+                <span className="relative group inline-block">
+                  <Info size={10} className="text-slate-500 hover:text-slate-350 cursor-help shrink-0" />
+                  <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block w-48 p-2.5 bg-[#0b1829] border border-[#1e293b] text-[9.5px] text-slate-300 rounded-lg shadow-2xl z-50 pointer-events-none leading-relaxed normal-case font-normal text-left">
+                    <span className="block font-semibold text-white mb-1">¿Cómo se calcula?</span>
+                    Es el promedio de la diferencia entre el último valor y el valor inicial de cada KPI con historial en esta sección (ajustado a % si aplica).
+                  </span>
+                </span>
+              </div>
             </div>
           </div>
 
@@ -156,6 +175,19 @@ function BscHealthView({ allKpis }) {
             const metaKey = ['Meta 2026', 'Meta 2027', 'Meta 2028', 'Meta 2029']
               .find(m => k[m] != null)
             const metaVal = metaKey ? k[metaKey] : null
+
+            const h = k.historico_simulado ?? []
+            const hasDelta = h.length >= 2
+            const deltaVal = hasDelta ? (h[h.length - 1].valor - h[0].valor) * (k.Unidad === '%' ? 100 : 1) : null
+            const isGood = deltaVal !== null && (
+              (k.Tipo === 'MIN' && deltaVal < -0.001) ||
+              (k.Tipo !== 'MIN' && deltaVal > 0.001)
+            )
+            const isBad = deltaVal !== null && (
+              (k.Tipo === 'MIN' && deltaVal > 0.001) ||
+              (k.Tipo !== 'MIN' && deltaVal < -0.001)
+            )
+            const varColor = isGood ? '#22c55e' : isBad ? '#ef4444' : '#94a3b8'
 
             return (
               <button
@@ -195,6 +227,17 @@ function BscHealthView({ allKpis }) {
                         <span className="text-[9px] uppercase tracking-wide text-slate-600">Meta</span>
                         <span className="text-[10px] font-semibold tabular-nums" style={{ color: dot }}>
                           {metaVal}{k.Unidad === '%' ? '%' : ''}
+                        </span>
+                      </div>
+                    </>
+                  )}
+                  {deltaVal !== null && (
+                    <>
+                      <span className="text-[9px] text-slate-700">·</span>
+                      <div className="flex items-center gap-1">
+                        <span className="text-[9px] uppercase tracking-wide text-slate-600">Var</span>
+                        <span className="text-[10px] font-bold tabular-nums" style={{ color: varColor }}>
+                          {deltaVal > 0.001 ? '▲ +' : deltaVal < -0.001 ? '▼ ' : '■ '}{deltaVal.toFixed(k.Unidad === '%' ? 0 : 1)}{k.Unidad === '%' ? '%' : ''}
                         </span>
                       </div>
                     </>
@@ -268,6 +311,23 @@ function IsoPrincipleView({ allKpis, principleId }) {
   const pctCrit = total > 0 ? Math.round((rojos / total) * 100) : 0
   const pctOk   = total > 0 ? Math.round((verdes / total) * 100) : 0
   const pctAmar = total > 0 ? Math.round((amar / total) * 100) : 0
+
+  const avgDelta = useMemo(() => {
+    const deltas = pkpis
+      .filter(k => (k.historico_simulado?.length ?? 0) >= 2)
+      .map(k => {
+        const h = k.historico_simulado
+        const isPct = k.Unidad === '%'
+        const mult = isPct ? 100 : 1
+        return (h[h.length - 1].valor - h[0].valor) * mult
+      })
+    return deltas.length > 0
+      ? deltas.reduce((s, d) => s + d, 0) / deltas.length
+      : 0
+  }, [pkpis])
+
+  const TrendIcon = avgDelta > 0.5 ? TrendingUp : avgDelta < -0.5 ? TrendingDown : Minus
+  const trendColor = avgDelta > 0.5 ? '#22c55e' : avgDelta < -0.5 ? '#ef4444' : '#94a3b8'
   const gaugeColor = avgComp >= 70 ? '#22c55e' : avgComp >= 50 ? '#eab308' : '#ef4444'
 
   return (
@@ -276,9 +336,32 @@ function IsoPrincipleView({ allKpis, principleId }) {
       <div className="flex items-center gap-2">
         <Icon size={15} style={{ color: hex }} />
         <p className="text-xs font-semibold" style={{ color: hex }}>{principleId}</p>
-        <span className="ml-auto text-[10px] text-slate-600">
-          {allWeightedIso ? 'Ponderado' : 'Promedio'} · {total} KPIs
-        </span>
+        <div className="ml-auto flex items-center gap-1.5">
+          <span className="text-[10px] text-slate-600">
+            {allWeightedIso ? 'Ponderado' : 'Promedio'} · {total} KPIs
+          </span>
+          <div className="relative group">
+            <Info size={11} className="text-slate-600 cursor-default" />
+            <div className="absolute right-0 top-5 z-20 w-56 rounded-lg p-3 text-[10px] leading-relaxed text-slate-300 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-150"
+              style={{ background: '#0b1829', border: '1px solid #1e3a5f', boxShadow: '0 8px 24px rgba(0,0,0,0.5)' }}>
+              {allWeightedIso ? (
+                <>
+                  <p className="font-semibold text-white mb-1">Cumplimiento ponderado</p>
+                  <p className="text-slate-400 mb-1.5">Cada KPI contribuye según su peso estratégico:</p>
+                  <p className="font-mono text-blue-300">Σ ( C<sub>i</sub> × P<sub>i</sub> )</p>
+                  <p className="text-slate-500 mt-1.5">donde C<sub>i</sub> = cumplimiento del KPI y P<sub>i</sub> = peso asignado (suma de pesos = 1).</p>
+                </>
+              ) : (
+                <>
+                  <p className="font-semibold text-white mb-1">Cumplimiento promedio</p>
+                  <p className="text-slate-400 mb-1.5">Promedio simple entre todos los KPIs del principio:</p>
+                  <p className="font-mono text-blue-300">Σ C<sub>i</sub> / n</p>
+                  <p className="text-slate-500 mt-1.5">Se usa cuando algún KPI no tiene peso estratégico definido.</p>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Two-column: bars left, gauge right */}
@@ -310,6 +393,26 @@ function IsoPrincipleView({ allKpis, principleId }) {
               <Bar_ pct={pct} color={color} />
             </div>
           ))}
+          
+          {/* Trend */}
+          <div className="flex items-center gap-1.5 pt-1">
+            <TrendIcon size={11} style={{ color: trendColor }} className="shrink-0" />
+            <div className="text-[10px] text-slate-500 flex items-center gap-1">
+              <span>
+                <span className="font-semibold" style={{ color: trendColor }}>
+                  {avgDelta > 0 ? '+' : ''}{avgDelta.toFixed(1)}
+                </span>{' '}
+                variación histórica prom.
+              </span>
+              <span className="relative group inline-block">
+                <Info size={10} className="text-slate-500 hover:text-slate-350 cursor-help shrink-0" />
+                <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block w-48 p-2.5 bg-[#0b1829] border border-[#1e293b] text-[9.5px] text-slate-300 rounded-lg shadow-2xl z-50 pointer-events-none leading-relaxed normal-case font-normal text-left">
+                  <span className="block font-semibold text-white mb-1">¿Cómo se calcula?</span>
+                  Es el promedio de la diferencia entre el último valor y el valor inicial de cada KPI con historial en esta sección (ajustado a % si aplica).
+                </span>
+              </span>
+            </div>
+          </div>
         </div>
 
         {/* Right: Gauge */}
@@ -330,6 +433,19 @@ function IsoPrincipleView({ allKpis, principleId }) {
           const metaKey = ['Meta 2026', 'Meta 2027', 'Meta 2028', 'Meta 2029']
             .find(m => k[m] != null)
           const metaVal = metaKey ? k[metaKey] : null
+
+          const h = k.historico_simulado ?? []
+          const hasDelta = h.length >= 2
+          const deltaVal = hasDelta ? (h[h.length - 1].valor - h[0].valor) * (k.Unidad === '%' ? 100 : 1) : null
+          const isGood = deltaVal !== null && (
+            (k.Tipo === 'MIN' && deltaVal < -0.001) ||
+            (k.Tipo !== 'MIN' && deltaVal > 0.001)
+          )
+          const isBad = deltaVal !== null && (
+            (k.Tipo === 'MIN' && deltaVal > 0.001) ||
+            (k.Tipo !== 'MIN' && deltaVal < -0.001)
+          )
+          const varColor = isGood ? '#22c55e' : isBad ? '#ef4444' : '#94a3b8'
 
           return (
             <button
@@ -382,6 +498,17 @@ function IsoPrincipleView({ allKpis, principleId }) {
                         style={{ color: dot }}
                       >
                         {metaVal}{k.Unidad === '%' ? '%' : ''}
+                      </span>
+                    </div>
+                  </>
+                )}
+                {deltaVal !== null && (
+                  <>
+                    <span className="text-[9px] text-slate-700">·</span>
+                    <div className="flex items-center gap-1">
+                      <span className="text-[9px] uppercase tracking-wide text-slate-600">Var</span>
+                      <span className="text-[10px] font-bold tabular-nums" style={{ color: varColor }}>
+                        {deltaVal > 0.001 ? '▲ +' : deltaVal < -0.001 ? '▼ ' : '■ '}{deltaVal.toFixed(k.Unidad === '%' ? 0 : 1)}{k.Unidad === '%' ? '%' : ''}
                       </span>
                     </div>
                   </>
