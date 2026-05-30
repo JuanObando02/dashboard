@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { X, ChevronDown, ChevronUp, Target, Zap, Shield, TrendingUp, TrendingDown, Minus, AlertTriangle, AlertCircle, Clock, User } from 'lucide-react'
 import {
   LineChart, Line, BarChart, Bar,
@@ -98,7 +99,7 @@ export default function KpiDetailModal({ kpi, onClose }) {
     ]
   }, [historico, metaScaled, meta2026Scaled, lineaBaseScaled, isPct])
 
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
       style={{ background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(4px)' }}
@@ -346,7 +347,6 @@ export default function KpiDetailModal({ kpi, onClose }) {
                 ['Presupuesto',    kpi.presupuesto_cop],
                 ['Línea base 2025', kpi.linea_base_2025 != null ? `${Number((kpi.linea_base_2025 * mult).toFixed(isPct ? 1 : 2))} ${kpi.Unidad ?? ''}`.trim() : null],
                 ['Fuente',         kpi.Fuente, true],
-                ['OEs relacionados', kpi['OEs Relacionados']],
               ].map(([l, v, full]) => v ? (
                 <div key={l} className={full ? 'col-span-2' : ''}>
                   <p className="text-[10px] text-slate-500 uppercase tracking-wide mb-0.5">{l}</p>
@@ -368,7 +368,25 @@ export default function KpiDetailModal({ kpi, onClose }) {
                       title={`${oe['Objetivo Estratégico']} — ${oe['Descripción']}`}
                       icon={Target}
                     >
-                      <p className="text-slate-300">{oe['Descripción']}</p>
+                      <div className="space-y-2">
+                        {oe['Descripción Completa'] && (
+                          <p className="text-slate-300 leading-relaxed">{oe['Descripción Completa']}</p>
+                        )}
+                        <div className="grid grid-cols-2 gap-x-4 gap-y-1 pt-2 border-t" style={{ borderColor: '#1e293b' }}>
+                          {oe['Objetivos BSC'] && (
+                            <span>
+                              <span className="text-slate-500">BSC: </span>
+                              <span className="text-slate-300">{oe['Objetivos BSC']}</span>
+                            </span>
+                          )}
+                          {oe['Ruta'] && (
+                            <span className="col-span-2">
+                              <span className="text-slate-500">Ruta: </span>
+                              <span className="text-slate-300">{oe['Ruta']}</span>
+                            </span>
+                          )}
+                        </div>
+                      </div>
                     </ExpandCard>
                   ))}
                 </div>
@@ -402,10 +420,6 @@ export default function KpiDetailModal({ kpi, onClose }) {
                           </span>
                         </span>
                         <span>
-                          <span className="text-slate-500">OE: </span>
-                          <span className="text-slate-300">{ini['Objetivos Estratégicos']}</span>
-                        </span>
-                        <span>
                           <span className="text-slate-500">BSC: </span>
                           <span className="text-slate-300">{ini['Objetivo(s) BSC']}</span>
                         </span>
@@ -434,6 +448,7 @@ export default function KpiDetailModal({ kpi, onClose }) {
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }

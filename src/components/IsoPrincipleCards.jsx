@@ -89,8 +89,14 @@ export default function IsoPrincipleCards() {
             const rojos     = pkpis.filter(k => k.semaforo === 'rojo').length
             const amarillos = pkpis.filter(k => k.semaforo === 'amarillo').length
             const verdes    = pkpis.filter(k => k.semaforo === 'verde').length
-            const avg       = total > 0
-              ? Math.round(pkpis.reduce((s, k) => s + (k.cumplimiento_pct ?? 0), 0) / total)
+            // Promedio Ponderado de Cumplimiento ISO 38500
+            // Si todos los KPIs tienen peso definido → Σ(cumplimiento_i × peso_i)
+            // Si alguno no tiene peso → fallback a promedio simple igualitario
+            const allWeighted = total > 0 && pkpis.every(k => k.peso !== null)
+            const avg = total > 0
+              ? allWeighted
+                ? Math.round(pkpis.reduce((s, k) => s + (k.cumplimiento_pct ?? 0) * (k.peso ?? 0), 0))
+                : Math.round(pkpis.reduce((s, k) => s + (k.cumplimiento_pct ?? 0), 0) / total)
               : 0
             const isActive  = activePrinciple === p.id
 

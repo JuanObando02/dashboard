@@ -9,6 +9,73 @@ export const ISO_PRINCIPLES = [
   { id: 'Comportamiento Humano', iconName: 'Users',        hex: '#ec4899', hdpuv: ['Respeto', 'Justicia e Inclusión', 'Humanización'] },
 ]
 
+/**
+ * Pesos estratégicos por KPI para el cálculo de Promedio Ponderado de Cumplimiento
+ * por Principio ISO 38500. Suma dentro de cada principio = 1.0 (100%).
+ * Fuente: definición estratégica del equipo de Gobierno TI – HDPUV.
+ */
+export const KPI_WEIGHTS = {
+  // ── Rendimiento (20 KPIs, suma = 1.00) ─────────────────────────────
+   1: 0.12,   // % uptime HIS (HOSVITAL)                         → 12%
+   2: 0.10,   // % incidentes críticos resueltos dentro del SLA  → 10%
+  13: 0.08,   // % módulos críticos HIS implementados y operativos→  8%
+  19: 0.08,   // MTTR ante incidente mayor (horas)               →  8%
+  46: 0.06,   // Tiempo promedio activación plan contingencia     →  6%
+  // Otros 15 operacionales → 56% / 15 ≈ 3.73% c/u
+   3: 0.0373,
+   5: 0.0373,
+   6: 0.0373,
+   7: 0.0373,
+   8: 0.0373,
+  10: 0.0373,
+  11: 0.0373,
+  15: 0.0373,
+  23: 0.0373,
+  24: 0.0373,
+  26: 0.0373,
+  27: 0.0373,
+  32: 0.0373,
+  36: 0.0373,
+  45: 0.0373,
+
+  // ── Adquisición (12 KPIs, suma = 1.00) ─────────────────────────────
+  39: 0.15,   // % ejecución presupuestal TI sin desviación >15%  → 15%
+  38: 0.10,   // % proyectos TI con ficha presupuestal completa   → 10%
+  40: 0.10,   // Nivel madurez gestión de costos TI               → 10%
+  41: 0.10,   // % reducción costos operativos TI año a año       → 10%
+  43: 0.10,   // % servicios TI migrados a nube con reducción de costo → 10%
+  44: 0.10,   // % riesgos financieros TI con plan mitigación     → 10%
+  // Otros 6 → 35% / 6 ≈ 5.83% c/u
+   9: 0.0583,
+  12: 0.0583,
+  14: 0.0583,
+  25: 0.0583,
+  37: 0.0583,
+  42: 0.0583,
+
+  // ── Conformidad (4 KPIs, suma = 1.00) ──────────────────────────────
+  17: 0.30,   // % datos clínicos sensibles con criptografía activa → 30%
+  16: 0.25,   // % controles MSPI implementados                    → 25%
+  18: 0.25,   // N.º incidentes de seguridad con impacto clínico   → 25%
+  28: 0.20,   // % cumplimiento normativo trazabilidad HCE         → 20%
+
+  // ── Comportamiento Humano (4 KPIs, suma = 1.00) ────────────────────
+  29: 0.30,   // % personal con formación TI completada y evaluada → 30%
+   4: 0.25,   // Índice satisfacción usuarios internos             → 25%
+  30: 0.25,   // Índice de apropiación tecnológica                 → 25%
+  31: 0.20,   // % formación vía plataforma virtual vs. presencial → 20%
+
+  // ── Responsabilidad (4 KPIs, suma = 1.00) ──────────────────────────
+  20: 0.30,   // % cumplimiento POA TI bajo modelo gobierno        → 30%
+  21: 0.30,   // Nivel madurez gobierno TI (COBIT/MIPG)            → 30%
+  22: 0.20,   // % sesiones Comité Gobierno TI realizadas          → 20%
+  35: 0.20,   // % roles críticos TI cubiertos con perfil esp.     → 20%
+
+  // ── Estrategia (2 KPIs, suma = 1.00) ───────────────────────────────
+  33: 0.60,   // % decisiones soportadas por datos estructurados   → 60%
+  34: 0.40,   // Tiempo promedio incorporación nueva fuente datos   → 40%
+}
+
 function normalizeKpi(k) {
   const semaforo       = (k.estado_codigo ?? 'ROJO').toLowerCase()
   const cumplimiento_pct = k.cumplimiento_meta_pct ?? 0
@@ -57,6 +124,7 @@ function normalizeKpi(k) {
     cumplimiento_pct,
     presupuesto_cop,
     auditoria,
+    peso: KPI_WEIGHTS[k.id_kpi] ?? null,   // null = sin peso definido → usa igual en agregación
   }
 }
 
@@ -89,6 +157,9 @@ function buildData(rawData) {
         objetivos_estrategicos.push({
           'Objetivo Estratégico': oe.id,
           'Descripción':          oe.nombre,
+          'Descripción Completa': oe.descripcion ?? null,
+          'Ruta':                 oe.ruta ?? null,
+          'Objetivos BSC':        oe.objetivos_bsc ?? null,
         })
       }
     })
