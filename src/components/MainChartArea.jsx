@@ -177,17 +177,19 @@ export default function MainChartArea() {
             {/* Y-axis zoom */}
             <div className="flex items-center gap-1.5">
               <span className="text-[9px] text-slate-500 uppercase tracking-wider">Escala Y</span>
-              <button
-                onClick={() => setYZoom(z => Math.max(0, z - 10))}
-                className="w-5 h-5 rounded flex items-center justify-center text-xs font-bold transition-colors"
-                style={{ background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.25)', color: '#60a5fa' }}
-              >−</button>
-              <span className="text-[10px] font-mono text-slate-400 w-7 text-center">{yZoom}%</span>
-              <button
-                onClick={() => setYZoom(z => Math.min(100, z + 10))}
-                className="w-5 h-5 rounded flex items-center justify-center text-xs font-bold transition-colors"
-                style={{ background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.25)', color: '#60a5fa' }}
-              >+</button>
+              <div className="flex items-center rounded-lg overflow-hidden" style={{ border: '1px solid rgba(59,130,246,0.25)', background: 'rgba(59,130,246,0.06)' }}>
+                <button
+                  onClick={() => setYZoom(z => Math.max(0, z - 10))}
+                  className="w-6 h-6 flex items-center justify-center text-xs font-bold transition-colors hover:bg-blue-500/20"
+                  style={{ color: '#60a5fa', borderRight: '1px solid rgba(59,130,246,0.2)' }}
+                >−</button>
+                <span className="text-[10px] font-mono text-slate-300 px-2">{yZoom}%</span>
+                <button
+                  onClick={() => setYZoom(z => Math.min(100, z + 10))}
+                  className="w-6 h-6 flex items-center justify-center text-xs font-bold transition-colors hover:bg-blue-500/20"
+                  style={{ color: '#60a5fa', borderLeft: '1px solid rgba(59,130,246,0.2)' }}
+                >+</button>
+              </div>
             </div>
 
             <div className="w-px h-4 bg-slate-700" />
@@ -266,7 +268,7 @@ export default function MainChartArea() {
           {chartData.length > 0 ? (
             <ResponsiveContainer width="100%" height={240}>
               {useBar ? (
-                <BarChart data={chartData} margin={{ top: 4, right: 8, left: -20, bottom: 0 }}>
+                <BarChart data={chartData} margin={{ top: 4, right: 8, left: -20, bottom: 8 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
                   <XAxis dataKey="periodo" tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} />
                   <YAxis tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} domain={yDomain} />
@@ -285,7 +287,7 @@ export default function MainChartArea() {
                   />
                 </BarChart>
               ) : (
-                <LineChart data={chartData} margin={{ top: 4, right: 8, left: -20, bottom: 0 }}>
+                <LineChart data={chartData} margin={{ top: 4, right: 8, left: -20, bottom: 8 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
                   <XAxis dataKey="periodo" tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} />
                   <YAxis tick={{ fontSize: 9, fill: '#64748b' }} axisLine={false} tickLine={false} domain={yDomain} />

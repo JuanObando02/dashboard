@@ -15,6 +15,7 @@ export default function MaturityDetailModal({ record, sectionName, onClose }) {
   const totalMax   = sectionDetail.preguntas.length * 2
   const pct        = sectionRadar.pct
   const barColor   = pct >= 70 ? '#22c55e' : pct >= 50 ? '#eab308' : '#ef4444'
+  const barColorMuted = pct >= 70 ? 'rgba(34,197,94,0.55)' : pct >= 50 ? 'rgba(234,179,8,0.5)' : 'rgba(239,68,68,0.5)'
 
   return (
     <div
@@ -61,7 +62,7 @@ export default function MaturityDetailModal({ record, sectionName, onClose }) {
           <div className="h-1.5 rounded-full overflow-hidden" style={{ background: '#1e293b' }}>
             <div
               className="h-full rounded-full transition-all duration-500"
-              style={{ width: `${pct}%`, background: barColor }}
+              style={{ width: `${pct}%`, background: barColorMuted }}
             />
           </div>
           <div className="flex justify-between mt-1">

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import {
   RadarChart, PolarGrid, PolarAngleAxis, Radar,
   Tooltip, ResponsiveContainer,
@@ -65,7 +65,7 @@ function LevelBadge({ record }) {
       {/* Hover tooltip */}
       {hovered && info && (
         <div
-          className="absolute left-0 top-full mt-2 z-50 rounded-xl p-3 shadow-2xl text-xs"
+          className="absolute bottom-full left-0 mb-2 z-50 rounded-xl p-3 shadow-2xl text-xs"
           style={{
             width: 240,
             background: '#1e2d45',
@@ -109,7 +109,20 @@ function ClickableTick({ x, y, payload, cx, onSectionClick }) {
 export default function MaturityRadar() {
   const { madurezData } = useDashboard()
   const [activeIdx, setActiveIdx] = useState(0)
+  const [compareIdx, setCompareIdx] = useState(null)
   const [selectedSection, setSelectedSection] = useState(null)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const dropdownRef = useRef(null)
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setDropdownOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   if (!madurezData?.length) return null
 
@@ -133,37 +146,85 @@ export default function MaturityRadar() {
       style={{ background: '#111e35', borderColor: '#1e293b' }}
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2.5 border-b" style={{ borderColor: '#1e293b' }}>
+      <div className="px-4 pt-3 pb-2.5 border-b space-y-2" style={{ borderColor: '#1e293b' }}>
+        {/* Title row */}
         <div className="flex items-center gap-2">
           <Hexagon size={14} className="text-indigo-400 shrink-0" />
-          <h2 className="text-sm font-semibold text-slate-200 leading-tight">Madurez ISO 38500</h2>
+          <h2 className="text-sm font-semibold text-slate-200">Madurez ISO 38500</h2>
         </div>
 
-        {/* Fecha + botones de eval apilados, mismos anchos */}
-        <div className="flex flex-col items-stretch gap-1">
-          <div
-            className="flex items-center justify-center gap-1 px-2 py-0.5 rounded-md"
-            style={{ background: `${record.maturityColor}18`, border: `1px solid ${record.maturityColor}50` }}
+        {/* Eval selector row — full width */}
+        <div className="relative" ref={dropdownRef}>
+          <button
+            onClick={() => setDropdownOpen(o => !o)}
+            className="w-full flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-lg transition-colors"
+            style={{ background: `${record.maturityColor}18`, border: `1px solid ${record.maturityColor}40` }}
           >
-            <CalendarDays size={10} style={{ color: record.maturityColor }} className="shrink-0" />
-            <span className="text-[10px] font-medium whitespace-nowrap" style={{ color: record.maturityColor }}>{formatFecha(record.fecha)}</span>
-          </div>
+            <div className="flex items-center gap-2 min-w-0">
+              <CalendarDays size={10} style={{ color: record.maturityColor }} className="shrink-0" />
+              <span className="text-[10px] font-semibold truncate" style={{ color: record.maturityColor }}>
+                Eval {effectiveIdx + 1} · {formatFecha(record.fecha)}
+                {compareIdx !== null && (
+                  <span className="text-slate-500 font-normal"> · vs Eval {compareIdx + 1} · {formatFecha(madurezData[compareIdx].fecha)}</span>
+                )}
+              </span>
+            </div>
+            <span className="text-[9px] shrink-0" style={{ color: record.maturityColor }}>▾</span>
+          </button>
 
-          {madurezData.length > 1 && (
-            <div className="flex gap-1">
-              {madurezData.map((m, i) => (
-                <button
-                  key={i}
-                  onClick={() => setActiveIdx(i)}
-                  className="flex-1 text-[10px] px-2 py-0.5 rounded-md border font-semibold transition-all"
-                  style={effectiveIdx === i
-                    ? { background: m.maturityColor, borderColor: m.maturityColor, color: '#fff' }
-                    : { background: `${m.maturityColor}18`, borderColor: `${m.maturityColor}40`, color: m.maturityColor }
-                  }
-                >
-                  Eval {i + 1}
-                </button>
-              ))}
+          {dropdownOpen && madurezData.length > 1 && (
+            <div className="absolute right-0 top-full mt-1 z-50 rounded-xl shadow-2xl overflow-hidden flex flex-col"
+              style={{ background: '#0b1829', border: '1px solid #1e3a5f', minWidth: '230px', maxHeight: '250px' }}>
+              {/* Section header — fixed */}
+              <div className="px-3 py-1.5 border-b shrink-0" style={{ borderColor: '#1e293b' }}>
+                <p className="text-[9px] uppercase tracking-wider text-slate-600 font-semibold">Evaluación activa</p>
+              </div>
+              {/* Scrollable list */}
+              <div className="overflow-y-auto scrollbar-thin">
+              {[...madurezData].reverse().map((m, ri) => {
+                const i = madurezData.length - 1 - ri
+                const isActive = i === effectiveIdx
+                const isCompare = i === compareIdx
+                return (
+                  <div
+                    key={i}
+                    className="flex items-center gap-2 px-3 py-2 transition-colors hover:bg-white/5"
+                    style={{ borderBottom: ri < madurezData.length - 1 ? '1px solid #1e293b' : 'none' }}
+                  >
+                    {/* Select as active */}
+                    <button
+                      onClick={() => { setActiveIdx(i); if (compareIdx === i) setCompareIdx(null); setDropdownOpen(false) }}
+                      className="flex items-center gap-2 flex-1 text-left"
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: m.maturityColor }} />
+                      <div className="min-w-0">
+                        <p className="text-[11px] font-semibold" style={{ color: isActive ? m.maturityColor : '#e2e8f0' }}>
+                          Evaluación {i + 1}
+                          {i === madurezData.length - 1 && <span className="ml-1.5 text-[9px] text-slate-500">(Actual)</span>}
+                        </p>
+                        <p className="text-[10px] text-slate-500">{formatFecha(m.fecha)}</p>
+                      </div>
+                      {isActive && <span className="text-[9px] shrink-0" style={{ color: m.maturityColor }}>✓</span>}
+                    </button>
+
+                    {/* Compare toggle */}
+                    {!isActive && (
+                      <button
+                        onClick={e => { e.stopPropagation(); setCompareIdx(isCompare ? null : i) }}
+                        className="shrink-0 text-[9px] px-1.5 py-0.5 rounded font-semibold transition-all"
+                        style={{
+                          background: isCompare ? 'rgba(100,116,139,0.3)' : 'rgba(100,116,139,0.1)',
+                          border: `1px solid ${isCompare ? '#64748b' : 'rgba(100,116,139,0.3)'}`,
+                          color: isCompare ? '#94a3b8' : '#475569',
+                        }}
+                      >
+                        {isCompare ? 'vs ✓' : 'vs'}
+                      </button>
+                    )}
+                  </div>
+                )
+              })}
+              </div>
             </div>
           )}
         </div>
@@ -201,19 +262,27 @@ export default function MaturityRadar() {
               dataKey="seccion"
               tick={(props) => <ClickableTick {...props} onSectionClick={setSelectedSection} />}
             />
-            {madurezData.map((m, i) => (
+            <Radar
+              name={`Eval ${effectiveIdx + 1}`}
+              dataKey={`Eval ${effectiveIdx + 1}`}
+              stroke={COLORS[effectiveIdx] ?? '#3b82f6'}
+              fill={COLORS[effectiveIdx] ?? '#3b82f6'}
+              fillOpacity={0.18}
+              strokeWidth={2}
+              dot={{ r: 3, fill: COLORS[effectiveIdx] ?? '#3b82f6' }}
+            />
+            {compareIdx !== null && (
               <Radar
-                key={i}
-                name={`Eval ${i + 1}`}
-                dataKey={`Eval ${i + 1}`}
-                stroke={COLORS[i]}
-                fill={COLORS[i]}
-                fillOpacity={effectiveIdx === i ? 0.18 : 0.04}
-                strokeOpacity={effectiveIdx === i ? 1 : 0.25}
-                strokeWidth={effectiveIdx === i ? 2 : 1}
-                dot={{ r: 3, fill: COLORS[i], fillOpacity: effectiveIdx === i ? 1 : 0.3 }}
+                name={`Eval ${compareIdx + 1}`}
+                dataKey={`Eval ${compareIdx + 1}`}
+                stroke="#64748b"
+                fill="#64748b"
+                fillOpacity={0.06}
+                strokeWidth={1.5}
+                strokeDasharray="4 3"
+                dot={{ r: 2, fill: '#64748b' }}
               />
-            ))}
+            )}
             <Tooltip content={<RadarTooltip />} />
           </RadarChart>
         </ResponsiveContainer>
