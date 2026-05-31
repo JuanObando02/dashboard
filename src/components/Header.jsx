@@ -1,4 +1,4 @@
-import { CalendarDays, ShieldCheck, Monitor, Database, BrainCircuit } from 'lucide-react'
+import { CalendarDays, ShieldCheck, Monitor, BrainCircuit, RefreshCw } from 'lucide-react'
 import ExecutiveReportButton from './ExecutiveReportButton'
 import { useDashboard } from '../context/DashboardContext'
 
@@ -9,13 +9,12 @@ const SEM_BADGES = [
 ]
 
 const TABS = [
-  { id: 'ti',    label: 'Gobierno de TI',    icon: Monitor },
-  { id: 'datos', label: 'Gobierno de Datos', icon: Database },
-  { id: 'ia',    label: 'Gobierno de IA',    icon: BrainCircuit },
+  { id: 'ti',       label: 'Gobierno de TI',    icon: Monitor },
+  { id: 'datos-ia', label: 'Datos e IA',         icon: BrainCircuit },
 ]
 
 export default function Header({ metadata, activeTab, onTabChange }) {
-  const { globalCounts } = useDashboard()
+  const { globalCounts, refreshData, refreshing } = useDashboard()
   const nombre = metadata?.nombre ?? 'Hospital'
   const modelo = metadata?.modelo_gobierno ?? 'ISO 38500 & BSC'
   const fecha  = metadata?.fecha_actualizacion ?? '—'
@@ -95,6 +94,20 @@ export default function Header({ metadata, activeTab, onTabChange }) {
               <p className="text-xs font-semibold text-white">{fecha}</p>
             </div>
           </div>
+
+          <button
+            onClick={refreshData}
+            disabled={refreshing}
+            title="Actualizar datos"
+            className="p-2 rounded-lg transition-all"
+            style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)' }}
+          >
+            <RefreshCw
+              size={14}
+              className="text-blue-300"
+              style={{ animation: refreshing ? 'spin 0.8s linear infinite' : 'none' }}
+            />
+          </button>
         </div>
 
       </div>

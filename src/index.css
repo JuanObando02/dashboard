@@ -74,6 +74,15 @@ option {
   font-variant-numeric: tabular-nums;
 }
 
+/* ─── Alert blink ─── */
+@keyframes alert-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.25; }
+}
+.alert-blink {
+  animation: alert-blink 1.2s ease-in-out infinite;
+}
+
 /* ─── Auto-play progress bar ─── */
 @keyframes autoplay-fill {
   from { width: 0% }

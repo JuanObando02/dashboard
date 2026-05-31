@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { TrendingUp, TrendingDown, Minus, Activity, Shield, Target, Package, CheckCircle2, Users, Info } from 'lucide-react'
+import { TrendingUp, TrendingDown, Minus, Activity, Shield, Target, Package, CheckCircle2, Users, Info, BarChart2 } from 'lucide-react'
 import { useDashboard, ISO_PRINCIPLES } from '../context/DashboardContext'
 import KpiDetailModal from './KpiDetailModal'
 
@@ -287,6 +287,7 @@ function GaugeSVG({ pct, color }) {
 
 function IsoPrincipleView({ allKpis, principleId }) {
   const [modalKpi, setModalKpi] = useState(null)
+  const { filteredKpis, setSelectedKpiIdx, pauseAutoPlay } = useDashboard()
   const principle = ISO_PRINCIPLES.find(p => p.id === principleId)
   const hex = principle?.hex ?? '#3b82f6'
   const Icon = principle ? ICON_MAP[principle.iconName] : Activity
@@ -524,6 +525,23 @@ function IsoPrincipleView({ allKpis, principleId }) {
                     </div>
                   </>
                 )}
+                {/* Ver en gráfica */}
+                {(() => {
+                  const chartIdx = filteredKpis.findIndex(f => f.KPI === k.KPI)
+                  if (chartIdx === -1) return null
+                  return (
+                    <button
+                      onClick={e => { e.stopPropagation(); setSelectedKpiIdx(chartIdx); pauseAutoPlay() }}
+                      title="Ver en gráfica"
+                      className="ml-auto shrink-0 p-1 rounded transition-colors hover:bg-blue-500/20"
+                      style={{ color: '#475569' }}
+                      onMouseEnter={e => e.currentTarget.style.color = '#60a5fa'}
+                      onMouseLeave={e => e.currentTarget.style.color = '#475569'}
+                    >
+                      <BarChart2 size={11} />
+                    </button>
+                  )
+                })()}
               </div>
             </button>
           )

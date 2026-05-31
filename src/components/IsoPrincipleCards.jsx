@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Shield, Target, Package, TrendingUp, CheckCircle2, Users, Sparkles, X, Loader2 } from 'lucide-react'
+import { Shield, Target, Package, TrendingUp, CheckCircle2, Users, Sparkles, X, Loader2, AlertTriangle, AlertCircle } from 'lucide-react'
 import { useDashboard, ISO_PRINCIPLES } from '../context/DashboardContext'
 import { askGeminiDirect } from '../services/geminiService'
 
@@ -39,6 +39,7 @@ export default function IsoPrincipleCards() {
   const [aiModal, setAiModal] = useState(null)
 
   const activePrincipleObj = ISO_PRINCIPLES.find(p => p.id === activePrinciple) ?? null
+  const syncDelay = `-${(Date.now() % 2500) / 1000}s`
 
   async function handleAiAnalysis() {
     if (!activePrincipleObj) return
@@ -99,6 +100,9 @@ export default function IsoPrincipleCards() {
                 : Math.round(pkpis.reduce((s, k) => s + (k.cumplimiento_pct ?? 0), 0) / total)
               : 0
             const isActive  = activePrinciple === p.id
+            const semColor  = avg >= 70 ? '#22c55e' : avg >= 50 ? '#eab308' : '#ef4444'
+            const semLabel  = avg >= 70 ? 'Óptimo' : avg >= 50 ? 'Precaución' : 'Crítico'
+            const AlertIcon = avg < 50 ? AlertTriangle : avg < 70 ? AlertCircle : null
 
             return (
               <div
@@ -110,6 +114,16 @@ export default function IsoPrincipleCards() {
                 {/* Active indicator */}
                 {isActive && (
                   <span className="absolute top-0 left-0 right-0 h-0.5" style={{ background: p.hex }} />
+                )}
+
+                {/* Alert pulse dot — top right corner */}
+                {AlertIcon && !isActive && (
+                  <span className="absolute top-2 right-2">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60" style={{ background: semColor }} />
+                      <span className="relative inline-flex rounded-full h-2 w-2" style={{ background: semColor }} />
+                    </span>
+                  </span>
                 )}
 
                 {/* Icon + name */}
@@ -131,13 +145,28 @@ export default function IsoPrincipleCards() {
                   {p.hdpuv.join(' · ')}
                 </p>
 
-                {/* % */}
-                <p
-                  className="text-2xl font-bold leading-none mb-0.5"
-                  style={{ color: isActive ? p.hex : '#cbd5e1' }}
-                >
-                  {avg}%
-                </p>
+                {/* % + alerta */}
+                <div className="flex items-baseline gap-1.5 mt-0.5 mb-0.5">
+                  <p
+                    className="text-2xl font-bold leading-none"
+                    style={{ color: isActive ? p.hex : semColor }}
+                  >
+                    {avg}%
+                  </p>
+                  {avg < 70 && (
+                    <span
+                      className="alert-blink text-[8px] font-bold px-1 py-px rounded"
+                      style={{
+                        color:   semColor,
+                        background: `${semColor}20`,
+                        border: `1px solid ${semColor}50`,
+                        animationDelay: syncDelay,
+                      }}
+                    >
+                      ALERTA
+                    </span>
+                  )}
+                </div>
 
                 {/* Semaforo bar + tooltip */}
                 <div className="relative group mt-1.5">

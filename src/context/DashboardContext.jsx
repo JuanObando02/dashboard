@@ -203,9 +203,10 @@ function ErrorScreen({ error }) {
 const Ctx = createContext(null)
 
 export function DashboardProvider({ children }) {
-  const [rawData,   setRawData]   = useState(null)
-  const [loading,   setLoading]   = useState(true)
-  const [loadError, setLoadError] = useState(null)
+  const [rawData,    setRawData]    = useState(null)
+  const [loading,    setLoading]    = useState(true)
+  const [loadError,  setLoadError]  = useState(null)
+  const [refreshing, setRefreshing] = useState(false)
 
   const [activePrinciple, setActivePrinciple]       = useState(null)
   const [selectedKpiIdx, setSelectedKpiIdx]         = useState(0)
@@ -215,7 +216,9 @@ export function DashboardProvider({ children }) {
   const [perspectiveFilter, setPerspectiveFilter]   = useState('')
   const [statusFilter, setStatusFilter]             = useState('')
 
-  useEffect(() => {
+  function loadData(isRefresh = false) {
+    if (isRefresh) setRefreshing(true)
+    else setLoading(true)
     const timestamp = new Date().getTime()
     fetch(`/data/Gobierno_TI_data.json?t=${timestamp}`)
       .then(r => {
@@ -223,15 +226,18 @@ export function DashboardProvider({ children }) {
         return r.json()
       })
       .then(raw => {
-        // Soporta formato nuevo [{"data":[...]}] y formato plano antiguo [...]
         const data = Array.isArray(raw) && raw.length > 0 && raw[0]?.data
           ? raw[0].data
           : raw
         setRawData(data)
         setLoading(false)
+        setRefreshing(false)
+        setLoadError(null)
       })
-      .catch(err => { setLoadError(err.message); setLoading(false) })
-  }, [])
+      .catch(err => { setLoadError(err.message); setLoading(false); setRefreshing(false) })
+  }
+
+  useEffect(() => { loadData() }, [])
 
   const _data = useMemo(
     () => rawData ? buildData(rawData) : { iniciativas: [], objetivos_estrategicos: [] },
@@ -385,6 +391,8 @@ export function DashboardProvider({ children }) {
       pauseAutoPlay,
       setAutoPlayHovered,
       autoPlayMs: 12000,
+      refreshData: () => loadData(true),
+      refreshing,
     }}>
       {children}
     </Ctx.Provider>

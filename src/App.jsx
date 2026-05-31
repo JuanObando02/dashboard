@@ -8,8 +8,8 @@ import PerspectiveHealthCard from './components/PerspectiveHealthCard'
 import SmartSearch from './components/SmartSearch'
 import GapAnalysisBar from './components/GapAnalysisBar'
 import MaturityRadar from './components/MaturityRadar'
-import { Database, BrainCircuit, Construction } from 'lucide-react'
 import IniciativasPanel from './components/IniciativasPanel'
+import DatosIAPanel from './components/DatosIAPanel'
 
 const metadata = {
   nombre: "Hospital Departamental Psiquiátrico Universitario del Valle",
@@ -66,23 +66,6 @@ function KpiPillsBar() {
   )
 }
 
-function ComingSoon({ icon: Icon, title, description }) {
-  return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 text-center px-4">
-      <div className="rounded-2xl p-5" style={{ background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.2)' }}>
-        <Icon size={56} className="text-blue-400" strokeWidth={1.2} />
-      </div>
-      <div className="space-y-2 max-w-sm">
-        <h2 className="text-xl font-bold text-white">{title}</h2>
-        <p className="text-slate-400 text-sm leading-relaxed">{description}</p>
-      </div>
-      <div className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium" style={{ background: 'rgba(234,179,8,0.1)', border: '1px solid rgba(234,179,8,0.25)', color: '#eab308' }}>
-        <Construction size={13} />
-        En desarrollo
-      </div>
-    </div>
-  )
-}
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('ti')
@@ -120,23 +103,9 @@ export default function App() {
           </main>
         )}
 
-        {activeTab === 'datos' && (
-          <main className="max-w-screen-2xl mx-auto px-4 sm:px-6 py-6">
-            <ComingSoon
-              icon={Database}
-              title="Gobierno de Datos"
-              description="Panel de gestión y calidad de datos institucionales. Aquí se visualizarán métricas de gobierno de datos, linaje, calidad y cumplimiento normativo."
-            />
-          </main>
-        )}
-
-        {activeTab === 'ia' && (
-          <main className="max-w-screen-2xl mx-auto px-4 sm:px-6 py-6">
-            <ComingSoon
-              icon={BrainCircuit}
-              title="Gobierno de IA"
-              description="Marco de gobernanza para modelos e iniciativas de inteligencia artificial. Aquí se gestionarán riesgos, ética, transparencia y cumplimiento de los sistemas de IA."
-            />
+        {activeTab === 'datos-ia' && (
+          <main>
+            <DatosIAPanel />
           </main>
         )}
       </div>
