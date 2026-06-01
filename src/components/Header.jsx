@@ -1,4 +1,4 @@
-import { CalendarDays, ShieldCheck, Monitor, BrainCircuit, RefreshCw } from 'lucide-react'
+import { CalendarDays, ShieldCheck, Monitor, BrainCircuit, Database, RefreshCw } from 'lucide-react'
 import ExecutiveReportButton from './ExecutiveReportButton'
 import { useDashboard } from '../context/DashboardContext'
 
@@ -9,8 +9,9 @@ const SEM_BADGES = [
 ]
 
 const TABS = [
-  { id: 'ti',       label: 'Gobierno de TI',    icon: Monitor },
-  { id: 'datos-ia', label: 'Datos e IA',         icon: BrainCircuit },
+  { id: 'ti',           label: 'Gobierno de TI',  icon: Monitor },
+  { id: 'datos-ia',     label: 'Datos',            icon: Database },
+  { id: 'gobierno-ia',  label: 'Gobierno de IA',   icon: BrainCircuit },
 ]
 
 export default function Header({ metadata, activeTab, onTabChange }) {

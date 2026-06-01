@@ -1,0 +1,658 @@
+[
+    {
+        "meta": {
+            "institucion": "Hospital Departamental Psiquiátrico Universitario del Valle E.S.E.",
+            "documento_base": "GD-HDPUV-01-2026 v1.0",
+            "generado_por": "n8n — Google Sheets",
+            "fecha_generacion": "2026-06-01T00:42:51.367Z",
+            "periodo_reporte": "2026-05"
+        },
+        "resumen_ejecutivo": {
+            "total_alertas_criticas": 20,
+            "alertas_criticas": [
+                {
+                    "area": "Calidad de Datos",
+                    "kpi": "Completitud",
+                    "valor": "78 %",
+                    "meta": "95 %"
+                },
+                {
+                    "area": "Calidad de Datos",
+                    "kpi": "Exactitud (Glosas)",
+                    "valor": "8.5 %",
+                    "meta": "5 %"
+                },
+                {
+                    "area": "Calidad de Datos",
+                    "kpi": "Oportunidad HCE",
+                    "valor": "12 horas",
+                    "meta": "8 horas"
+                },
+                {
+                    "area": "Calidad de Datos",
+                    "kpi": "Consistencia CIE-10",
+                    "valor": "6.2 %",
+                    "meta": "3 %"
+                },
+                {
+                    "area": "Calidad de Datos",
+                    "kpi": "Unicidad Pacientes",
+                    "valor": "5.5 %",
+                    "meta": "2 %"
+                },
+                {
+                    "area": "Calidad de Datos",
+                    "kpi": "Integridad Referencial",
+                    "valor": "2.1 %",
+                    "meta": "0 %"
+                },
+                {
+                    "area": "Seguridad",
+                    "kpi": "Cifrado AES-256",
+                    "valor": "No activo",
+                    "meta": "Activo"
+                },
+                {
+                    "area": "Seguridad",
+                    "kpi": "MSPI",
+                    "valor": "1%",
+                    "meta": "50% en 2028"
+                },
+                {
+                    "area": "MDM",
+                    "kpi": "Unicidad Pacientes",
+                    "valor": "5%",
+                    "meta": "2%"
+                },
+                {
+                    "area": "MDM",
+                    "kpi": "Paciente (RUP)",
+                    "valor": "CRÍTICO",
+                    "meta": "Duplicados <2%"
+                },
+                {
+                    "area": "MDM",
+                    "kpi": "Colaborador",
+                    "valor": "CRÍTICO",
+                    "meta": "Inconsistencias <1%"
+                },
+                {
+                    "area": "MDM",
+                    "kpi": "Diagnóstico CIE-10",
+                    "valor": "CRÍTICO",
+                    "meta": "Inconsistencias <3%"
+                },
+                {
+                    "area": "MDM",
+                    "kpi": "Procedimiento CUPS",
+                    "valor": "CRÍTICO",
+                    "meta": "Glosas CUPS <1%"
+                },
+                {
+                    "area": "MDM",
+                    "kpi": "EPS/Aseguradora",
+                    "valor": "CRÍTICO",
+                    "meta": "RIPS rechazados <2%"
+                },
+                {
+                    "area": "Ciclo de Vida",
+                    "kpi": "Historia Clínica (adulto)",
+                    "valor": "REVISAR",
+                    "meta": "CONFORME"
+                },
+                {
+                    "area": "Ciclo de Vida",
+                    "kpi": "Historia Clínica (menor de edad)",
+                    "valor": "REVISAR",
+                    "meta": "CONFORME"
+                },
+                {
+                    "area": "Ciclo de Vida",
+                    "kpi": "Datos de nómina y contrato",
+                    "valor": "REVISAR",
+                    "meta": "CONFORME"
+                },
+                {
+                    "area": "Ciclo de Vida",
+                    "kpi": "Datos financieros (RIPS/facturas)",
+                    "valor": "REVISAR",
+                    "meta": "CONFORME"
+                },
+                {
+                    "area": "Ciclo de Vida",
+                    "kpi": "Auditoría y acceso a sistemas",
+                    "valor": "REVISAR",
+                    "meta": "CONFORME"
+                },
+                {
+                    "area": "Ciclo de Vida",
+                    "kpi": "Documentos institucionales PQRSD",
+                    "valor": "REVISAR",
+                    "meta": "CONFORME"
+                }
+            ],
+            "madurez_promedio_actual": 1.64,
+            "madurez_meta_2026": 2.5,
+            "pct_series_conformes": 14
+        },
+        "calidad_datos": {
+            "periodo": "2026-05",
+            "fecha_registro": "31/05/2026",
+            "fuente_sistema": "HOSVITAL-HIS",
+            "responsable_steward": "Coordinador Clínico",
+            "observaciones": "Línea base estimada Doc. Maestro v1.0 — validar con HIS",
+            "dimensiones": [
+                {
+                    "id": "completitud",
+                    "nombre": "Completitud",
+                    "valor_actual": 78,
+                    "meta_2026": 95,
+                    "meta_2029": 99,
+                    "unidad": "%",
+                    "logica": "mayor_es_mejor",
+                    "estado": "CRÍTICO"
+                },
+                {
+                    "id": "exactitud",
+                    "nombre": "Exactitud (Glosas)",
+                    "valor_actual": 8.5,
+                    "meta_2026": 5,
+                    "meta_2029": 1,
+                    "unidad": "%",
+                    "logica": "menor_es_mejor",
+                    "estado": "CRÍTICO"
+                },
+                {
+                    "id": "oportunidad",
+                    "nombre": "Oportunidad HCE",
+                    "valor_actual": 12,
+                    "meta_2026": 8,
+                    "meta_2029": 4,
+                    "unidad": "horas",
+                    "logica": "menor_es_mejor",
+                    "estado": "CRÍTICO"
+                },
+                {
+                    "id": "consistencia",
+                    "nombre": "Consistencia CIE-10",
+                    "valor_actual": 6.2,
+                    "meta_2026": 3,
+                    "meta_2029": 0.5,
+                    "unidad": "%",
+                    "logica": "menor_es_mejor",
+                    "estado": "CRÍTICO"
+                },
+                {
+                    "id": "unicidad",
+                    "nombre": "Unicidad Pacientes",
+                    "valor_actual": 5.5,
+                    "meta_2026": 2,
+                    "meta_2029": 0,
+                    "unidad": "%",
+                    "logica": "menor_es_mejor",
+                    "estado": "CRÍTICO"
+                },
+                {
+                    "id": "integridad_referencial",
+                    "nombre": "Integridad Referencial",
+                    "valor_actual": 2.1,
+                    "meta_2026": 0,
+                    "meta_2029": 0,
+                    "unidad": "%",
+                    "logica": "menor_es_mejor",
+                    "estado": "CRÍTICO"
+                }
+            ]
+        },
+        "seguridad_privacidad": {
+            "periodo": "2026-05",
+            "fecha_registro": "31/05/2026",
+            "cifrado": {
+                "aes256_activo": false,
+                "datos_criticos_cifrados_pct": 1,
+                "meta": "Activo + 100% datos críticos cifrados",
+                "estado": "CRÍTICO"
+            },
+            "rbac": {
+                "incidentes": 0,
+                "meta": 0,
+                "estado": "SEGURA"
+            },
+            "arco": {
+                "solicitudes_mes": 3,
+                "resueltas_en_tiempo": 3,
+                "cumplimiento_pct": 100,
+                "limite_dias_habiles": 10,
+                "estado": "CUMPLE"
+            },
+            "mspi": {
+                "avance_pct": 1,
+                "meta_2028_pct": 50,
+                "estado": "CRÍTICO"
+            },
+            "data_masking_activo": false,
+            "violaciones_reportadas_sic": 0,
+            "revision_perfiles_fecha": "Pendiente",
+            "responsable_owner": "Subgerencia Científica",
+            "observaciones": "Línea base — MSPI no implementado (fuente F16 PETI)"
+        },
+        "ciclo_vida_documental": {
+            "fecha_consulta": "2026-06-01",
+            "total_series": 7,
+            "conformes": 1,
+            "en_revision": 6,
+            "pct_cumplimiento": 14,
+            "series": [
+                {
+                    "id": "S01",
+                    "nombre": "Historia Clínica (adulto)",
+                    "sistema": "HOSVITAL-HIS",
+                    "retencion_años": "20",
+                    "disposicion_final": "Conservación total",
+                    "fundamento": "Res.1995/1999 Art.15",
+                    "trigger_bloqueo_activo": false,
+                    "almacenamiento_frio_activo": false,
+                    "fecha_ultima_auditoria": null,
+                    "estado": "REVISAR",
+                    "responsable": "Jefatura TI",
+                    "observaciones": "20 años desde último registro"
+                },
+                {
+                    "id": "S02",
+                    "nombre": "Historia Clínica (menor de edad)",
+                    "sistema": "HOSVITAL-HIS",
+                    "retencion_años": "Mayoría edad+10",
+                    "disposicion_final": "Conservación total",
+                    "fundamento": "Res.1995/1999",
+                    "trigger_bloqueo_activo": false,
+                    "almacenamiento_frio_activo": false,
+                    "fecha_ultima_auditoria": null,
+                    "estado": "REVISAR",
+                    "responsable": "Jefatura TI",
+                    "observaciones": "Trazabilidad completa"
+                },
+                {
+                    "id": "S03",
+                    "nombre": "Datos de nómina y contrato",
+                    "sistema": "KACTUS-HCM",
+                    "retencion_años": "10",
+                    "disposicion_final": "Destrucción certificada",
+                    "fundamento": "CST + UGPP",
+                    "trigger_bloqueo_activo": false,
+                    "almacenamiento_frio_activo": false,
+                    "fecha_ultima_auditoria": null,
+                    "estado": "REVISAR",
+                    "responsable": "Coordinador RRHH",
+                    "observaciones": "Archivo PINAR"
+                },
+                {
+                    "id": "S04",
+                    "nombre": "Datos financieros (RIPS/facturas)",
+                    "sistema": "HOSVITAL-HIS",
+                    "retencion_años": "10",
+                    "disposicion_final": "Archivo electrónico inmutable",
+                    "fundamento": "Estatuto Tributario Art.632",
+                    "trigger_bloqueo_activo": false,
+                    "almacenamiento_frio_activo": false,
+                    "fecha_ultima_auditoria": null,
+                    "estado": "REVISAR",
+                    "responsable": "Líder Facturación",
+                    "observaciones": "Almacenamiento frío"
+                },
+                {
+                    "id": "S05",
+                    "nombre": "Auditoría y acceso a sistemas",
+                    "sistema": "HOSVITAL-HIS/KACTUS",
+                    "retencion_años": "5",
+                    "disposicion_final": "Archivo frío; revisión anual",
+                    "fundamento": "MSPI MinTIC / Ley 1581",
+                    "trigger_bloqueo_activo": false,
+                    "almacenamiento_frio_activo": false,
+                    "fecha_ultima_auditoria": null,
+                    "estado": "REVISAR",
+                    "responsable": "Jefatura TI",
+                    "observaciones": ""
+                },
+                {
+                    "id": "S06",
+                    "nombre": "Datos anonimizados analítica",
+                    "sistema": "Data Warehouse",
+                    "retencion_años": "Indefinido",
+                    "disposicion_final": "Uso en IA/DW",
+                    "fundamento": "CONPES 3975/2019",
+                    "trigger_bloqueo_activo": true,
+                    "almacenamiento_frio_activo": true,
+                    "fecha_ultima_auditoria": null,
+                    "estado": "CONFORME",
+                    "responsable": "Jefatura TI",
+                    "observaciones": "Previo comité de ética"
+                },
+                {
+                    "id": "S07",
+                    "nombre": "Documentos institucionales PQRSD",
+                    "sistema": "SIGDOC/SGDEA",
+                    "retencion_años": "5",
+                    "disposicion_final": "Según TRD (AGN)",
+                    "fundamento": "Acuerdo 004/2019 AGN",
+                    "trigger_bloqueo_activo": false,
+                    "almacenamiento_frio_activo": false,
+                    "fecha_ultima_auditoria": null,
+                    "estado": "REVISAR",
+                    "responsable": "Coord. Documental",
+                    "observaciones": "Transferencia archivo central"
+                }
+            ]
+        },
+        "mdm_gobernanza": {
+            "unicidad_pacientes": {
+                "periodo": "2026-05",
+                "fecha_registro": "2026-05-31",
+                "total_pacientes_his": 4500,
+                "duplicados_identificados": 225,
+                "duplicados_fusionados_mes": 0,
+                "pct_duplicados": 5,
+                "meta_pct_2026": 2,
+                "meta_pct_2029": 0,
+                "algoritmo_dedup_activo": false,
+                "estado": "CRÍTICO",
+                "fuente": "HOSVITAL-HIS Admisiones",
+                "responsable": "Coordinador Clínico",
+                "observaciones": "Estimado 5% lb. Doc. Maestro — ejecutar perfilamiento formal"
+            },
+            "entidades_maestras": {
+                "total": 5,
+                "criticos": 5,
+                "en_revision": 0,
+                "conformes": 0,
+                "entidades": [
+                    {
+                        "id": "E01",
+                        "nombre": "Paciente (RUP)",
+                        "sistema_autoritativo": "HOSVITAL-HIS",
+                        "problema_actual": "Duplicados 3-8% por errores digitación",
+                        "data_owner": "Subgerencia Científica",
+                        "data_steward": "Coordinador Admisiones",
+                        "glosario_validado": false,
+                        "catalogo_registrado": false,
+                        "meta_calidad_2026": "Duplicados <2%",
+                        "fecha_revision": null,
+                        "observaciones": "",
+                        "estado": "CRÍTICO"
+                    },
+                    {
+                        "id": "E02",
+                        "nombre": "Colaborador",
+                        "sistema_autoritativo": "KACTUS-HCM",
+                        "problema_actual": "Inconsistencias KACTUS vs HIS en turnos",
+                        "data_owner": "Subgerencia Administrativa",
+                        "data_steward": "Coordinador RRHH",
+                        "glosario_validado": false,
+                        "catalogo_registrado": false,
+                        "meta_calidad_2026": "Inconsistencias <1%",
+                        "fecha_revision": null,
+                        "observaciones": "",
+                        "estado": "CRÍTICO"
+                    },
+                    {
+                        "id": "E03",
+                        "nombre": "Diagnóstico CIE-10",
+                        "sistema_autoritativo": "Catálogo OPS/MinSalud",
+                        "problema_actual": "Versiones locales no alineadas",
+                        "data_owner": "Subgerencia Científica",
+                        "data_steward": "Líder Auditoría Médica",
+                        "glosario_validado": false,
+                        "catalogo_registrado": false,
+                        "meta_calidad_2026": "Inconsistencias <3%",
+                        "fecha_revision": null,
+                        "observaciones": "",
+                        "estado": "CRÍTICO"
+                    },
+                    {
+                        "id": "E04",
+                        "nombre": "Procedimiento CUPS",
+                        "sistema_autoritativo": "Resolución MSPS vigente",
+                        "problema_actual": "Códigos desactualizados → glosas",
+                        "data_owner": "Subgerencia Científica",
+                        "data_steward": "Líder Facturación",
+                        "glosario_validado": false,
+                        "catalogo_registrado": false,
+                        "meta_calidad_2026": "Glosas CUPS <1%",
+                        "fecha_revision": null,
+                        "observaciones": "",
+                        "estado": "CRÍTICO"
+                    },
+                    {
+                        "id": "E05",
+                        "nombre": "EPS/Aseguradora",
+                        "sistema_autoritativo": "BDUA-ADRES",
+                        "problema_actual": "Datos contacto obsoletos → RIPS rechazados",
+                        "data_owner": "Subgerencia Administrativa",
+                        "data_steward": "Líder Facturación",
+                        "glosario_validado": false,
+                        "catalogo_registrado": false,
+                        "meta_calidad_2026": "RIPS rechazados <2%",
+                        "fecha_revision": null,
+                        "observaciones": "",
+                        "estado": "CRÍTICO"
+                    }
+                ]
+            },
+            "madurez_dama": {
+                "promedio_global": {
+                    "lb_2025": 1.8,
+                    "meta_2026": 2.5,
+                    "meta_2027": 3.2,
+                    "meta_2029": 4.1,
+                    "valor_actual": 1.64,
+                    "estado": "CRÍTICO"
+                },
+                "areas": [
+                    {
+                        "id": "A01",
+                        "nombre": "Gobierno de Datos",
+                        "lb_2025": 1.5,
+                        "meta_2026": 2.5,
+                        "meta_2027": 3.5,
+                        "meta_2029": 4,
+                        "valor_actual": 1.5,
+                        "brecha_meta_2026": 1,
+                        "iniciativa": "I-07, I-15",
+                        "responsable": "Jefatura TI / CIGD",
+                        "estado": "EN PROGRESO"
+                    },
+                    {
+                        "id": "A02",
+                        "nombre": "Arquitectura de Datos",
+                        "lb_2025": 2,
+                        "meta_2026": 2.5,
+                        "meta_2027": 3,
+                        "meta_2029": 4,
+                        "valor_actual": 2,
+                        "brecha_meta_2026": 0.5,
+                        "iniciativa": "I-04, I-10",
+                        "responsable": "Jefatura TI / CIGD",
+                        "estado": "EN PROGRESO"
+                    },
+                    {
+                        "id": "A03",
+                        "nombre": "Modelado y Diseño",
+                        "lb_2025": 2,
+                        "meta_2026": 2.5,
+                        "meta_2027": 3,
+                        "meta_2029": 3.5,
+                        "valor_actual": 2,
+                        "brecha_meta_2026": 0.5,
+                        "iniciativa": "I-04",
+                        "responsable": "Jefatura TI / CIGD",
+                        "estado": "EN PROGRESO"
+                    },
+                    {
+                        "id": "A04",
+                        "nombre": "Almacenamiento y Operaciones",
+                        "lb_2025": 2.5,
+                        "meta_2026": 3,
+                        "meta_2027": 3.5,
+                        "meta_2029": 4,
+                        "valor_actual": 2.5,
+                        "brecha_meta_2026": 0.5,
+                        "iniciativa": "I-05, I-16",
+                        "responsable": "Jefatura TI / CIGD",
+                        "estado": "EN PROGRESO"
+                    },
+                    {
+                        "id": "A05",
+                        "nombre": "Seguridad de Datos",
+                        "lb_2025": 2,
+                        "meta_2026": 3,
+                        "meta_2027": 3.5,
+                        "meta_2029": 4.5,
+                        "valor_actual": 2,
+                        "brecha_meta_2026": 1,
+                        "iniciativa": "I-06, I-16",
+                        "responsable": "Jefatura TI / CIGD",
+                        "estado": "EN PROGRESO"
+                    },
+                    {
+                        "id": "A06",
+                        "nombre": "Integración e Interop.",
+                        "lb_2025": 1.5,
+                        "meta_2026": 2,
+                        "meta_2027": 3,
+                        "meta_2029": 4.5,
+                        "valor_actual": 1.5,
+                        "brecha_meta_2026": 0.5,
+                        "iniciativa": "I-04",
+                        "responsable": "Jefatura TI / CIGD",
+                        "estado": "EN PROGRESO"
+                    },
+                    {
+                        "id": "A07",
+                        "nombre": "Gestión Documental",
+                        "lb_2025": 1,
+                        "meta_2026": 1.5,
+                        "meta_2027": 2.5,
+                        "meta_2029": 4,
+                        "valor_actual": 1,
+                        "brecha_meta_2026": 0.5,
+                        "iniciativa": "I-08",
+                        "responsable": "Jefatura TI / CIGD",
+                        "estado": "EN PROGRESO"
+                    },
+                    {
+                        "id": "A08",
+                        "nombre": "Datos Maestros (MDM)",
+                        "lb_2025": 1,
+                        "meta_2026": 2,
+                        "meta_2027": 3,
+                        "meta_2029": 4,
+                        "valor_actual": 1,
+                        "brecha_meta_2026": 1,
+                        "iniciativa": "I-04",
+                        "responsable": "Jefatura TI / CIGD",
+                        "estado": "EN PROGRESO"
+                    },
+                    {
+                        "id": "A09",
+                        "nombre": "DW / BI / Analítica",
+                        "lb_2025": 1.5,
+                        "meta_2026": 2,
+                        "meta_2027": 3,
+                        "meta_2029": 4.5,
+                        "valor_actual": 1.5,
+                        "brecha_meta_2026": 0.5,
+                        "iniciativa": "I-10",
+                        "responsable": "Jefatura TI / CIGD",
+                        "estado": "EN PROGRESO"
+                    },
+                    {
+                        "id": "A10",
+                        "nombre": "Gestión de Metadatos",
+                        "lb_2025": 1,
+                        "meta_2026": 2,
+                        "meta_2027": 3,
+                        "meta_2029": 3.5,
+                        "valor_actual": 1,
+                        "brecha_meta_2026": 1,
+                        "iniciativa": "I-10, I-04",
+                        "responsable": "Jefatura TI / CIGD",
+                        "estado": "EN PROGRESO"
+                    },
+                    {
+                        "id": "A11",
+                        "nombre": "Calidad de Datos",
+                        "lb_2025": 2,
+                        "meta_2026": 3,
+                        "meta_2027": 3.5,
+                        "meta_2029": 4.5,
+                        "valor_actual": 2,
+                        "brecha_meta_2026": 1,
+                        "iniciativa": "I-04, I-15",
+                        "responsable": "Jefatura TI / CIGD",
+                        "estado": "EN PROGRESO"
+                    }
+                ]
+            }
+        },
+        "interoperabilidad": {
+            "iniciativa": "I-04",
+            "presupuesto_total_cop": 1200000000,
+            "ejecutado_total_cop": 0,
+            "pct_ejecucion": 0,
+            "fase_activa": "F01",
+            "fases": [
+                {
+                    "id": "F01",
+                    "nombre": "Fase 1 — Fundamentos",
+                    "periodo": "2026",
+                    "estandar": "APIs REST internas. Inicio HL7 v2.x en admisiones",
+                    "estado": "EN CURSO",
+                    "pct_avance": 0,
+                    "presupuesto_cop": 400000000,
+                    "ejecutado_cop": 0,
+                    "sistemas": [
+                        "HOSVITAL-HIS",
+                        "KACTUS-HCM",
+                        "SIGDOC/SGDEA"
+                    ],
+                    "responsable": "Jefatura TI",
+                    "observaciones": "Iniciativa I-04 — primer hito"
+                },
+                {
+                    "id": "F02",
+                    "nombre": "Fase 2 — Interop. Institucional",
+                    "periodo": "2027",
+                    "estandar": "HL7 v2.x intercambio clínico. APIs MinSalud/ADRES",
+                    "estado": "PLANIFICADO",
+                    "pct_avance": 0,
+                    "presupuesto_cop": 400000000,
+                    "ejecutado_cop": 0,
+                    "sistemas": [
+                        "HOSVITAL-HIS",
+                        "KACTUS",
+                        "RNEC",
+                        "ADRES"
+                    ],
+                    "responsable": "Jefatura TI",
+                    "observaciones": ""
+                },
+                {
+                    "id": "F03",
+                    "nombre": "Fase 3 — Interop. Avanzada",
+                    "periodo": "2028-2029",
+                    "estandar": "FHIR R4. Servicios Ciudadanos Digitales MinTIC. Datos Abiertos.",
+                    "estado": "PLANIFICADO",
+                    "pct_avance": 0,
+                    "presupuesto_cop": 400000000,
+                    "ejecutado_cop": 0,
+                    "sistemas": [
+                        "Aseguradoras EPS",
+                        "MSPS",
+                        "Plataforma Estado"
+                    ],
+                    "responsable": "Jefatura TI",
+                    "observaciones": ""
+                }
+            ]
+        }
+    }
+]

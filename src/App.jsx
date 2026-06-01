@@ -9,6 +9,7 @@ import SmartSearch from './components/SmartSearch'
 import MaturityRadar from './components/MaturityRadar'
 import IniciativasPanel from './components/IniciativasPanel'
 import DatosIA from './components/DatosIA'
+import GobiernoIA from './components/GobiernoIA'
 
 const metadata = {
   nombre: "Hospital Departamental Psiquiátrico Universitario del Valle",
@@ -105,6 +106,12 @@ export default function App() {
         {activeTab === 'datos-ia' && (
           <main>
             <DatosIA />
+          </main>
+        )}
+
+        {activeTab === 'gobierno-ia' && (
+          <main>
+            <GobiernoIA />
           </main>
         )}
       </div>
