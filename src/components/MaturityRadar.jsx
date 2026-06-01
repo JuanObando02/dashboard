@@ -55,7 +55,7 @@ function LevelBadge({ record }) {
           {record.maturityLevel}
         </span>
         <div>
-          <p className="text-[9px] text-slate-500 leading-none uppercase tracking-wide">Nivel</p>
+          <p className="text-[9px] text-slate-500 leading-none uppercase tracking-wide">Nivel actual</p>
           <p className="text-xs font-bold leading-tight" style={{ color: record.maturityColor }}>
             {record.maturityName}
           </p>
