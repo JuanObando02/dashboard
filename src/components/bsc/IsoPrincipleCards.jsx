@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Shield, Target, Package, TrendingUp, CheckCircle2, Users, Sparkles, X, Loader2, AlertTriangle, AlertCircle } from 'lucide-react'
-import { useDashboard, ISO_PRINCIPLES } from '../context/DashboardContext'
-import { askGeminiDirect } from '../services/geminiService'
+import { useDashboard, ISO_PRINCIPLES } from '../../context/DashboardContext'
+import { askGeminiDirect } from '../../services/geminiService'
 
 const ICON_MAP = { Shield, Target, Package, TrendingUp, CheckCircle2, Users }
 

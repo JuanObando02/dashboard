@@ -1,5 +1,5 @@
 import { FileDown } from 'lucide-react'
-import { useDashboard } from '../context/DashboardContext'
+import { useDashboard } from '../../context/DashboardContext'
 
 function parseBudget(raw) {
   if (typeof raw === 'number') return raw

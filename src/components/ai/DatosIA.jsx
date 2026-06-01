@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import SeguridadPrivacidad from './SeguridadPrivacidad'
+import SeguridadPrivacidad from '../seguridad/SeguridadPrivacidad'
 import {
   RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar,
   BarChart, Bar, XAxis, YAxis, Tooltip, Cell, ReferenceLine,

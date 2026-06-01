@@ -1,6 +1,6 @@
 import { CalendarDays, ShieldCheck, Monitor, BrainCircuit, Database, RefreshCw } from 'lucide-react'
-import ExecutiveReportButton from './ExecutiveReportButton'
-import { useDashboard } from '../context/DashboardContext'
+import ExecutiveReportButton from '../reports/ExecutiveReportButton'
+import { useDashboard } from '../../context/DashboardContext'
 
 const SEM_BADGES = [
   { key: 'criticos',  label: 'Crítico',  dot: '#ef4444', bg: 'rgba(239,68,68,0.15)',  border: 'rgba(239,68,68,0.35)'  },

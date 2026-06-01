@@ -6,7 +6,7 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, ReferenceLine,
 } from 'recharts'
-import { useDashboard } from '../context/DashboardContext'
+import { useDashboard } from '../../context/DashboardContext'
 
 const SEM = {
   verde:    { dot: '#22c55e', badge: 'rgba(34,197,94,0.15)',  text: '#4ade80',  label: 'Óptimo'     },

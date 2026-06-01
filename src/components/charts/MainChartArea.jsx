@@ -4,7 +4,7 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, ReferenceLine, Brush,
 } from 'recharts'
-import { useDashboard } from '../context/DashboardContext'
+import { useDashboard } from '../../context/DashboardContext'
 import { BarChart2, TrendingUp, Info } from 'lucide-react'
 
 const SEM_COLOR = { verde: '#22c55e', amarillo: '#eab308', rojo: '#ef4444' }
@@ -73,8 +73,9 @@ export default function MainChartArea() {
   const metaRaw = selectedKpi[`Meta ${metaYear}`]
   const metaScaled = metaRaw !== null && metaRaw !== undefined ? metaRaw * mult : null
   const valSimScaled = selectedKpi['Valor Actual'] !== null && selectedKpi['Valor Actual'] !== undefined ? selectedKpi['Valor Actual'] * mult : null
-  const hasDelta = chartData.length >= 2
-  const deltaVal = hasDelta ? (chartData[chartData.length - 1].valor - chartData[0].valor) : null
+  const deltaVal = chartData.length >= 2
+    ? (chartData[chartData.length - 1].valor - chartData[0].valor)
+    : null
   const cumplimientoDynamic = (() => {
     if (metaScaled === null || valSimScaled === null || metaScaled === 0) {
       return selectedKpi.cumplimiento_pct ?? 0

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { Sparkles, Send, RotateCcw, ChevronDown, ChevronUp, Loader2 } from 'lucide-react'
-import { useDashboard } from '../context/DashboardContext'
-import { buildDashboardContext, askGemini } from '../services/geminiService'
+import { useDashboard } from '../../context/DashboardContext'
+import { buildDashboardContext, askGemini } from '../../services/geminiService'
 
 const PRESET_PROMPTS = [
   { label: 'KPIs críticos', prompt: 'Analiza los KPIs en estado crítico (rojo) e identifica los 3 más urgentes. Para cada uno, explica la causa probable y una acción correctiva concreta.' },

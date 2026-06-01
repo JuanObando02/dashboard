@@ -210,11 +210,12 @@ export function DashboardProvider({ children }) {
 
   const [activePrinciple, setActivePrinciple]       = useState(null)
   const [selectedKpiIdx, setSelectedKpiIdx]         = useState(0)
-  const [periodFilter, setPeriodFilter]             = useState('6m')
+  const [periodFilter, setPeriodFilter]             = useState('3')
   const [searchQuery, setSearchQuery]               = useState('')
   const [roleFilter, setRoleFilter]                 = useState('')
   const [perspectiveFilter, setPerspectiveFilter]   = useState('')
   const [statusFilter, setStatusFilter]             = useState('')
+  const [objBscFilter, setObjBscFilter]             = useState('')
 
   function loadData(isRefresh = false) {
     if (isRefresh) setRefreshing(true)
@@ -301,8 +302,12 @@ export function DashboardProvider({ children }) {
       kpis = kpis.filter(k => k.semaforo === statusFilter)
     }
 
+    if (objBscFilter) {
+      kpis = kpis.filter(k => k['Obj. BSC'] === objBscFilter)
+    }
+
     return kpis
-  }, [activePrinciple, allKpis, searchQuery, roleFilter, perspectiveFilter, statusFilter])
+  }, [activePrinciple, allKpis, searchQuery, roleFilter, perspectiveFilter, statusFilter, objBscFilter])
 
   const safeIdx     = selectedKpiIdx < filteredKpis.length ? selectedKpiIdx : 0
   const selectedKpi = filteredKpis[safeIdx] ?? null
@@ -310,6 +315,7 @@ export function DashboardProvider({ children }) {
   function togglePrinciple(id) {
     setActivePrinciple(prev => (prev === id ? null : id))
     setSelectedKpiIdx(0)
+    setObjBscFilter('')
   }
 
   function applyStatusFilter(status) {
@@ -386,6 +392,8 @@ export function DashboardProvider({ children }) {
       statusFilter,
       setStatusFilter,
       applyStatusFilter,
+      objBscFilter,
+      setObjBscFilter,
       uniquePerspectives,
       globalCounts,
       pauseAutoPlay,

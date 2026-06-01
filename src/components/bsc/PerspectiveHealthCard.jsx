@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { TrendingUp, TrendingDown, Minus, Activity, Shield, Target, Package, CheckCircle2, Users, Info, BarChart2 } from 'lucide-react'
-import { useDashboard, ISO_PRINCIPLES } from '../context/DashboardContext'
-import KpiDetailModal from './KpiDetailModal'
+import { useDashboard, ISO_PRINCIPLES } from '../../context/DashboardContext'
+import KpiDetailModal from '../kpi/KpiDetailModal'
 
 const PERSPECTIVAS = [
   { id: 'Clientes', short: 'CLI', hex: '#3b82f6' },
@@ -25,7 +25,7 @@ function Bar_({ pct, color }) {
 
 function BscHealthView({ allKpis }) {
   const [active, setActive] = useState('Clientes')
-  const [modalKpi, setModalKpi] = useState(null)
+  const { objBscFilter, setObjBscFilter } = useDashboard()
 
   const pkpis = useMemo(
     () => allKpis.filter(k => k.Perspectiva === active),
@@ -60,6 +60,32 @@ function BscHealthView({ allKpis }) {
       : 0
   }, [pkpis])
 
+  const objectives = useMemo(() => {
+    const map = {}
+    pkpis.forEach(k => {
+      const id = k['Obj. BSC']
+      if (!map[id]) {
+        map[id] = {
+          id,
+          nombre: k.contexto?.objetivo_bsc?.objetivo ?? id,
+          kpis: [],
+        }
+      }
+      map[id].kpis.push(k)
+    })
+    return Object.values(map).map(obj => {
+      const n = obj.kpis.length
+      const cumplimiento = n > 0
+        ? Math.round(obj.kpis.reduce((s, k) => s + (k.cumplimiento_pct ?? 0), 0) / n)
+        : 0
+      const rojos     = obj.kpis.filter(k => k.semaforo === 'rojo').length
+      const amarillos = obj.kpis.filter(k => k.semaforo === 'amarillo').length
+      const verdes    = obj.kpis.filter(k => k.semaforo === 'verde').length
+      const color = cumplimiento >= 70 ? '#22c55e' : cumplimiento >= 50 ? '#eab308' : '#ef4444'
+      return { ...obj, cumplimiento, rojos, amarillos, verdes, n, color }
+    })
+  }, [pkpis])
+
   const activePConfig = PERSPECTIVAS.find(p => p.id === active)
   const hex = activePConfig?.hex ?? '#3b82f6'
 
@@ -74,7 +100,7 @@ function BscHealthView({ allKpis }) {
         {PERSPECTIVAS.map(p => (
           <button
             key={p.id}
-            onClick={() => setActive(p.id)}
+            onClick={() => { setActive(p.id); setObjBscFilter('') }}
             className="py-1.5 rounded-lg text-[11px] font-semibold border transition-all"
             style={active === p.id
               ? { background: p.hex, borderColor: p.hex, color: '#fff' }
@@ -163,93 +189,53 @@ function BscHealthView({ allKpis }) {
           </div>
         </div>
 
-        {/* KPI list */}
+        {/* Objectives list */}
         <div className="space-y-2 pt-1 border-t" style={{ borderColor: '#1e293b' }}>
           <p className="text-[10px] uppercase tracking-wider text-slate-600 font-semibold mb-2 pt-1">
-            Indicadores
+            Objetivos
           </p>
-          {pkpis.map((k, i) => {
-            const dot = k.semaforo === 'verde' ? '#22c55e'
-              : k.semaforo === 'amarillo' ? '#eab308'
-                : '#ef4444'
-            const metaKey = ['Meta 2026', 'Meta 2027', 'Meta 2028', 'Meta 2029']
-              .find(m => k[m] != null)
-            const metaVal = metaKey ? k[metaKey] : null
-
-            const h = k.historico_simulado ?? []
-            const hasDelta = h.length >= 2
-            const deltaVal = hasDelta ? (h[h.length - 1].valor - h[0].valor) * (k.Unidad === '%' ? 100 : 1) : null
-            const isGood = deltaVal !== null && (
-              (k.Tipo === 'MIN' && deltaVal < -0.001) ||
-              (k.Tipo !== 'MIN' && deltaVal > 0.001)
-            )
-            const isBad = deltaVal !== null && (
-              (k.Tipo === 'MIN' && deltaVal > 0.001) ||
-              (k.Tipo !== 'MIN' && deltaVal < -0.001)
-            )
-            const varColor = isGood ? '#22c55e' : isBad ? '#ef4444' : '#94a3b8'
-
+          {objectives.map(obj => {
+            const isActive = objBscFilter === obj.id
             return (
-              <button
-                key={i}
-                onClick={() => setModalKpi(k)}
-                className="w-full text-left rounded-lg p-2.5 space-y-1 transition-all duration-150 focus:outline-none"
-                style={{ background: '#0b1829', border: `1px solid ${dot}22` }}
-                onMouseEnter={e => { e.currentTarget.style.border = `1px solid ${dot}66`; e.currentTarget.style.background = '#0f2040' }}
-                onMouseLeave={e => { e.currentTarget.style.border = `1px solid ${dot}22`; e.currentTarget.style.background = '#0b1829' }}
-              >
-                <div className="flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full mt-1 shrink-0" style={{ background: dot }} />
-                  <p className="text-[11px] text-slate-300 leading-snug flex-1 min-w-0">{k.KPI}</p>
-                  <span className="text-[10px] font-bold tabular-nums shrink-0" style={{ color: dot }}>
-                    {k.cumplimiento_pct}%
-                  </span>
-                </div>
-                {k.rol_responsable && (
-                  <div className="flex items-center gap-1.5 pl-3.5">
-                    <Users size={10} className="text-slate-600 shrink-0" />
-                    <p className="text-[10px] text-slate-500 truncate">{k.rol_responsable}</p>
-                  </div>
-                )}
-                <div className="flex items-center gap-3 pl-3.5">
-                  <div className="flex items-center gap-1">
-                    <span className="text-[9px] uppercase tracking-wide text-slate-600">Actual</span>
-                    <span className="text-[10px] font-semibold text-slate-400 tabular-nums">
-                      {k['Valor Actual'] != null
-                        ? `${k['Valor Actual']}${k.Unidad === '%' ? '%' : ''}`
-                        : '—'}
-                    </span>
-                  </div>
-                  {metaVal != null && (
-                    <>
-                      <span className="text-[9px] text-slate-700">→</span>
-                      <div className="flex items-center gap-1">
-                        <span className="text-[9px] uppercase tracking-wide text-slate-600">Meta</span>
-                        <span className="text-[10px] font-semibold tabular-nums" style={{ color: dot }}>
-                          {metaVal}{k.Unidad === '%' ? '%' : ''}
-                        </span>
-                      </div>
-                    </>
-                  )}
-                  {deltaVal !== null && (
-                    <>
-                      <span className="text-[9px] text-slate-700">·</span>
-                      <div className="flex items-center gap-1">
-                        <span className="text-[9px] uppercase tracking-wide text-slate-600">Var</span>
-                        <span className="text-[10px] font-bold tabular-nums" style={{ color: varColor }}>
-                          {deltaVal > 0.001 ? '▲ +' : deltaVal < -0.001 ? '▼ ' : '■ '}{deltaVal.toFixed(k.Unidad === '%' ? 0 : 1)}{k.Unidad === '%' ? '%' : ''}
-                        </span>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </button>
-            )
-          })}
+            <button
+              key={obj.id}
+              onClick={() => setObjBscFilter(prev => prev === obj.id ? '' : obj.id)}
+              className="w-full text-left rounded-lg p-2.5 space-y-1.5 transition-all duration-150 focus:outline-none"
+              style={{
+                background: isActive ? `${obj.color}12` : '#0b1829',
+                border: `1px solid ${isActive ? obj.color : `${obj.color}22`}`,
+                boxShadow: isActive ? `0 0 0 1px ${obj.color}44` : 'none',
+              }}
+            >
+              <div className="flex items-start gap-2">
+                <span
+                  className="text-[10px] font-bold shrink-0 mt-0.5 px-1.5 py-0.5 rounded"
+                  style={{ background: `${obj.color}20`, color: obj.color }}
+                >
+                  {obj.id}
+                </span>
+                <p className="text-[11px] text-slate-300 leading-snug flex-1 min-w-0">{obj.nombre}</p>
+                <span className="text-[12px] font-bold tabular-nums shrink-0" style={{ color: obj.color }}>
+                  {obj.cumplimiento}%
+                </span>
+              </div>
+
+              <div className="h-1.5 rounded-full overflow-hidden flex ml-0.5">
+                {obj.rojos     > 0 && <span style={{ width: `${(obj.rojos     / obj.n) * 100}%`, background: '#ef4444' }} />}
+                {obj.amarillos > 0 && <span style={{ width: `${(obj.amarillos / obj.n) * 100}%`, background: '#eab308' }} />}
+                {obj.verdes    > 0 && <span style={{ width: `${(obj.verdes    / obj.n) * 100}%`, background: '#22c55e' }} />}
+              </div>
+
+              <div className="flex items-center gap-2 text-[9.5px] text-slate-500 ml-0.5">
+                <span>{obj.n} KPI{obj.n !== 1 ? 's' : ''}</span>
+                {obj.rojos     > 0 && <span style={{ color: '#ef4444' }}>● {obj.rojos} crítico{obj.rojos !== 1 ? 's' : ''}</span>}
+                {obj.amarillos > 0 && <span style={{ color: '#eab308' }}>● {obj.amarillos} precaución</span>}
+                {obj.verdes    > 0 && <span style={{ color: '#22c55e' }}>● {obj.verdes} ok</span>}
+              </div>
+            </button>
+          )})}
         </div>
       </div>
-
-      {modalKpi && <KpiDetailModal kpi={modalKpi} onClose={() => setModalKpi(null)} />}
     </>
   )
 }
@@ -580,7 +566,7 @@ export default function PerspectiveHealthCard() {
         )}
       </div>
 
-      <div className="overflow-y-auto" style={{ maxHeight: 540 }}>
+      <div className="overflow-y-auto" style={{ maxHeight: 660 }}>
         {activePrinciple
           ? <IsoPrincipleView allKpis={allKpis} principleId={activePrinciple} />
           : <BscHealthView allKpis={allKpis} />
