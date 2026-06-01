@@ -6,10 +6,9 @@ import MainChartArea from './components/MainChartArea'
 import ExecutiveTable from './components/ExecutiveTable'
 import PerspectiveHealthCard from './components/PerspectiveHealthCard'
 import SmartSearch from './components/SmartSearch'
-import GapAnalysisBar from './components/GapAnalysisBar'
 import MaturityRadar from './components/MaturityRadar'
 import IniciativasPanel from './components/IniciativasPanel'
-import DatosIAPanel from './components/DatosIAPanel'
+import DatosIA from './components/DatosIA'
 
 const metadata = {
   nombre: "Hospital Departamental Psiquiátrico Universitario del Valle",
@@ -105,7 +104,7 @@ export default function App() {
 
         {activeTab === 'datos-ia' && (
           <main>
-            <DatosIAPanel />
+            <DatosIA />
           </main>
         )}
       </div>
