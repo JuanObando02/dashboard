@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import SeguridadPrivacidad from '../seguridad/SeguridadPrivacidad'
+import { SeguridadContent } from '../seguridad/SeguridadPrivacidad'
 import {
   RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar,
   BarChart, Bar, XAxis, YAxis, Tooltip, Cell, ReferenceLine,
@@ -8,7 +8,7 @@ import {
 import {
   Database, Users,
   BarChart2, Network, FileText,
-  AlertTriangle, CalendarDays, CheckCircle2, XCircle,
+  AlertTriangle, CalendarDays, CheckCircle2, XCircle, ShieldCheck,
 } from 'lucide-react'
 
 // ── constants ─────────────────────────────────────────────────────────────────
@@ -118,6 +118,141 @@ function DarkTip({ active, payload, label }) {
   )
 }
 
+// ── Right-panel tab content ───────────────────────────────────────────────────
+
+function CicloTab({ ciclo }) {
+  return (
+    <div>
+      <div className="flex items-center gap-3 mb-2 text-[11px]">
+        <span className="text-slate-400">{ciclo.total_series} series</span>
+        <span style={{ color: clr.verde }}>{ciclo.conformes} conformes</span>
+        <span style={{ color: clr.amarillo }}>{ciclo.en_revision} en revisión</span>
+        <span className="ml-auto font-bold" style={{ color: clr.rojo }}>{ciclo.pct_cumplimiento}% cumpl.</span>
+      </div>
+      <div>
+        {ciclo.series.map((s, i) => {
+          const col     = s.estado === 'CONFORME' ? clr.verde : s.estado === 'REVISAR' ? clr.amarillo : clr.rojo
+          const trigCol = s.trigger_bloqueo_activo ? clr.verde : '#475569'
+          const frioCol = s.almacenamiento_frio_activo ? clr.verde : '#475569'
+          return (
+            <div key={s.id} className="flex items-start gap-2 py-1.5"
+              style={{ borderBottom: i < ciclo.series.length - 1 ? `1px solid ${clr.borde}` : 'none' }}>
+              <span className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" style={{ background: col }} />
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-[11px] font-semibold text-slate-200 truncate">{s.nombre}</p>
+                  <Sbadge label={s.estado} color={col} />
+                </div>
+                <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                  <SysChip nombre={s.sistema} />
+                  <span className="text-[10px] text-slate-600">Ret: {isNaN(s.retencion_años) ? s.retencion_años : `${s.retencion_años}a`}</span>
+                  <span className="text-[10px] font-semibold" style={{ color: trigCol }}>⬤ Trigger</span>
+                  <span className="text-[10px] font-semibold" style={{ color: frioCol }}>⬤ Frío</span>
+                </div>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+function MDMTab({ mdm }) {
+  const uniq     = mdm.unicidad_pacientes
+  const dupColor = uniq.pct_duplicados > uniq.meta_pct_2026 ? clr.rojo : clr.verde
+  return (
+    <div>
+      <div className="grid grid-cols-2 gap-2 mb-3">
+        <div className="rounded-lg p-2 border" style={{ background: 'rgba(59,130,246,0.06)', borderColor: 'rgba(59,130,246,0.2)' }}>
+          <p className="text-[10px] text-slate-500 uppercase tracking-wider">Censo</p>
+          <p className="text-base font-bold text-white">{uniq.total_pacientes_his.toLocaleString('es-CO')}</p>
+        </div>
+        <div className="rounded-lg p-2 border" style={{ background: `${dupColor}08`, borderColor: `${dupColor}25` }}>
+          <p className="text-[10px] text-slate-500 uppercase tracking-wider">Duplicidad</p>
+          <p className="text-base font-bold" style={{ color: dupColor }}>
+            {uniq.pct_duplicados}%
+            <span className="text-[10px] text-slate-500 font-normal ml-1">meta {uniq.meta_pct_2026}%</span>
+          </p>
+        </div>
+      </div>
+      <table className="w-full text-left">
+        <thead>
+          <tr style={{ borderBottom: `1px solid ${clr.borde}` }}>
+            <th className="pb-1 text-slate-500 text-[10px] uppercase tracking-wider pr-2">Entidad</th>
+            <th className="pb-1 text-slate-500 text-[10px] uppercase tracking-wider text-center pr-2">Glos.</th>
+            <th className="pb-1 text-slate-500 text-[10px] uppercase tracking-wider text-center pr-2">Cat.</th>
+            <th className="pb-1 text-slate-500 text-[10px] uppercase tracking-wider text-center">Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          {mdm.entidades_maestras.entidades.map((e, i) => (
+            <tr key={e.id} style={{ borderBottom: i < mdm.entidades_maestras.entidades.length - 1 ? `1px solid ${clr.borde}` : 'none' }}
+              className="hover:bg-white/[0.02]">
+              <td className="py-1.5 pr-2 text-[11px] text-slate-200 truncate max-w-[130px]" title={e.nombre}>{e.nombre}</td>
+              <td className="py-1.5 pr-2 text-center">
+                {e.glosario_validado ? <CheckCircle2 size={12} style={{ color: clr.verde }} className="mx-auto" /> : <XCircle size={12} style={{ color: clr.rojo }} className="mx-auto" />}
+              </td>
+              <td className="py-1.5 pr-2 text-center">
+                {e.catalogo_registrado ? <CheckCircle2 size={12} style={{ color: clr.verde }} className="mx-auto" /> : <XCircle size={12} style={{ color: clr.rojo }} className="mx-auto" />}
+              </td>
+              <td className="py-1.5 text-center"><Sbadge label={e.estado} color={semColor(e.estado)} /></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+function InteropTab({ interop }) {
+  return (
+    <div>
+      <div className="rounded-lg p-2.5 border mb-3" style={{ background: clr.bg, borderColor: clr.borde }}>
+        <div className="flex items-center justify-between text-[11px] mb-1.5">
+          <span className="text-slate-400">Presupuesto I-04</span>
+          <span className="text-slate-200 font-bold">{fmtCOP(interop.presupuesto_total_cop)} COP</span>
+        </div>
+        <div className="h-1.5 rounded-full overflow-hidden" style={{ background: '#1e293b' }}>
+          <div className="h-full rounded-full"
+            style={{ width: `${Math.max(interop.pct_ejecucion, 1.5)}%`, background: interop.pct_ejecucion === 0 ? clr.gris : clr.azul }} />
+        </div>
+        <div className="flex justify-between text-[10px] text-slate-500 mt-1">
+          <span>Ejecutado: {fmtCOP(interop.ejecutado_total_cop)} ({interop.pct_ejecucion}%)</span>
+          <span>Pendiente: {fmtCOP(interop.presupuesto_total_cop - interop.ejecutado_total_cop)}</span>
+        </div>
+      </div>
+      <div className="space-y-2">
+        {interop.fases.map((fase, idx) => {
+          const col      = fase.estado === 'EN CURSO' ? clr.azul : fase.estado === 'PLANIFICADO' ? clr.gris : clr.verde
+          const isActive = fase.id === interop.fase_activa
+          return (
+            <div key={fase.id} className="flex gap-2">
+              <div className="flex flex-col items-center shrink-0">
+                <div className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold"
+                  style={{ background: `${col}18`, border: `2px solid ${col}`, color: col }}>
+                  {idx + 1}
+                </div>
+                {idx < interop.fases.length - 1 && (
+                  <div className="w-px mt-1 flex-1" style={{ background: clr.borde, minHeight: 10 }} />
+                )}
+              </div>
+              <div className="flex-1 min-w-0 rounded-lg p-2 border mb-1"
+                style={{ background: isActive ? `${col}08` : clr.bg, borderColor: isActive ? `${col}30` : clr.borde }}>
+                <div className="flex items-center justify-between gap-2 mb-0.5">
+                  <p className="text-[11px] font-bold text-slate-200 truncate">{fase.nombre}</p>
+                  <Sbadge label={fase.estado} color={col} />
+                </div>
+                <p className="text-[10px] text-slate-500">{fase.periodo} · {fase.estandar}</p>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 // ── Block 1: Madurez DAMA-DMBOK2 ─────────────────────────────────────────────
 
 function TwoLineTick({ x, y, payload, cx }) {
@@ -193,8 +328,9 @@ const METAS = [
 ]
 
 function BloqueDAMA({ d, seguridad, resumen }) {
-  const [damaTab,       setDamaTab]       = useState('radar')
-  const [selectedMeta,  setSelectedMeta]  = useState('meta_2026')
+  const [damaTab,        setDamaTab]        = useState('radar')
+  const [rightTab,       setRightTab]       = useState('seguridad')
+  const [selectedMeta,   setSelectedMeta]   = useState('meta_2026')
   const [hoveredSegment, setHoveredSegment] = useState(null)
 
   const areas = d.mdm_gobernanza.madurez_dama.areas
@@ -272,27 +408,19 @@ function BloqueDAMA({ d, seguridad, resumen }) {
 
         {/* Card izquierda — Radar */}
         <Block
-          title={damaTab === 'radar' ? "Madurez DAMA-DMBOK2" : "Panel Operativo de Calidad"}
-          icon={damaTab === 'radar' ? BarChart2 : Database}
+          title={damaTab === 'radar' ? "Madurez DAMA-DMBOK2" : damaTab === 'calidad' ? "Calidad — 6 Dimensiones" : "Panel Operativo"}
+          icon={damaTab === 'operativo' ? Database : BarChart2}
           accent={clr.violeta}
           headerRight={
             <div className="flex items-center gap-1 p-0.5 rounded-md bg-[#0b1829] border border-[#1e293b] shrink-0">
-              <button
-                onClick={() => setDamaTab('radar')}
-                className={`px-2 py-1 rounded text-[11px] font-bold transition-all ${
-                  damaTab === 'radar' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-slate-200'
-                }`}
-              >
-                Radar DAMA
-              </button>
-              <button
-                onClick={() => setDamaTab('operativo')}
-                className={`px-2 py-1 rounded text-[11px] font-bold transition-all ${
-                  damaTab === 'operativo' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-slate-200'
-                }`}
-              >
-                Operativo
-              </button>
+              {[{ key: 'radar', label: 'Radar' }, { key: 'operativo', label: 'Operativo' }, { key: 'calidad', label: 'Calidad' }].map(t => (
+                <button key={t.key} onClick={() => setDamaTab(t.key)}
+                  className={`px-2 py-1 rounded text-[11px] font-bold transition-all ${
+                    damaTab === t.key ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-slate-200'
+                  }`}>
+                  {t.label}
+                </button>
+              ))}
             </div>
           }
         >
@@ -348,7 +476,7 @@ function BloqueDAMA({ d, seguridad, resumen }) {
                 </RadarChart>
               </ResponsiveContainer>
             </>
-          ) : (
+          ) : damaTab === 'operativo' ? (
             <div className="space-y-4" style={{ minHeight: 334 }}>
               {/* Gauges */}
               {(() => {
@@ -466,277 +594,104 @@ function BloqueDAMA({ d, seguridad, resumen }) {
                 </div>
               </div>
             </div>
+          ) : (
+            <div style={{ minHeight: 334 }}>
+              {(() => {
+                const dims = d.calidad_datos.dimensiones
+                const chartData = dims.map(dim => {
+                  let cumpl
+                  if (dim.logica === 'mayor_es_mejor') {
+                    cumpl = Math.round(Math.min((dim.valor_actual / dim.meta_2026) * 100, 105))
+                  } else if (dim.meta_2026 === 0) {
+                    cumpl = dim.valor_actual === 0 ? 100 : 2
+                  } else {
+                    cumpl = Math.round(Math.min((dim.meta_2026 / dim.valor_actual) * 100, 105))
+                  }
+                  return { nombre: dim.nombre, cumpl, valor: dim.valor_actual, meta: dim.meta_2026, unidad: dim.unidad, estado: dim.estado, logica: dim.logica }
+                })
+                return (
+                  <>
+                    <p className="text-[12px] text-slate-500 mb-3">
+                      {d.calidad_datos.fuente_sistema} · {d.calidad_datos.fecha_registro} · % vs meta 2026
+                    </p>
+                    <ResponsiveContainer width="100%" height={275}>
+                      <BarChart layout="vertical" data={chartData} margin={{ top: 4, right: 28, bottom: 4, left: 0 }}>
+                        <XAxis type="number" domain={[0, 110]} tick={{ fill: '#475569', fontSize: 9 }} tickFormatter={v => `${v}%`} />
+                        <YAxis type="category" dataKey="nombre" width={155} tick={{ fill: '#94a3b8', fontSize: 9 }} />
+                        <Tooltip content={({ active, payload, label }) => {
+                          if (!active || !payload?.[0]) return null
+                          const item = chartData.find(x => x.nombre === label)
+                          return (
+                            <div className="rounded-lg px-3 py-2 text-xs shadow-xl" style={{ background: '#1e2d45', border: '1px solid #334155' }}>
+                              <p className="text-white font-bold mb-1">{label}</p>
+                              <p style={{ color: item?.estado === 'CRÍTICO' ? clr.rojo : clr.verde }}>Actual: {item?.valor} {item?.unidad}</p>
+                              <p className="text-blue-300">Meta 2026: {item?.meta} {item?.unidad}</p>
+                            </div>
+                          )
+                        }} cursor={{ fill: 'rgba(255,255,255,0.03)' }} />
+                        <ReferenceLine x={100} stroke="#60a5fa" strokeDasharray="4 3" strokeWidth={1.5}
+                          label={{ value: 'Meta', fill: '#60a5fa', fontSize: 9, position: 'insideTopRight' }} />
+                        <Bar dataKey="cumpl" name="Cumplimiento" barSize={10} radius={[0, 3, 3, 0]}>
+                          {chartData.map((item, i) => (
+                            <Cell key={i} fill={item.estado === 'CRÍTICO' ? clr.rojo : clr.verde} />
+                          ))}
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </>
+                )
+              })()}
+            </div>
           )}
         </Block>
       </div>
 
-      {/* Card derecha — Seguridad y Privacidad */}
-      <SeguridadPrivacidad data={seguridad} />
+      {/* Card derecha — panel con tabs */}
+      <div className="rounded-xl border overflow-hidden" style={{ background: clr.card, borderColor: clr.borde }}>
+        <div className="flex items-center justify-between px-4 py-3 border-b"
+          style={{ borderColor: clr.borde, background: 'rgba(34,197,94,0.04)' }}>
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="p-1.5 rounded-lg shrink-0" style={{
+              background: rightTab === 'seguridad' ? 'rgba(34,197,94,0.12)' : `${clr.azul}15`,
+              border: rightTab === 'seguridad' ? '1px solid rgba(34,197,94,0.25)' : `1px solid ${clr.azul}30`,
+            }}>
+              {rightTab === 'seguridad' ? <ShieldCheck size={13} style={{ color: clr.verde }} /> :
+               rightTab === 'ciclo'     ? <FileText   size={13} style={{ color: clr.cyan  }} /> :
+               rightTab === 'mdm'       ? <Database   size={13} style={{ color: clr.azul  }} /> :
+                                          <Network    size={13} style={{ color: clr.cyan  }} />}
+            </div>
+            <h3 className="text-xs font-bold text-white truncate">
+              {rightTab === 'seguridad' ? 'Seguridad y Privacidad' :
+               rightTab === 'ciclo'     ? 'Ciclo de Vida Documental' :
+               rightTab === 'mdm'       ? 'MDM — Entidades Maestras' :
+                                          'Interoperabilidad — I-04'}
+            </h3>
+          </div>
+          <div className="flex items-center gap-1 p-0.5 rounded-md bg-[#0b1829] border border-[#1e293b] shrink-0">
+            {[
+              { key: 'seguridad', label: 'Seguridad' },
+              { key: 'ciclo',     label: 'Ciclo' },
+              { key: 'mdm',       label: 'MDM' },
+              { key: 'interop',   label: 'Interop' },
+            ].map(t => (
+              <button key={t.key} onClick={() => setRightTab(t.key)}
+                className={`px-2 py-1 rounded text-[11px] font-bold transition-all ${
+                  rightTab === t.key ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-slate-200'
+                }`}>
+                {t.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="p-4 overflow-y-auto" style={{ maxHeight: 540 }}>
+          {rightTab === 'seguridad' ? <SeguridadContent data={seguridad} /> :
+           rightTab === 'ciclo'     ? <CicloTab   ciclo={d.ciclo_vida_documental} /> :
+           rightTab === 'mdm'       ? <MDMTab     mdm={d.mdm_gobernanza} /> :
+                                      <InteropTab interop={d.interoperabilidad} />}
+        </div>
+      </div>
 
     </div>
-  )
-}
-
-// ── Block 2: Calidad de Datos ─────────────────────────────────────────────────
-
-function BloqueCalidad({ d }) {
-  const dims = d.calidad_datos.dimensiones
-
-  const chartData = dims.map(dim => {
-    let cumpl
-    if (dim.logica === 'mayor_es_mejor') {
-      cumpl = Math.round(Math.min((dim.valor_actual / dim.meta_2026) * 100, 105))
-    } else if (dim.meta_2026 === 0) {
-      cumpl = dim.valor_actual === 0 ? 100 : 2
-    } else {
-      cumpl = Math.round(Math.min((dim.meta_2026 / dim.valor_actual) * 100, 105))
-    }
-    return { nombre: dim.nombre, cumpl, valor: dim.valor_actual, meta: dim.meta_2026, unidad: dim.unidad, estado: dim.estado, logica: dim.logica }
-  })
-
-  const CustomTip = ({ active, payload, label }) => {
-    if (!active || !payload?.[0]) return null
-    const item = chartData.find(x => x.nombre === label)
-    return (
-      <div className="rounded-lg px-3 py-2 text-xs shadow-xl" style={{ background: '#1e2d45', border: '1px solid #334155' }}>
-        <p className="text-white font-bold mb-1">{label}</p>
-        <p style={{ color: item?.estado === 'CRÍTICO' ? clr.rojo : clr.verde }}>
-          Actual: {item?.valor} {item?.unidad}
-        </p>
-        <p className="text-blue-300">Meta 2026: {item?.meta} {item?.unidad}</p>
-        <p className="text-slate-500 mt-1 text-[11px]">{item?.logica === 'menor_es_mejor' ? '↓ menor es mejor' : '↑ mayor es mejor'}</p>
-      </div>
-    )
-  }
-
-  return (
-    <Block title="Calidad de Datos — 6 Dimensiones" icon={BarChart2} accent={clr.azul}>
-      <p className="text-[12px] text-slate-500 mb-3">
-        {d.calidad_datos.fuente_sistema} · {d.calidad_datos.fecha_registro} · % cumplimiento vs meta 2026
-      </p>
-      <ResponsiveContainer width="100%" height={235}>
-        <BarChart layout="vertical" data={chartData} margin={{ top: 4, right: 28, bottom: 4, left: 0 }}>
-          <XAxis type="number" domain={[0, 110]} tick={{ fill: '#475569', fontSize: 9 }} tickFormatter={v => `${v}%`} />
-          <YAxis type="category" dataKey="nombre" width={155} tick={{ fill: '#94a3b8', fontSize: 9 }} />
-          <Tooltip content={<CustomTip />} cursor={{ fill: 'rgba(255,255,255,0.03)' }} />
-          <ReferenceLine x={100} stroke="#60a5fa" strokeDasharray="4 3" strokeWidth={1.5}
-            label={{ value: 'Meta', fill: '#60a5fa', fontSize: 9, position: 'insideTopRight' }} />
-          <Bar dataKey="cumpl" name="Cumplimiento" barSize={10} radius={[0, 3, 3, 0]}>
-            {chartData.map((item, i) => (
-              <Cell key={i} fill={item.estado === 'CRÍTICO' ? clr.rojo : clr.verde} />
-            ))}
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
-    </Block>
-  )
-}
-
-// ── Block 3: Seguridad y Privacidad ──────────────────────────────────────────
-
-// ── Block 4: Ciclo de Vida Documental ────────────────────────────────────────
-
-function BoolBadge({ label, active }) {
-  const color = active ? clr.verde : clr.rojo
-  return (
-    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[11px] font-semibold"
-      style={{ background: `${color}15`, color, border: `1px solid ${color}30` }}>
-      <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: color }} />
-      {label}: {active ? 'ACTIVO' : 'INACTIVO'}
-    </span>
-  )
-}
-
-function BloqueCiclo({ d }) {
-  const ciclo = d.ciclo_vida_documental
-  return (
-    <Block title="Ciclo de Vida Documental" icon={FileText} accent={clr.cyan}>
-      <div className="flex items-center gap-4 mb-3 text-[12px]">
-        <span className="text-slate-400">{ciclo.total_series} series</span>
-        <span style={{ color: clr.verde }}>{ciclo.conformes} conformes</span>
-        <span style={{ color: clr.amarillo }}>{ciclo.en_revision} en revisión</span>
-        <span className="ml-auto font-bold tabular-nums" style={{ color: clr.rojo }}>{ciclo.pct_cumplimiento}% cumplimiento</span>
-      </div>
-
-      <div className="space-y-0">
-        {ciclo.series.map((s, i) => {
-          const col = s.estado === 'CONFORME' ? clr.verde : s.estado === 'REVISAR' ? clr.amarillo : clr.rojo
-          return (
-            <div key={s.id}
-              className="flex items-start gap-2.5 py-2"
-              style={{ borderBottom: i < ciclo.series.length - 1 ? `1px solid ${clr.borde}` : 'none' }}>
-              <span className="w-2 h-2 rounded-full mt-1 shrink-0" style={{ background: col }} />
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between gap-2 min-w-0">
-                  <p className="text-[11px] font-semibold text-slate-200 truncate" title={s.nombre}>{s.nombre}</p>
-                  <Sbadge label={s.estado} color={col} />
-                </div>
-                <div className="flex items-center gap-1 mt-0.5 min-w-0">
-                  <SysChip nombre={s.sistema} />
-                  <span className="text-[11px] text-slate-600 shrink-0">· Ret: {s.retencion_años}a ·</span>
-                  <span className="text-[11px] text-slate-500 truncate" title={s.fundamento}>{s.fundamento}</span>
-                </div>
-                <div className="flex items-center gap-2 mt-1.5">
-                  <BoolBadge label="Trigger bloqueo" active={s.trigger_bloqueo_activo} />
-                  <BoolBadge label="Almac. frío" active={s.almacenamiento_frio_activo} />
-                </div>
-              </div>
-            </div>
-          )
-        })}
-      </div>
-    </Block>
-  )
-}
-
-// ── Block 5: MDM Entidades Maestras ──────────────────────────────────────────
-
-function BloqueMDM({ d }) {
-  const mdm = d.mdm_gobernanza.entidades_maestras
-  const uniq = d.mdm_gobernanza.unicidad_pacientes
-  const dupColor = uniq.pct_duplicados > uniq.meta_pct_2026 ? clr.rojo : clr.verde
-
-  return (
-    <Block title="MDM — Entidades Maestras" icon={Database} accent={clr.azul}>
-
-      {/* Unicidad — 2 mini-cards */}
-      <div className="grid grid-cols-2 gap-3 mb-4">
-        <div className="rounded-lg p-3 border flex items-center gap-2.5"
-          style={{ background: 'rgba(59,130,246,0.06)', borderColor: 'rgba(59,130,246,0.2)' }}>
-          <Users size={14} style={{ color: '#93c5fd' }} className="shrink-0" />
-          <div className="min-w-0">
-            <p className="text-[11px] uppercase tracking-wider text-slate-500 font-semibold">Censo Pacientes</p>
-            <p className="text-lg font-bold tabular-nums text-white leading-tight">
-              {uniq.total_pacientes_his.toLocaleString('es-CO')}
-            </p>
-          </div>
-        </div>
-        <div className="rounded-lg p-3 border flex items-center gap-2.5"
-          style={{ background: `${dupColor}08`, borderColor: `${dupColor}25` }}>
-          <AlertTriangle size={14} style={{ color: dupColor }} className="shrink-0" />
-          <div className="min-w-0">
-            <p className="text-[11px] uppercase tracking-wider text-slate-500 font-semibold">Tasa Duplicidad</p>
-            <p className="text-lg font-bold tabular-nums leading-tight" style={{ color: dupColor }}>
-              {uniq.pct_duplicados}%
-              <span className="text-[11px] font-normal text-slate-500 ml-1">meta {uniq.meta_pct_2026}%</span>
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Semáforo resumen */}
-      <div className="flex items-center gap-4 mb-3 text-[12px]">
-        <span style={{ color: clr.rojo }}>{mdm.criticos} críticos</span>
-        <span style={{ color: clr.amarillo }}>{mdm.en_revision} en revisión</span>
-        <span style={{ color: clr.verde }}>{mdm.conformes} conformes</span>
-      </div>
-
-      {/* Tabla */}
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead>
-            <tr style={{ borderBottom: `1px solid ${clr.borde}` }}>
-              <th className="text-left pb-1.5 pr-3 text-slate-500 font-semibold uppercase tracking-wider text-[11px]">Entidad</th>
-              <th className="text-left pb-1.5 pr-3 text-slate-500 font-semibold uppercase tracking-wider text-[11px]">Sistema</th>
-              <th className="text-center pb-1.5 pr-3 text-slate-500 font-semibold uppercase tracking-wider text-[11px]">Glosario</th>
-              <th className="text-center pb-1.5 pr-3 text-slate-500 font-semibold uppercase tracking-wider text-[11px]">Catálogo</th>
-              <th className="text-left pb-1.5 pr-3 text-slate-500 font-semibold uppercase tracking-wider text-[11px]">Meta 2026</th>
-              <th className="text-center pb-1.5 text-slate-500 font-semibold uppercase tracking-wider text-[11px]">Estado</th>
-            </tr>
-          </thead>
-          <tbody>
-            {mdm.entidades.map((e, i) => (
-              <tr key={e.id}
-                style={{ borderBottom: i < mdm.entidades.length - 1 ? `1px solid ${clr.borde}` : 'none' }}
-                className="hover:bg-white/[0.02]">
-                <td className="py-2 pr-3 text-[12px] text-slate-200 font-medium">{e.nombre}</td>
-                <td className="py-2 pr-3">
-                  <SysChip nombre={e.sistema_autoritativo.split('-')[0].split('/')[0]} />
-                </td>
-                <td className="py-2 pr-3 text-center">
-                  {e.glosario_validado
-                    ? <CheckCircle2 size={13} style={{ color: clr.verde }} className="mx-auto" />
-                    : <XCircle size={13} style={{ color: clr.rojo }} className="mx-auto" />}
-                </td>
-                <td className="py-2 pr-3 text-center">
-                  {e.catalogo_registrado
-                    ? <CheckCircle2 size={13} style={{ color: clr.verde }} className="mx-auto" />
-                    : <XCircle size={13} style={{ color: clr.rojo }} className="mx-auto" />}
-                </td>
-                <td className="py-2 pr-3 text-[11px] text-slate-500">{e.meta_calidad_2026}</td>
-                <td className="py-2 text-center">
-                  <Sbadge label={e.estado} color={semColor(e.estado)} />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </Block>
-  )
-}
-
-// ── Block 6: Interoperabilidad ────────────────────────────────────────────────
-
-function BloqueInterop({ d }) {
-  const interop = d.interoperabilidad
-
-  return (
-    <Block title={`Interoperabilidad — ${interop.iniciativa}`} icon={Network} accent={clr.cyan}>
-      {/* Budget bar */}
-      <div className="rounded-lg p-3 border mb-4" style={{ background: clr.bg, borderColor: clr.borde }}>
-        <div className="flex items-center justify-between text-[12px] mb-1.5">
-          <span className="text-slate-400">Presupuesto total I-04</span>
-          <span className="text-slate-200 font-bold tabular-nums">{fmtCOP(interop.presupuesto_total_cop)} COP</span>
-        </div>
-        <div className="h-2 rounded-full overflow-hidden" style={{ background: '#1e293b' }}>
-          <div className="h-full rounded-full"
-            style={{ width: `${Math.max(interop.pct_ejecucion, 1.5)}%`, background: interop.pct_ejecucion === 0 ? clr.gris : clr.azul }} />
-        </div>
-        <div className="flex justify-between text-[11px] text-slate-500 mt-1">
-          <span>Ejecutado: {fmtCOP(interop.ejecutado_total_cop)} ({interop.pct_ejecucion}%)</span>
-          <span>Pendiente: {fmtCOP(interop.presupuesto_total_cop - interop.ejecutado_total_cop)}</span>
-        </div>
-      </div>
-
-      {/* Phase timeline */}
-      <div className="space-y-2">
-        {interop.fases.map((fase, idx) => {
-          const col = fase.estado === 'EN CURSO' ? clr.azul : fase.estado === 'PLANIFICADO' ? clr.gris : clr.verde
-          const isActive = fase.id === interop.fase_activa
-          return (
-            <div key={fase.id} className="flex gap-3">
-              {/* Step indicator */}
-              <div className="flex flex-col items-center shrink-0">
-                <div className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold"
-                  style={{ background: `${col}18`, border: `2px solid ${col}`, color: col }}>
-                  {idx + 1}
-                </div>
-                {idx < interop.fases.length - 1 && (
-                  <div className="w-px mt-1 flex-1" style={{ background: clr.borde, minHeight: 12 }} />
-                )}
-              </div>
-
-              {/* Phase card */}
-              <div className="flex-1 min-w-0 rounded-lg p-2.5 border mb-1"
-                style={{ background: isActive ? `${col}08` : clr.bg, borderColor: isActive ? `${col}30` : clr.borde }}>
-                <div className="flex items-center justify-between gap-2 mb-1">
-                  <p className="text-[11px] font-bold text-slate-200 truncate">{fase.nombre}</p>
-                  <Sbadge label={fase.estado} color={col} />
-                </div>
-                <p className="text-[11px] text-slate-500 mb-1.5">{fase.periodo} · {fase.estandar}</p>
-                <div className="flex flex-wrap gap-1">
-                  {fase.sistemas.map(s => (
-                    <span key={s} className="text-[11px] px-1.5 py-0.5 rounded"
-                      style={{ background: '#1e293b', color: '#64748b' }}>{s}</span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )
-        })}
-      </div>
-    </Block>
   )
 }
 
@@ -836,10 +791,6 @@ export default function DatosIA() {
         </div>
 
         <BloqueDAMA d={d} seguridad={d.seguridad_privacidad} resumen={resumen} />
-        <BloqueCalidad d={d} />
-        <BloqueCiclo d={d} />
-        <BloqueMDM d={d} />
-        <BloqueInterop d={d} />
       </div>
     </div>
   )

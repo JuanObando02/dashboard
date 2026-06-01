@@ -70,21 +70,23 @@ export default function Header({ metadata, activeTab, onTabChange }) {
 
         {/* Right: semáforo + button + date */}
         <div className="flex items-center gap-3 flex-shrink-0">
-          <div className="flex items-center gap-2">
-            {SEM_BADGES.map(({ key, label, dot, bg, border }) => (
-              <div
-                key={key}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg"
-                style={{ background: bg, border: `1px solid ${border}` }}
-              >
-                <span className="w-2 h-2 rounded-full shrink-0" style={{ background: dot }} />
-                <span className="text-xs font-bold" style={{ color: dot }}>
-                  {globalCounts?.[key] ?? '—'}
-                </span>
-                <span className="text-[10px] text-white/60 hidden sm:inline">{label}</span>
-              </div>
-            ))}
-          </div>
+          {activeTab === 'ti' && (
+            <div className="flex items-center gap-2">
+              {SEM_BADGES.map(({ key, label, dot, bg, border }) => (
+                <div
+                  key={key}
+                  className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg"
+                  style={{ background: bg, border: `1px solid ${border}` }}
+                >
+                  <span className="w-2 h-2 rounded-full shrink-0" style={{ background: dot }} />
+                  <span className="text-xs font-bold" style={{ color: dot }}>
+                    {globalCounts?.[key] ?? '—'}
+                  </span>
+                  <span className="text-[10px] text-white/60 hidden sm:inline">{label}</span>
+                </div>
+              ))}
+            </div>
+          )}
 
           <ExecutiveReportButton />
 
