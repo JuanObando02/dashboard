@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { askGeminiFlashLite } from '../../services/geminiService'
 import { SeguridadContent } from '../seguridad/SeguridadPrivacidad'
 import {
   RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar,
@@ -9,6 +10,7 @@ import {
   Database, Users,
   BarChart2, Network, FileText,
   AlertTriangle, CalendarDays, CheckCircle2, XCircle, ShieldCheck,
+  Sparkles, Loader2,
 } from 'lucide-react'
 
 // ── constants ─────────────────────────────────────────────────────────────────
@@ -333,6 +335,12 @@ function BloqueDAMA({ d, seguridad, resumen }) {
   const [selectedMeta,   setSelectedMeta]   = useState('meta_2026')
   const [hoveredSegment, setHoveredSegment] = useState(null)
 
+  const LS_KEY_DAMA = 'hdpuv_dama_ai'
+  const [damaAi, setDamaAi] = useState(null)
+  const [showDamaAi, setShowDamaAi] = useState(false)
+
+  useEffect(() => { localStorage.removeItem(LS_KEY_DAMA) }, [])
+
   const areas = d.mdm_gobernanza.madurez_dama.areas
   const prom  = d.mdm_gobernanza.madurez_dama.promedio_global
 
@@ -357,6 +365,25 @@ function BloqueDAMA({ d, seguridad, resumen }) {
     { name: 'Registros Duplicados', value: uniq.duplicados_identificados,                            color: clr.rojo  },
   ]
   const unicidadTotal = uniq.total_pacientes_his
+
+  async function handleDamaAiClick() {
+    setShowDamaAi(v => !v)
+    if (damaAi && damaAi !== 'loading') return
+    const cached = localStorage.getItem(LS_KEY_DAMA)
+    if (cached) { setDamaAi(cached); return }
+    if (damaAi === 'loading') return
+    setDamaAi('loading')
+    const areasStr = areas.map(a => `  - ${a.nombre}: ${a.valor_actual}/5`).join('\n')
+    const prompt = `Eres un analista de gobierno de datos de un hospital colombiano especializado en DAMA-DMBOK2. Analiza los niveles de madurez actuales en las 11 áreas de conocimiento:\n\n${areasStr}\n\nPromedio global: ${prom.valor_actual.toFixed(2)}/5 — Estado: ${prom.estado}\n\nResponde en máximo 100 palabras, sin markdown, sin asteriscos, en español. Estructura:\nDIAGNÓSTICO: [fortalezas y debilidades principales].\nPRIORIDADES: [2-3 áreas críticas a fortalecer para Meta 2026].`
+    try {
+      const result = await askGeminiFlashLite(prompt)
+      const text = result.replace(/\*+/g, '').trim()
+      setDamaAi(text)
+      localStorage.setItem(LS_KEY_DAMA, text)
+    } catch {
+      setDamaAi('Error al contactar el servicio de IA. Intente de nuevo.')
+    }
+  }
 
   return (
     <div className="grid grid-cols-2 gap-4">
@@ -433,7 +460,19 @@ function BloqueDAMA({ d, seguridad, resumen }) {
                   </span>
                   <span className="text-slate-500 text-xs">/ 5</span>
                 </div>
-                <Sbadge label={prom.estado} />
+                <div className="flex items-center gap-2">
+                  <Sbadge label={prom.estado} />
+                  <button
+                    onClick={handleDamaAiClick}
+                    className="flex items-center gap-1 text-[9px] font-bold px-1.5 py-0.5 rounded-full focus:outline-none"
+                    style={{ background: 'rgba(99,102,241,0.15)', color: '#a5b4fc', border: '1px solid rgba(99,102,241,0.35)' }}
+                  >
+                    {damaAi === 'loading'
+                      ? <><Loader2 size={9} className="animate-spin" /> Analizando…</>
+                      : <><Sparkles size={9} /> IA</>
+                    }
+                  </button>
+                </div>
               </div>
 
               {/* Selector de meta */}
@@ -475,6 +514,22 @@ function BloqueDAMA({ d, seguridad, resumen }) {
                   <Tooltip content={<DarkTip />} />
                 </RadarChart>
               </ResponsiveContainer>
+
+              {showDamaAi && damaAi && damaAi !== 'loading' && (
+                <div className="rounded-xl p-3 space-y-2 mt-2"
+                  style={{ background: '#0b1829', border: '1px solid #1e3a5f', boxShadow: '0 8px 32px rgba(0,0,0,0.6)' }}>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+                      Análisis IA · DAMA DMBOK2
+                    </span>
+                    <button
+                      onClick={() => setShowDamaAi(false)}
+                      className="text-slate-600 hover:text-slate-300 text-xs leading-none transition-colors"
+                    >✕</button>
+                  </div>
+                  <p className="text-[11px] leading-relaxed text-slate-300 whitespace-pre-line">{damaAi}</p>
+                </div>
+              )}
             </>
           ) : damaTab === 'operativo' ? (
             <div className="space-y-4" style={{ minHeight: 334 }}>
