@@ -435,10 +435,13 @@ function IsoPrincipleView({ allKpis, principleId }) {
           const varColor = isGood ? '#22c55e' : isBad ? '#ef4444' : '#94a3b8'
 
           return (
-            <button
+            <div
               key={i}
+              role="button"
+              tabIndex={0}
               onClick={() => setModalKpi(k)}
-              className="w-full text-left rounded-lg p-2.5 space-y-1 transition-all duration-150 focus:outline-none"
+              onKeyDown={e => e.key === 'Enter' && setModalKpi(k)}
+              className="w-full text-left rounded-lg p-2.5 space-y-1 transition-all duration-150 cursor-pointer"
               style={{ background: '#0b1829', border: `1px solid ${dot}22` }}
               onMouseEnter={e => { e.currentTarget.style.border = `1px solid ${dot}66`; e.currentTarget.style.background = '#0f2040' }}
               onMouseLeave={e => { e.currentTarget.style.border = `1px solid ${dot}22`; e.currentTarget.style.background = '#0b1829' }}
@@ -529,7 +532,7 @@ function IsoPrincipleView({ allKpis, principleId }) {
                   )
                 })()}
               </div>
-            </button>
+            </div>
           )
         })}
       </div>

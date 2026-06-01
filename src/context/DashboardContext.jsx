@@ -1,12 +1,15 @@
 import { createContext, useContext, useState, useMemo, useEffect, useRef } from 'react'
 
+const WEBHOOK_TI         = 'https://n8n.juanobando.dev/webhook/hdpuv-ti-refresh'
+const WEBHOOK_TIMEOUT_MS = 12 * 60 * 1000  // 12 min — mayor que los 8 min del flujo
+
 export const ISO_PRINCIPLES = [
-  { id: 'Responsabilidad',       iconName: 'Shield',       hex: '#3b82f6', hdpuv: ['Honestidad', 'Compromiso y Diligencia', 'Servicios'] },
-  { id: 'Estrategia',            iconName: 'Target',       hex: '#8b5cf6', hdpuv: ['Conocimiento', 'Compromiso'] },
-  { id: 'Adquisición',           iconName: 'Package',      hex: '#f97316', hdpuv: ['Honestidad', 'Diligencia', 'Servicio'] },
-  { id: 'Rendimiento',           iconName: 'TrendingUp',   hex: '#10b981', hdpuv: ['Diligencia', 'Servicio', 'Compromiso'] },
-  { id: 'Conformidad',           iconName: 'CheckCircle2', hex: '#06b6d4', hdpuv: ['Honestidad', 'Seguridad'] },
-  { id: 'Comportamiento Humano', iconName: 'Users',        hex: '#ec4899', hdpuv: ['Respeto', 'Justicia e Inclusión', 'Humanización'] },
+  { id: 'Responsabilidad', iconName: 'Shield', hex: '#3b82f6', hdpuv: ['Honestidad', 'Compromiso y Diligencia', 'Servicios'] },
+  { id: 'Estrategia', iconName: 'Target', hex: '#8b5cf6', hdpuv: ['Conocimiento', 'Compromiso'] },
+  { id: 'Adquisición', iconName: 'Package', hex: '#f97316', hdpuv: ['Honestidad', 'Diligencia', 'Servicio'] },
+  { id: 'Rendimiento', iconName: 'TrendingUp', hex: '#10b981', hdpuv: ['Diligencia', 'Servicio', 'Compromiso'] },
+  { id: 'Conformidad', iconName: 'CheckCircle2', hex: '#06b6d4', hdpuv: ['Honestidad', 'Seguridad'] },
+  { id: 'Comportamiento Humano', iconName: 'Users', hex: '#ec4899', hdpuv: ['Respeto', 'Justicia e Inclusión', 'Humanización'] },
 ]
 
 /**
@@ -16,17 +19,17 @@ export const ISO_PRINCIPLES = [
  */
 export const KPI_WEIGHTS = {
   // ── Rendimiento (20 KPIs, suma = 1.00) ─────────────────────────────
-   1: 0.12,   // % uptime HIS (HOSVITAL)                         → 12%
-   2: 0.10,   // % incidentes críticos resueltos dentro del SLA  → 10%
+  1: 0.12,   // % uptime HIS (HOSVITAL)                         → 12%
+  2: 0.10,   // % incidentes críticos resueltos dentro del SLA  → 10%
   13: 0.08,   // % módulos críticos HIS implementados y operativos→  8%
   19: 0.08,   // MTTR ante incidente mayor (horas)               →  8%
   46: 0.06,   // Tiempo promedio activación plan contingencia     →  6%
   // Otros 15 operacionales → 56% / 15 ≈ 3.73% c/u
-   3: 0.0373,
-   5: 0.0373,
-   6: 0.0373,
-   7: 0.0373,
-   8: 0.0373,
+  3: 0.0373,
+  5: 0.0373,
+  6: 0.0373,
+  7: 0.0373,
+  8: 0.0373,
   10: 0.0373,
   11: 0.0373,
   15: 0.0373,
@@ -46,7 +49,7 @@ export const KPI_WEIGHTS = {
   43: 0.10,   // % servicios TI migrados a nube con reducción de costo → 10%
   44: 0.10,   // % riesgos financieros TI con plan mitigación     → 10%
   // Otros 6 → 35% / 6 ≈ 5.83% c/u
-   9: 0.0583,
+  9: 0.0583,
   12: 0.0583,
   14: 0.0583,
   25: 0.0583,
@@ -61,7 +64,7 @@ export const KPI_WEIGHTS = {
 
   // ── Comportamiento Humano (4 KPIs, suma = 1.00) ────────────────────
   29: 0.30,   // % personal con formación TI completada y evaluada → 30%
-   4: 0.25,   // Índice satisfacción usuarios internos             → 25%
+  4: 0.25,   // Índice satisfacción usuarios internos             → 25%
   30: 0.25,   // Índice de apropiación tecnológica                 → 25%
   31: 0.20,   // % formación vía plataforma virtual vs. presencial → 20%
 
@@ -77,7 +80,7 @@ export const KPI_WEIGHTS = {
 }
 
 function normalizeKpi(k) {
-  const semaforo       = (k.estado_codigo ?? 'ROJO').toLowerCase()
+  const semaforo = (k.estado_codigo ?? 'ROJO').toLowerCase()
   const cumplimiento_pct = k.cumplimiento_meta_pct ?? 0
 
   const totalBudget = (k.contexto?.iniciativas ?? []).reduce(
@@ -89,7 +92,7 @@ function normalizeKpi(k) {
 
   const historico_simulado = (k.mediciones ?? []).map(m => ({
     periodo: m.fecha ? m.fecha.substring(0, 7) : '',
-    valor:   m.valor ?? null,
+    valor: m.valor ?? null,
     observaciones: m.observaciones ?? '',
   }))
 
@@ -104,21 +107,21 @@ function normalizeKpi(k) {
 
   return {
     ...k,
-    KPI:                k.kpi,
-    Perspectiva:        k.perspectiva,
-    'Obj. BSC':         k.obj_bsc,
-    Unidad:             k.unidad,
-    'Valor Actual':     k.valor_actual,
-    linea_base_2025:    k.linea_base_2025 ?? null,
-    'Meta 2026':        k.meta_2026 ?? null,
-    'Meta 2027':        k.meta_2027 ?? null,
-    'Meta 2028':        k.meta_2028 ?? null,
-    'Meta 2029':        k.meta_2029 ?? null,
-    Tipo:               k.tipo,
-    Frecuencia:         k.frecuencia,
-    Fuente:             k.contexto?.fuente?.descripcion ?? null,
-    rol_responsable:    k.responsable,
-    Iniciativas:        (k.contexto?.iniciativas ?? []).map(i => i.id).join(', '),
+    KPI: k.kpi,
+    Perspectiva: k.perspectiva,
+    'Obj. BSC': k.obj_bsc,
+    Unidad: k.unidad,
+    'Valor Actual': k.valor_actual,
+    linea_base_2025: k.linea_base_2025 ?? null,
+    'Meta 2026': k.meta_2026 ?? null,
+    'Meta 2027': k.meta_2027 ?? null,
+    'Meta 2028': k.meta_2028 ?? null,
+    'Meta 2029': k.meta_2029 ?? null,
+    Tipo: k.tipo,
+    Frecuencia: k.frecuencia,
+    Fuente: k.contexto?.fuente?.descripcion ?? null,
+    rol_responsable: k.responsable,
+    Iniciativas: (k.contexto?.iniciativas ?? []).map(i => i.id).join(', '),
     'OEs Relacionados': (k.contexto?.objetivos_estrategicos ?? []).map(oe => oe.id).join(', '),
     historico_simulado,
     semaforo,
@@ -133,20 +136,20 @@ function buildData(rawData) {
   const seenInits = new Set()
   const iniciativas = []
   rawData.forEach(k => {
-    ;(k.contexto?.iniciativas ?? []).forEach(ini => {
+    ; (k.contexto?.iniciativas ?? []).forEach(ini => {
       if (!seenInits.has(ini.id)) {
         seenInits.add(ini.id)
         iniciativas.push({
-          ID:                     ini.id,
-          'Nombre Iniciativa':    ini.nombre,
-          'Presupuesto (COP)':    ini.presupuesto,
-          'Período':              `${ini.inicio} – ${ini.fin}`,
-          'Objetivo(s) BSC':      ini.obj_bsc,
+          ID: ini.id,
+          'Nombre Iniciativa': ini.nombre,
+          'Presupuesto (COP)': ini.presupuesto,
+          'Período': `${ini.inicio} – ${ini.fin}`,
+          'Objetivo(s) BSC': ini.obj_bsc,
           'Objetivos Estratégicos': '',
-          'Descripción Resumida':   ini.descripcion ?? '',
-          inicio:                 ini.inicio ?? null,
-          fin:                    ini.fin ?? null,
-          ejecucion:              ini.ejecucion ?? null,
+          'Descripción Resumida': ini.descripcion ?? '',
+          inicio: ini.inicio ?? null,
+          fin: ini.fin ?? null,
+          ejecucion: ini.ejecucion ?? null,
         })
       }
     })
@@ -155,15 +158,15 @@ function buildData(rawData) {
   const seenOes = new Set()
   const objetivos_estrategicos = []
   rawData.forEach(k => {
-    ;(k.contexto?.objetivos_estrategicos ?? []).forEach(oe => {
+    ; (k.contexto?.objetivos_estrategicos ?? []).forEach(oe => {
       if (!seenOes.has(oe.id)) {
         seenOes.add(oe.id)
         objetivos_estrategicos.push({
           'Objetivo Estratégico': oe.id,
-          'Descripción':          oe.nombre,
+          'Descripción': oe.nombre,
           'Descripción Completa': oe.descripcion ?? null,
-          'Ruta':                 oe.ruta ?? null,
-          'Objetivos BSC':        oe.objetivos_bsc ?? null,
+          'Ruta': oe.ruta ?? null,
+          'Objetivos BSC': oe.objetivos_bsc ?? null,
         })
       }
     })
@@ -203,19 +206,20 @@ function ErrorScreen({ error }) {
 const Ctx = createContext(null)
 
 export function DashboardProvider({ children }) {
-  const [rawData,    setRawData]    = useState(null)
-  const [loading,    setLoading]    = useState(true)
-  const [loadError,  setLoadError]  = useState(null)
+  const [rawData, setRawData] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState(null)
   const [refreshing, setRefreshing] = useState(false)
+  const [webhookStatus, setWebhookStatus] = useState('idle') // idle | running | success | error
 
-  const [activePrinciple, setActivePrinciple]       = useState(null)
-  const [selectedKpiIdx, setSelectedKpiIdx]         = useState(0)
-  const [periodFilter, setPeriodFilter]             = useState('3')
-  const [searchQuery, setSearchQuery]               = useState('')
-  const [roleFilter, setRoleFilter]                 = useState('')
-  const [perspectiveFilter, setPerspectiveFilter]   = useState('')
-  const [statusFilter, setStatusFilter]             = useState('')
-  const [objBscFilter, setObjBscFilter]             = useState('')
+  const [activePrinciple, setActivePrinciple] = useState(null)
+  const [selectedKpiIdx, setSelectedKpiIdx] = useState(0)
+  const [periodFilter, setPeriodFilter] = useState('3')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [roleFilter, setRoleFilter] = useState('')
+  const [perspectiveFilter, setPerspectiveFilter] = useState('')
+  const [statusFilter, setStatusFilter] = useState('')
+  const [objBscFilter, setObjBscFilter] = useState('')
 
   function loadData(isRefresh = false) {
     if (isRefresh) setRefreshing(true)
@@ -236,6 +240,33 @@ export function DashboardProvider({ children }) {
         setLoadError(null)
       })
       .catch(err => { setLoadError(err.message); setLoading(false); setRefreshing(false) })
+  }
+
+  async function triggerWebhookRefresh() {
+    console.log('[Webhook] click — estado:', webhookStatus, '| refreshing:', refreshing)
+    if (webhookStatus === 'running' || refreshing) return
+    setWebhookStatus('running')
+    try {
+      const controller = new AbortController()
+      const abort = setTimeout(() => controller.abort(), WEBHOOK_TIMEOUT_MS)
+      const r = await fetch(WEBHOOK_TI, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ source: 'dashboard', timestamp: Date.now() }),
+        signal: controller.signal,
+      })
+      clearTimeout(abort)
+      console.log('[Webhook] respuesta HTTP', r.status)
+      if (!r.ok) throw new Error(`HTTP ${r.status}`)
+      // flujo completado — recargar datos
+      loadData(true)
+      setWebhookStatus('success')
+      setTimeout(() => setWebhookStatus('idle'), 4000)
+    } catch (err) {
+      console.error('[Webhook] error:', err)
+      setWebhookStatus('error')
+      setTimeout(() => setWebhookStatus('idle'), 5000)
+    }
   }
 
   useEffect(() => { loadData() }, [])
@@ -273,9 +304,9 @@ export function DashboardProvider({ children }) {
     if (fromData) return fromData
     return {
       total_kpis: allKpis.length,
-      criticos:   allKpis.filter(k => k.semaforo === 'rojo').length,
-      moderados:  allKpis.filter(k => k.semaforo === 'amarillo').length,
-      normales:   allKpis.filter(k => k.semaforo === 'verde').length,
+      criticos: allKpis.filter(k => k.semaforo === 'rojo').length,
+      moderados: allKpis.filter(k => k.semaforo === 'amarillo').length,
+      normales: allKpis.filter(k => k.semaforo === 'verde').length,
     }
   }, [rawData, allKpis])
 
@@ -309,7 +340,7 @@ export function DashboardProvider({ children }) {
     return kpis
   }, [activePrinciple, allKpis, searchQuery, roleFilter, perspectiveFilter, statusFilter, objBscFilter])
 
-  const safeIdx     = selectedKpiIdx < filteredKpis.length ? selectedKpiIdx : 0
+  const safeIdx = selectedKpiIdx < filteredKpis.length ? selectedKpiIdx : 0
   const selectedKpi = filteredKpis[safeIdx] ?? null
 
   function togglePrinciple(id) {
@@ -328,8 +359,8 @@ export function DashboardProvider({ children }) {
   }
 
   // ── Auto-play ──────────────────────────────────────────────────
-  const AUTOPLAY_MS      = 12000
-  const RESUME_HOVER_MS  = 4000
+  const AUTOPLAY_MS = 12000
+  const RESUME_HOVER_MS = 4000
   const RESUME_INTERACT_MS = 12000
 
   const filteredLenRef = useRef(0)
@@ -367,7 +398,7 @@ export function DashboardProvider({ children }) {
   }
   // ───────────────────────────────────────────────────────────────
 
-  if (loading)   return <LoadingScreen />
+  if (loading) return <LoadingScreen />
   if (loadError) return <ErrorScreen error={loadError} />
 
   return (
@@ -401,6 +432,8 @@ export function DashboardProvider({ children }) {
       autoPlayMs: 12000,
       refreshData: () => loadData(true),
       refreshing,
+      webhookStatus,
+      triggerWebhookRefresh,
     }}>
       {children}
     </Ctx.Provider>

@@ -138,7 +138,7 @@ export default function MainChartArea() {
         <div className="flex items-start gap-2 flex-1 min-w-0">
           <TrendingUp size={15} className="text-blue-400 mt-0.5 shrink-0" />
           <div className="min-w-0">
-            <p className="text-xs text-slate-500 font-medium uppercase tracking-wider mb-0.5 flex items-center gap-1.5">
+            <div className="text-xs text-slate-500 font-medium uppercase tracking-wider mb-0.5 flex items-center gap-1.5">
               Tendencia histórica
               <span className="relative group">
                 <Info size={11} className="text-slate-500 hover:text-slate-300 cursor-help" />
@@ -149,7 +149,7 @@ export default function MainChartArea() {
                   <p><strong className="text-blue-400">Cumplimiento:</strong> Porcentaje del valor actual con respecto a la meta del año seleccionado. Si es <strong className="text-slate-200">MIN</strong> (minimizar), es 100% si se cumple la meta o proporcional si se excede; si es <strong className="text-slate-200">MAX</strong> (maximizar), es la proporción del avance.</p>
                 </span>
               </span>
-            </p>
+            </div>
             <h3 className="text-sm font-semibold text-white leading-snug">
               {selectedKpi.KPI}
             </h3>
