@@ -1,0 +1,152 @@
+[
+  {
+    "meta": {
+      "institucion": "Hospital Departamental Psiquiatrico Universitario del Valle E.S.E.",
+      "sistema": "SIAGP",
+      "nombre_sistema": "Sistema de Inteligencia Analitica para la Gestion Publica",
+      "documento_base": "Gobernanza_IA_SIAGP_full.pdf",
+      "version": "1.3",
+      "periodo_reporte": "Mayo 2026",
+      "fecha_generacion": "2026-05-31T20:58:12-05:00",
+      "clasificacion": "Uso Interno / Alta Direccion"
+    },
+    "resumen_ejecutivo": {
+      "dictamen": "Go condicionado",
+      "riesgo_global": "ALTO",
+      "viabilidad_etica": "MEDIA",
+      "clasificacion_eu_ai_act": "Alto riesgo",
+      "fase_aims": "Fase 2 - Habilitadores",
+      "impacto_estrategico": "SIAGP habilita planeacion proactiva de capacidad instalada, talento humano y PQRSD, elevando el valor publico y la toma de decisiones basada en datos.",
+      "indicadores": [
+        { "label": "Riesgos criticos/altos", "value": "5", "suffix": " / 10", "estado": "ALTO" },
+        { "label": "Clausulas ISO cubiertas", "value": "17", "suffix": " / 17", "estado": "CONFORME" },
+        { "label": "Decision operativa", "value": "Go", "suffix": " condicionado", "estado": "ALERTA" },
+        { "label": "Horizonte AIMS", "value": "2026", "suffix": " - 2027", "estado": "EN CURSO" }
+      ]
+    },
+    "riesgo_ia": {
+      "total_riesgos": 10,
+      "criticos": 1,
+      "altos": 4,
+      "medios": 5,
+      "bajos": 0,
+      "categorias": [
+        {
+          "nombre": "Datos",
+          "nivel": "CRITICO",
+          "score": 88,
+          "riesgos": "Reidentificacion, calidad de origen y subregistro humano",
+          "control": "k-anonimidad k>=5, cifrado AES-256, validacion ETL y pruebas de penetracion"
+        },
+        {
+          "nombre": "Modelo",
+          "nivel": "ALTO",
+          "score": 76,
+          "riesgos": "Data drift, concept drift y perdida de precision predictiva",
+          "control": "Telemetria MAE mensual, fail-safe si MAE > 15% y reentrenamiento controlado"
+        },
+        {
+          "nombre": "Etica",
+          "nivel": "ALTO",
+          "score": 72,
+          "riesgos": "Complacencia algoritmica y sesgo geografico historico",
+          "control": "Supervision HITL, justificacion firmada, W_geo, EOD, DI, IID e ICE"
+        },
+        {
+          "nombre": "Seguridad",
+          "nivel": "ALTO",
+          "score": 70,
+          "riesgos": "Acceso indebido al DWH, integridad de logs y ataques por triangulacion",
+          "control": "RBAC, logs criptograficos inmutables, repositorios firmados y auditoria tecnica"
+        },
+        {
+          "nombre": "Cumplimiento",
+          "nivel": "MEDIO",
+          "score": 54,
+          "riesgos": "Function creep, trazabilidad incompleta y brecha de competencias",
+          "control": "Lineas rojas, auditorias de alcance, Data Literacy y revision semestral AIA"
+        }
+      ]
+    },
+    "cumplimiento_gobierno": {
+      "madurez": 68,
+      "estado": "EN CURSO",
+      "marcos": [
+        { "nombre": "ISO/IEC 42001", "alineacion": 100, "estado": "CUBIERTA", "detalle": "Clausulas 4 a 10 documentadas para el SGIA/AIMS." },
+        { "nombre": "EU AI Act", "alineacion": 74, "estado": "ALTO RIESGO", "detalle": "Clasificacion de alto riesgo por gestion de servicios esenciales de salud." },
+        { "nombre": "UNESCO", "alineacion": 82, "estado": "ALTO/MEDIO", "detalle": "Alineacion alta con observaciones en explicabilidad y robustez." },
+        { "nombre": "CONPES IA", "alineacion": 80, "estado": "ALINEADO", "detalle": "Apoya decisiones basadas en datos, valor publico y transformacion digital." },
+        { "nombre": "Ley 1581", "alineacion": 72, "estado": "CONDICIONADO", "detalle": "Depende de k-anonimidad, minimizacion y controles de reidentificacion." }
+      ],
+      "objetivos_aims": [
+        { "id": "O-1", "nombre": "Alcance aprobado", "meta": "0 incidentes de function creep", "estado": "EN CONTROL" },
+        { "id": "O-2", "nombre": "Privacidad", "meta": "0 registros n<5 y 0 reidentificacion", "estado": "CONDICIONADO" },
+        { "id": "O-3", "nombre": "Supervision HITL", "meta": "10%-30% desviacion humana y >=90% firmas", "estado": "PENDIENTE" },
+        { "id": "O-4", "nombre": "Equidad territorial", "meta": "ICE >=80%, IID 0.75-1.25, |EOD| <=0.05", "estado": "PENDIENTE" },
+        { "id": "O-5", "nombre": "Precision tecnica", "meta": "MAE <=15%, RPP 0.8-1.2, theta >=85%", "estado": "PENDIENTE" },
+        { "id": "O-6", "nombre": "Competencia", "meta": "100% usuarios certificados", "estado": "PENDIENTE" },
+        { "id": "O-7", "nombre": "Trazabilidad", "meta": "100% cambios y reevaluaciones AIA registradas", "estado": "EN CONTROL" }
+      ]
+    },
+    "etica_confianza": {
+      "indice_global": 64,
+      "estado": "MEDIA",
+      "semaforo": [
+        { "nombre": "Supervision humana", "valor": 82, "estado": "ALTO", "descripcion": "Modelo Human-in-the-Loop y decisiones no vinculantes." },
+        { "nombre": "Privacidad", "valor": 78, "estado": "ALTO", "descripcion": "Anonimizacion irreversible y prohibicion de identificadores directos." },
+        { "nombre": "Transparencia", "valor": 58, "estado": "MEDIO", "descripcion": "Modelos explicables, con brecha de traduccion ejecutiva de metricas." },
+        { "nombre": "Equidad territorial", "valor": 52, "estado": "MEDIO", "descripcion": "Riesgo de subestimar demanda rural por datos historicos sesgados." },
+        { "nombre": "Confianza operacional", "valor": 50, "estado": "MEDIO", "descripcion": "Requiere evitar complacencia automatizada y reforzar data literacy." }
+      ],
+      "salvaguardas": [
+        "Visualizar intervalos de confianza antes de aprobar planes.",
+        "Registrar firma digital y justificacion humana en decisiones soportadas por SIAGP.",
+        "Activar canal de impugnacion ciudadana para decisiones guiadas por algoritmo.",
+        "Suspender visualizacion predictiva si aparecen sesgos o anomalias matematicas."
+      ]
+    },
+    "desempeno_salud": {
+      "estado_general": "CONDICIONADO",
+      "indicadores": [
+        { "nombre": "Precision predictiva", "valor": 85, "meta": "MAE <= 15%", "estado": "OBJETIVO" },
+        { "nombre": "Confianza minima", "valor": 85, "meta": "theta >= 85%", "estado": "UMBRAL" },
+        { "nombre": "Calidad de ingesta", "valor": 97, "meta": "Retrasos >12h < 3%", "estado": "OBJETIVO" },
+        { "nombre": "Equidad operacional", "valor": 80, "meta": "ICE >= 80%", "estado": "UMBRAL" },
+        { "nombre": "Resiliencia fail-safe", "valor": 100, "meta": "Modo descriptivo ante desviacion critica", "estado": "CONTROL" }
+      ],
+      "modulos": [
+        { "id": "M01", "nombre": "Series de tiempo", "uso": "Ocupacion de 266 camas y demanda asistencial", "estado": "Gobernado" },
+        { "id": "M02", "nombre": "Process Mining", "uso": "Cuellos de botella y flujos PQRSD", "estado": "Gobernado" },
+        { "id": "M03", "nombre": "FURAG", "uso": "Evidencias y valor publico basado en datos", "estado": "Gobernado" }
+      ]
+    },
+    "auditoria_trazabilidad": {
+      "estado": "EN IMPLEMENTACION",
+      "evidencias_clave": 8,
+      "auditorias": [
+        { "tipo": "Tecnica del sistema", "frecuencia": "Trimestral", "responsable": "CISO + Planeacion", "artefacto": "Informe tecnico al Comite", "estado": "Programada" },
+        { "tipo": "Equidad algoritmica", "frecuencia": "Trimestral", "responsable": "Comite IA", "artefacto": "Semaforo de fairness", "estado": "Programada" },
+        { "tipo": "HITL", "frecuencia": "Trimestral", "responsable": "Control Interno", "artefacto": "Muestra 20% decisiones", "estado": "Programada" },
+        { "tipo": "Privacidad y seguridad", "frecuencia": "Semestral", "responsable": "CISO + tercero", "artefacto": "Certificado k-anonimidad", "estado": "Pendiente" },
+        { "tipo": "Integral AIMS", "frecuencia": "Anual", "responsable": "Control Interno", "artefacto": "Informe anual SGIA", "estado": "Pendiente" }
+      ],
+      "hallazgos": [
+        { "titulo": "Go condicionado", "prioridad": "ALTA", "descripcion": "La puesta en produccion depende de k-anonimidad certificada, logs explicables y kill switch por error." },
+        { "titulo": "Function creep", "prioridad": "ALTA", "descripcion": "NLP, decisiones clinicas individuales o automatizacion administrativa vinculante quedan fuera del alcance aprobado." },
+        { "titulo": "Brecha de explicabilidad", "prioridad": "MEDIA", "descripcion": "La alta direccion requiere capa ejecutiva para entender incertidumbre, margen de error y limites del modelo." }
+      ]
+    },
+    "impacto_estrategico": [
+      { "nombre": "Capacidad instalada", "valor": "266 camas", "descripcion": "Planeacion anticipada de ocupacion y alertas por sobreocupacion." },
+      { "nombre": "Valor publico", "valor": "FURAG", "descripcion": "Evidencia institucional para decisiones basadas en datos y MIPG." },
+      { "nombre": "Operacion", "valor": "PQRSD", "descripcion": "Redistribucion de cargas y deteccion de cuellos de botella administrativos." },
+      { "nombre": "Talento humano", "valor": "HITL", "descripcion": "Apoyo a dimensionamiento preventivo sin delegar responsabilidad humana." }
+    ],
+    "hoja_ruta": [
+      { "fase": "Fundamentos", "periodo": "Ene-Mar 2026", "estado": "Completada", "avance": 100 },
+      { "fase": "Habilitadores", "periodo": "Abr-Jun 2026", "estado": "En curso", "avance": 58 },
+      { "fase": "Operacion plena", "periodo": "Jul-Sep 2026", "estado": "Pendiente", "avance": 0 },
+      { "fase": "Madurez", "periodo": "Oct 2026-Dic 2027", "estado": "Pendiente", "avance": 0 }
+    ]
+  }
+]
