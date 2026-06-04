@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell, LineChart, Line, ComposedChart
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell, LineChart, Line, ComposedChart,
+  RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar
 } from 'recharts';
 import {
   BrainCircuit, CalendarDays, ClipboardCheck, AlertTriangle, ShieldCheck,
@@ -77,7 +78,35 @@ function DarkTip({ active, payload, label }) {
   );
 }
 
+function RadarTick({ x, y, payload, cx }) {
+  const anchor = Math.abs(x - cx) < 10 ? 'middle' : x > cx ? 'start' : 'end';
+  const words = payload.value.split(' ');
+  const mid = Math.ceil(words.length / 2);
+  const line1 = words.slice(0, mid).join(' ');
+  const line2 = words.slice(mid).join(' ');
+
+  return (
+    <text
+      x={x}
+      y={y}
+      textAnchor={anchor}
+      fill="#94a3b8"
+      fontSize={9}
+    >
+      <tspan x={x} dy={line2 ? '-0.5em' : '0'}>{line1}</tspan>
+      {line2 && <tspan x={x} dy="1.2em">{line2}</tspan>}
+    </text>
+  );
+}
+
 const D = {
+  radarData: [
+    { subject: 'Public purpose', v: 50.00 },
+    { subject: 'Human-centred Values', v: 50.00 },
+    { subject: 'Transparency & Exp.', v: 25.00 },
+    { subject: 'Robustness & Safety', v: 43.18 },
+    { subject: 'Accountability', v: 50.00 }
+  ],
   isoClausulas: [
     {id:'6.1',v:90,u:85}, {id:'6.2',v:85,u:80}, {id:'7.2',v:80,u:100},
     {id:'8.4',v:88,u:85}, {id:'9.1',v:75,u:80}, {id:'10.1',v:70,u:80}
@@ -185,21 +214,57 @@ export default function GobiernoIA() {
         </div>
       </div>
       
+      {/* ══ ALERTAS ESTRATÉGICAS ═══════════════════════════ */}
+      <SectionTitle eyebrow="Alertas" title="Alertas estratégicas — alta dirección" icon={AlertTriangle} accent={clr.rojo} />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <div className="p-3 rounded-r-xl border-l-4" style={{ background: 'rgba(239,68,68,0.05)', borderLeftColor: clr.rojo }}>
+            <p className="text-xs font-bold text-slate-200 mb-1">Go condicionado — sin certificar, no avanzar</p>
+            <p className="text-[11px] text-slate-400">No avanzar a producción plena sin k-anonimidad certificada por tercero, logs explicables y Kill-Switch verificado. 5 condiciones pendientes.</p>
+          </div>
+          <div className="p-3 rounded-r-xl border-l-4" style={{ background: 'rgba(239,68,68,0.05)', borderLeftColor: clr.rojo }}>
+            <p className="text-xs font-bold text-slate-200 mb-1">Discrepancia HITL por debajo del umbral saludable</p>
+            <p className="text-[11px] text-slate-400">Tasa 3% (rango sano: 10–30%). Posible complacencia algorítmica o falta de registro deliberativo (RS-03 Automation Bias).</p>
+          </div>
+        </div>
+        <div className="space-y-2">
+          <div className="p-3 rounded-r-xl border-l-4" style={{ background: 'rgba(59,130,246,0.1)', borderLeftColor: clr.azul }}>
+            <p className="text-xs font-bold text-slate-200 mb-1">ICE territorial en zona amarilla — 74%</p>
+            <p className="text-[11px] text-slate-400">Dagua (IID=0.68) y El Dovio (IID=0.63) próximos al umbral crítico. Revisar modelo con filtro W_geo. Meta ICE ≥80%.</p>
+          </div>
+          <div className="p-3 rounded-r-xl border-l-4" style={{ background: 'rgba(245,158,11,0.05)', borderLeftColor: clr.amarillo }}>
+            <p className="text-xs font-bold text-slate-200 mb-1">Function creep — líneas rojas operativas</p>
+            <p className="text-[11px] text-slate-400">NLP, triaje, predicción individual o automatización vinculante quedan fuera del alcance aprobado. Excederlos reclasifica el sistema en EU AI Act.</p>
+          </div>
+        </div>
+      </div>
+
       {/* ══ FILA 1 — KPI EJECUTIVOS ════════════════════════ */}
       <SectionTitle eyebrow="Fila 1" title="Resumen ejecutivo" icon={Gauge} accent={clr.verde} />
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-        <Kpi label="AI Governance Score" val={<span>82<span className="text-sm font-normal text-slate-400">%</span></span>} subIconColor={clr.amarillo} subText="Riesgo moderado" />
-        <Kpi label="Madurez AIMS (ISO 42001)" val={<span>68<span className="text-sm font-normal text-slate-400">%</span></span>} subIconColor={clr.amarillo} subText="En curso" />
-        <Kpi label="MAE Global" val={<span>11.3<span className="text-sm font-normal text-slate-400">%</span></span>} subIconColor={clr.verde} subText="Meta ≤15%" />
-        <Kpi label="Incidentes activos" val="0" mainColor={clr.verde} subIconColor={clr.verde} subText="Meta = 0" />
-        <Kpi label="HITL discrepancia" val={<span>3<span className="text-sm font-normal text-slate-400">%</span></span>} mainColor={clr.amarillo} subIconColor={clr.amarillo} subText="Rango sano: 10-30%" />
-      </div>
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-        <Kpi label="Concept Drift" val={<span>8<span className="text-sm font-normal text-slate-400">%</span></span>} subIconColor={clr.verde} subText="Umbral: <15%" />
-        <Kpi label="Calidad DWH" val={<span>98.1<span className="text-sm font-normal text-slate-400">%</span></span>} subIconColor={clr.verde} subText="Meta ≥97%" />
-        <Kpi label="Data Literacy" val={<span>83<span className="text-sm font-normal text-slate-400">%</span></span>} mainColor={clr.amarillo} subIconColor={clr.amarillo} subText="Meta 100%" />
-        <Kpi label="ICE Territorial" val={<span>74<span className="text-sm font-normal text-slate-400">%</span></span>} mainColor={clr.amarillo} subIconColor={clr.amarillo} subText="Meta ≥80%" />
-        <Kpi label="Riesgo residual" val={<span>72<span className="text-sm font-normal text-slate-400">%</span></span>} mainColor={clr.rojo} subIconColor={clr.rojo} subText="Apetito: 60%" />
+      <div className="grid grid-cols-1 xl:grid-cols-[1fr_3fr] gap-4">
+        <Block title="Madurez de IA (1ra evaluación)" icon={BrainCircuit} accent={clr.violeta}>
+          <div className="h-64 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <RadarChart cx="50%" cy="50%" outerRadius="65%" data={D.radarData} margin={{ top: 15, right: 30, bottom: 15, left: 30 }}>
+                <PolarGrid stroke="#1e293b" />
+                <PolarAngleAxis dataKey="subject" tick={(props) => <RadarTick {...props} />} />
+                <Radar name="Madurez" dataKey="v" stroke={clr.violeta} fill={clr.violeta} fillOpacity={0.18} strokeWidth={2} dot={{ r: 3, fill: clr.violeta }} />
+                <Tooltip content={<DarkTip />} cursor={{fill: 'rgba(255,255,255,0.02)'}} />
+              </RadarChart>
+            </ResponsiveContainer>
+          </div>
+        </Block>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          <Kpi label="AI Governance Score" val={<span>82<span className="text-sm font-normal text-slate-400">%</span></span>} subIconColor={clr.amarillo} subText="Riesgo moderado" />
+          <Kpi label="MAE Global" val={<span>11.3<span className="text-sm font-normal text-slate-400">%</span></span>} subIconColor={clr.verde} subText="Meta ≤15%" />
+          <Kpi label="Incidentes activos" val="0" mainColor={clr.verde} subIconColor={clr.verde} subText="Meta = 0" />
+          <Kpi label="HITL discrepancia" val={<span>3<span className="text-sm font-normal text-slate-400">%</span></span>} mainColor={clr.amarillo} subIconColor={clr.amarillo} subText="Rango sano: 10-30%" />
+          <Kpi label="Concept Drift" val={<span>8<span className="text-sm font-normal text-slate-400">%</span></span>} subIconColor={clr.verde} subText="Umbral: <15%" />
+          <Kpi label="Calidad DWH" val={<span>98.1<span className="text-sm font-normal text-slate-400">%</span></span>} subIconColor={clr.verde} subText="Meta ≥97%" />
+          <Kpi label="Data Literacy" val={<span>83<span className="text-sm font-normal text-slate-400">%</span></span>} mainColor={clr.amarillo} subIconColor={clr.amarillo} subText="Meta 100%" />
+          <Kpi label="ICE Territorial" val={<span>74<span className="text-sm font-normal text-slate-400">%</span></span>} mainColor={clr.amarillo} subIconColor={clr.amarillo} subText="Meta ≥80%" />
+          <Kpi label="Riesgo residual" val={<span>72<span className="text-sm font-normal text-slate-400">%</span></span>} mainColor={clr.rojo} subIconColor={clr.rojo} subText="Apetito: 60%" />
+        </div>
       </div>
       
       {/* ══ BLOQUE 2 — GOBERNANZA Y CUMPLIMIENTO ═══════════ */}
@@ -551,30 +616,7 @@ export default function GobiernoIA() {
         </Block>
       </div>
       
-      {/* ══ ALERTAS ESTRATÉGICAS ═══════════════════════════ */}
-      <SectionTitle eyebrow="Alertas" title="Alertas estratégicas — alta dirección" icon={AlertTriangle} accent={clr.rojo} />
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <div className="p-3 rounded-r-xl border-l-4" style={{ background: 'rgba(239,68,68,0.05)', borderLeftColor: clr.rojo }}>
-            <p className="text-xs font-bold text-slate-200 mb-1">Go condicionado — sin certificar, no avanzar</p>
-            <p className="text-[11px] text-slate-400">No avanzar a producción plena sin k-anonimidad certificada por tercero, logs explicables y Kill-Switch verificado. 5 condiciones pendientes.</p>
-          </div>
-          <div className="p-3 rounded-r-xl border-l-4" style={{ background: 'rgba(239,68,68,0.05)', borderLeftColor: clr.rojo }}>
-            <p className="text-xs font-bold text-slate-200 mb-1">Discrepancia HITL por debajo del umbral saludable</p>
-            <p className="text-[11px] text-slate-400">Tasa 3% (rango sano: 10–30%). Posible complacencia algorítmica o falta de registro deliberativo (RS-03 Automation Bias).</p>
-          </div>
-        </div>
-        <div className="space-y-2">
-          <div className="p-3 rounded-r-xl border-l-4" style={{ background: 'rgba(59,130,246,0.1)', borderLeftColor: clr.azul }}>
-            <p className="text-xs font-bold text-slate-200 mb-1">ICE territorial en zona amarilla — 74%</p>
-            <p className="text-[11px] text-slate-400">Dagua (IID=0.68) y El Dovio (IID=0.63) próximos al umbral crítico. Revisar modelo con filtro W_geo. Meta ICE ≥80%.</p>
-          </div>
-          <div className="p-3 rounded-r-xl border-l-4" style={{ background: 'rgba(245,158,11,0.05)', borderLeftColor: clr.amarillo }}>
-            <p className="text-xs font-bold text-slate-200 mb-1">Function creep — líneas rojas operativas</p>
-            <p className="text-[11px] text-slate-400">NLP, triaje, predicción individual o automatización vinculante quedan fuera del alcance aprobado. Excederlos reclasifica el sistema en EU AI Act.</p>
-          </div>
-        </div>
-      </div>
+
       
       {/* ══ GLOSARIO EJECUTIVO ═════════════════════════════ */}
       <SectionTitle eyebrow="Glosario" title="Glosario ejecutivo" icon={Eye} accent={clr.violeta} />
