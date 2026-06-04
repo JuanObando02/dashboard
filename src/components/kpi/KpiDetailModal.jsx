@@ -6,7 +6,7 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, ReferenceLine,
 } from 'recharts'
-import { useDashboard } from '../context/DashboardContext'
+import { useDashboard } from '../../context/DashboardContext'
 
 const SEM = {
   verde:    { dot: '#22c55e', badge: 'rgba(34,197,94,0.15)',  text: '#4ade80',  label: 'Óptimo'     },
@@ -134,13 +134,45 @@ export default function KpiDetailModal({ kpi, onClose }) {
                 const flat = kpi.tendencia === 'Estable'
                 const Icon = flat ? Minus : up ? TrendingUp : TrendingDown
                 const color = flat ? '#94a3b8' : up ? '#4ade80' : '#f87171'
+                const tipo  = kpi.tipo ?? 'MAX'
                 return (
-                  <span
-                    className="flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full"
-                    style={{ background: `${color}22`, color }}
-                  >
-                    <Icon size={10} />
-                    {kpi.tendencia}
+                  <span className="relative group">
+                    <span
+                      className="flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full cursor-default"
+                      style={{ background: `${color}22`, color }}
+                    >
+                      <Icon size={10} />
+                      {kpi.tendencia}
+                    </span>
+                    {/* Tooltip */}
+                    <span
+                      className="pointer-events-none absolute top-full right-0 mt-1.5 z-[200] hidden group-hover:flex flex-col gap-2 w-64 rounded-xl p-3 text-[11px] leading-snug shadow-2xl"
+                      style={{ background: '#0f1c2e', border: '1px solid #1e3a5f' }}
+                    >
+                      <span className="font-bold text-slate-200 text-[11px]">¿Cómo se calcula la tendencia?</span>
+                      <span className="text-slate-400">
+                        Se toman las últimas <span className="text-white font-semibold">3 mediciones</span> y se compara la primera contra la última:
+                      </span>
+                      <span className="rounded-lg px-2 py-1.5 font-mono text-[10px] text-slate-300" style={{ background: '#0b1829', border: '1px solid #1e293b' }}>
+                        delta = última − primera{'\n'}
+                        threshold = 0.1% × |primera|
+                      </span>
+                      <span className="text-slate-400">
+                        Si <span className="text-white">|delta| &lt; threshold</span> → <span className="text-slate-300 font-semibold">Estable</span>
+                      </span>
+                      <span className="text-slate-400">
+                        KPI tipo <span className="font-bold" style={{ color: tipo === 'MAX' ? '#4ade80' : '#fb923c' }}>{tipo}</span>
+                        {tipo === 'MAX'
+                          ? <> (quieres que <span className="text-white">suba</span>): delta &gt; 0 → Mejorando, delta &lt; 0 → Deteriorando</>
+                          : <> (quieres que <span className="text-white">baje</span>): delta &lt; 0 → Mejorando, delta &gt; 0 → Deteriorando</>
+                        }
+                      </span>
+                      <span className="border-t pt-2 text-slate-500" style={{ borderColor: '#1e293b' }}>
+                        Este KPI es tipo <span className="font-bold" style={{ color: tipo === 'MAX' ? '#4ade80' : '#fb923c' }}>{tipo}</span> → tendencia actual: <span className="font-bold" style={{ color }}>{kpi.tendencia}</span>
+                      </span>
+                      {/* Arrow */}
+                      <span className="absolute bottom-full right-4 border-4 border-transparent" style={{ borderBottomColor: '#1e3a5f' }} />
+                    </span>
                   </span>
                 )
               })()}

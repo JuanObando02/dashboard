@@ -3,9 +3,10 @@ import {
   RadarChart, PolarGrid, PolarAngleAxis, Radar,
   Tooltip, ResponsiveContainer,
 } from 'recharts'
-import { Hexagon, CalendarDays } from 'lucide-react'
-import { useDashboard } from '../context/DashboardContext'
+import { Hexagon, CalendarDays, Sparkles, Loader2 } from 'lucide-react'
+import { useDashboard } from '../../context/DashboardContext'
 import MaturityDetailModal from './MaturityDetailModal'
+import { askGeminiDirect } from '../../services/geminiService'
 
 const COLORS = ['#3b82f6', '#f59e0b']
 
@@ -55,7 +56,7 @@ function LevelBadge({ record }) {
           {record.maturityLevel}
         </span>
         <div>
-          <p className="text-[9px] text-slate-500 leading-none uppercase tracking-wide">Nivel</p>
+          <p className="text-[9px] text-slate-500 leading-none uppercase tracking-wide">Nivel actual</p>
           <p className="text-xs font-bold leading-tight" style={{ color: record.maturityColor }}>
             {record.maturityName}
           </p>
@@ -114,6 +115,14 @@ export default function MaturityRadar() {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const dropdownRef = useRef(null)
 
+  const LS_KEY_AI = 'hdpuv_maturity_ai'
+  const [maturityAi, setMaturityAi] = useState(null)
+  const [showMaturityAi, setShowMaturityAi] = useState(false)
+  const [maturityAiPos, setMaturityAiPos] = useState(null)
+  const hideTimerRef = useRef(null)
+
+  useEffect(() => { localStorage.removeItem(LS_KEY_AI) }, [])
+
   useEffect(() => {
     function handleClickOutside(e) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -123,6 +132,47 @@ export default function MaturityRadar() {
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
+
+  async function handleAiMouseEnter(e) {
+    clearTimeout(hideTimerRef.current)
+    const rect = e.currentTarget.getBoundingClientRect()
+    setMaturityAiPos({ top: rect.bottom + 8, right: window.innerWidth - rect.right })
+    setShowMaturityAi(true)
+    if (maturityAi && maturityAi !== 'loading') return
+    const cached = localStorage.getItem(LS_KEY_AI)
+    if (cached) { setMaturityAi(cached); return }
+    if (maturityAi === 'loading') return
+    setMaturityAi('loading')
+
+    const historyStr = madurezData.map((m, i) => {
+      const sections = m.radar.map(r => `  - ${r.seccion}: ${r.pct}%`).join('\n')
+      return `Evaluación ${i + 1} (${m.fecha}) — Nivel ${m.maturityLevel} "${m.maturityName}", Score: ${m.totalScore}/${m.totalMax} (${Math.round(m.ratio * 100)}%)\n${sections}`
+    }).join('\n\n')
+
+    const prompt = `Eres un analista de gobierno TI de un hospital colombiano especializado en ISO 38500. Analiza la evolución de madurez entre las siguientes evaluaciones:
+
+${historyStr}
+
+Responde en máximo 90 palabras, sin markdown, sin asteriscos, en español. Estructura:
+EVOLUCIÓN: [cómo ha variado la madurez entre evaluaciones, destacando secciones con mayor cambio].
+BENEFICIOS: [qué beneficios concretos representa este nivel/progreso para la organización hospitalaria].`
+
+    try {
+      const result = await askGeminiDirect(prompt)
+      const text = result.replace(/\*+/g, '').trim()
+      setMaturityAi(text)
+      localStorage.setItem(LS_KEY_AI, text)
+    } catch {
+      setMaturityAi('Error al contactar el servicio de IA. Intente de nuevo.')
+    }
+  }
+
+  function handleAiMouseLeave() {
+    hideTimerRef.current = setTimeout(() => setShowMaturityAi(false), 150)
+  }
+
+  function handleTooltipMouseEnter() { clearTimeout(hideTimerRef.current) }
+  function handleTooltipMouseLeave() { setShowMaturityAi(false) }
 
   if (!madurezData?.length) return null
 
@@ -151,6 +201,53 @@ export default function MaturityRadar() {
         <div className="flex items-center gap-2">
           <Hexagon size={14} className="text-indigo-400 shrink-0" />
           <h2 className="text-sm font-semibold text-slate-200">Madurez ISO 38500</h2>
+
+          {/* AI button */}
+          <div
+            className="relative ml-auto"
+            onMouseEnter={handleAiMouseEnter}
+            onMouseLeave={handleAiMouseLeave}
+          >
+            <button
+              className="flex items-center gap-1 text-[9px] font-bold px-1.5 py-0.5 rounded-full focus:outline-none"
+              style={{ background: 'rgba(99,102,241,0.15)', color: '#a5b4fc', border: '1px solid rgba(99,102,241,0.35)' }}
+            >
+              {maturityAi === 'loading'
+                ? <><Loader2 size={9} className="animate-spin" /> Analizando…</>
+                : <><Sparkles size={9} /> IA</>
+              }
+            </button>
+
+            {showMaturityAi && maturityAi && maturityAi !== 'loading' && maturityAiPos && (
+              <div
+                onMouseEnter={handleTooltipMouseEnter}
+                onMouseLeave={handleTooltipMouseLeave}
+                className="w-72 rounded-xl p-3 space-y-2"
+                style={{
+                  position: 'fixed',
+                  top: maturityAiPos.top,
+                  right: maturityAiPos.right,
+                  zIndex: 9999,
+                  background: '#0b1829',
+                  border: '1px solid #1e3a5f',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
+                }}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+                    Análisis IA · Madurez ISO 38500
+                  </span>
+                  <button
+                    onClick={e => { e.stopPropagation(); setShowMaturityAi(false) }}
+                    className="text-slate-600 hover:text-slate-300 text-xs leading-none transition-colors"
+                  >✕</button>
+                </div>
+                <p className="text-[11px] leading-relaxed text-slate-300 whitespace-pre-line">
+                  {maturityAi}
+                </p>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Eval selector row — full width */}
@@ -291,7 +388,7 @@ export default function MaturityRadar() {
       {/* Section bars */}
       <div className="px-4 pb-4 space-y-2 border-t" style={{ borderColor: '#1e293b' }}>
         <div className="flex items-center justify-between pt-3">
-          <p className="text-[9px] uppercase tracking-wider text-slate-600 font-semibold">
+          <p className="text-[10px] uppercase tracking-wider text-slate-600 font-semibold">
             Detalle por sección
           </p>
           <div className="flex items-center gap-2">
@@ -302,7 +399,7 @@ export default function MaturityRadar() {
             ].map(({ color, label }) => (
               <div key={label} className="flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: color }} />
-                <span className="text-[8px] text-slate-600">{label}</span>
+                <span className="text-[11px] text-slate-600 whitespace-nowrap">{label}</span>
               </div>
             ))}
           </div>
@@ -315,7 +412,7 @@ export default function MaturityRadar() {
               onClick={() => setSelectedSection(r.seccion)}
               className="cursor-pointer rounded-lg px-1.5 py-1 -mx-1.5 transition-colors hover:bg-white/[0.03]"
             >
-              <div className="flex justify-between text-[10px] mb-0.5">
+              <div className="flex justify-between text-xs mb-0.5">
                 <span className="text-slate-400 truncate">{r.seccion}</span>
                 <span className="font-semibold tabular-nums shrink-0 ml-2" style={{ color: barColor }}>
                   {r.pct}%

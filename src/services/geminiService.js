@@ -53,3 +53,9 @@ export async function askGeminiDirect(prompt) {
   const result = await model.generateContent(prompt)
   return result.response.text()
 }
+
+export async function askGeminiFlashLite(prompt) {
+  const model = genAI.getGenerativeModel({ model: 'gemini-3.1-flash-lite' })
+  const result = await model.generateContent(prompt)
+  return result.response.text()
+}

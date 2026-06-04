@@ -1,6 +1,6 @@
-import { CalendarDays, ShieldCheck, Monitor, BrainCircuit, Database, RefreshCw } from 'lucide-react'
-import ExecutiveReportButton from './ExecutiveReportButton'
-import { useDashboard } from '../context/DashboardContext'
+import { CalendarDays, ShieldCheck, Monitor, BrainCircuit, Database, RefreshCw, CheckCircle2, XCircle, Loader2 } from 'lucide-react'
+import ExecutiveReportButton from '../reports/ExecutiveReportButton'
+import { useDashboard } from '../../context/DashboardContext'
 
 const SEM_BADGES = [
   { key: 'criticos',  label: 'Crítico',  dot: '#ef4444', bg: 'rgba(239,68,68,0.15)',  border: 'rgba(239,68,68,0.35)'  },
@@ -15,7 +15,20 @@ const TABS = [
 ]
 
 export default function Header({ metadata, activeTab, onTabChange }) {
-  const { globalCounts, refreshData, refreshing } = useDashboard()
+  const { globalCounts, webhookStatus = 'idle', triggerWebhookRefresh, refreshing } = useDashboard()
+
+  const syncIsRunning = webhookStatus === 'running' || refreshing
+  const syncLabel = syncIsRunning        ? 'Ejecutando…'
+                  : webhookStatus === 'success' ? '¡Actualizado!'
+                  : webhookStatus === 'error'   ? 'Error'
+                  : 'Sincronizar'
+  const syncBorder = webhookStatus === 'success' ? 'rgba(34,197,94,0.5)'
+                   : webhookStatus === 'error'   ? 'rgba(239,68,68,0.5)'
+                   : 'rgba(255,255,255,0.15)'
+  const syncIcon = syncIsRunning               ? <Loader2 size={13} style={{ animation: 'spin 0.8s linear infinite' }} />
+                 : webhookStatus === 'success' ? <CheckCircle2 size={13} className="text-green-400" />
+                 : webhookStatus === 'error'   ? <XCircle size={13} className="text-red-400" />
+                 : <RefreshCw size={13} className="text-blue-300" />
   const nombre = metadata?.nombre ?? 'Hospital'
   const modelo = metadata?.modelo_gobierno ?? 'ISO 38500 & BSC'
   const fecha  = metadata?.fecha_actualizacion ?? '—'
@@ -70,21 +83,23 @@ export default function Header({ metadata, activeTab, onTabChange }) {
 
         {/* Right: semáforo + button + date */}
         <div className="flex items-center gap-3 flex-shrink-0">
-          <div className="flex items-center gap-2">
-            {SEM_BADGES.map(({ key, label, dot, bg, border }) => (
-              <div
-                key={key}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg"
-                style={{ background: bg, border: `1px solid ${border}` }}
-              >
-                <span className="w-2 h-2 rounded-full shrink-0" style={{ background: dot }} />
-                <span className="text-xs font-bold" style={{ color: dot }}>
-                  {globalCounts?.[key] ?? '—'}
-                </span>
-                <span className="text-[10px] text-white/60 hidden sm:inline">{label}</span>
-              </div>
-            ))}
-          </div>
+          {activeTab === 'ti' && (
+            <div className="flex items-center gap-2">
+              {SEM_BADGES.map(({ key, label, dot, bg, border }) => (
+                <div
+                  key={key}
+                  className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg"
+                  style={{ background: bg, border: `1px solid ${border}` }}
+                >
+                  <span className="w-2 h-2 rounded-full shrink-0" style={{ background: dot }} />
+                  <span className="text-xs font-bold" style={{ color: dot }}>
+                    {globalCounts?.[key] ?? '—'}
+                  </span>
+                  <span className="text-[10px] text-white/60 hidden sm:inline">{label}</span>
+                </div>
+              ))}
+            </div>
+          )}
 
           <ExecutiveReportButton />
 
@@ -97,17 +112,26 @@ export default function Header({ metadata, activeTab, onTabChange }) {
           </div>
 
           <button
-            onClick={refreshData}
-            disabled={refreshing}
-            title="Actualizar datos"
-            className="p-2 rounded-lg transition-all"
-            style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)' }}
+            onClick={() => {
+              console.log('[Header] click sync — webhookStatus:', webhookStatus, '| refreshing:', refreshing, '| fn:', typeof triggerWebhookRefresh)
+              if (triggerWebhookRefresh) triggerWebhookRefresh()
+              else console.warn('[Header] triggerWebhookRefresh is undefined!')
+            }}
+            title="Ejecutar flujo n8n y recargar datos"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
+            style={{
+              background: webhookStatus === 'success' ? 'rgba(34,197,94,0.15)'
+                        : webhookStatus === 'error'   ? 'rgba(239,68,68,0.15)'
+                        : 'rgba(255,255,255,0.08)',
+              border: `1px solid ${syncBorder}`,
+              color: webhookStatus === 'success' ? '#4ade80'
+                   : webhookStatus === 'error'   ? '#f87171'
+                   : '#93c5fd',
+              cursor: syncIsRunning ? 'not-allowed' : 'pointer',
+            }}
           >
-            <RefreshCw
-              size={14}
-              className="text-blue-300"
-              style={{ animation: refreshing ? 'spin 0.8s linear infinite' : 'none' }}
-            />
+            {syncIcon}
+            <span className="hidden sm:inline">{syncLabel}</span>
           </button>
         </div>
 

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { ChevronRight, SearchX } from 'lucide-react'
-import { useDashboard } from '../context/DashboardContext'
-import KpiDetailModal from './KpiDetailModal'
+import { useDashboard } from '../../context/DashboardContext'
+import KpiDetailModal from '../kpi/KpiDetailModal'
 
 const SEM = {
   verde:    { dot: '#22c55e', bg: 'rgba(34,197,94,0.1)',   text: '#4ade80',  label: 'Óptimo'    },

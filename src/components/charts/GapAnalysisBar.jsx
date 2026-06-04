@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { TrendingDown, Info } from 'lucide-react'
-import { useDashboard } from '../context/DashboardContext'
+import { useDashboard } from '../../context/DashboardContext'
 
 function parseBudget(raw) {
   if (typeof raw === 'number') return raw

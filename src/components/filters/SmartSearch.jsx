@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { Search, X, User, ChevronDown, BarChart2 } from 'lucide-react'
-import { useDashboard } from '../context/DashboardContext'
+import { useDashboard } from '../../context/DashboardContext'
 
 const STATUS_OPTIONS = [
   { value: 'rojo', label: 'Crítico', dot: '#ef4444' },
