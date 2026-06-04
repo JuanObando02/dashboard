@@ -1,52 +1,35 @@
-import { useEffect, useMemo, useState } from 'react'
+import React, { useState } from 'react';
 import {
-  Bar, BarChart, CartesianGrid, Cell, Legend, Line, LineChart, Pie, PieChart,
-  PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart,
-  ResponsiveContainer, Tooltip, XAxis, YAxis,
-} from 'recharts'
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell, LineChart, Line, ComposedChart
+} from 'recharts';
 import {
-  AlertTriangle, BrainCircuit, CalendarDays, ClipboardCheck,
-  Eye, FileSearch, Gauge, GitBranch, HeartPulse, Info, LockKeyhole,
-  Scale, ShieldAlert, ShieldCheck, Sparkles, Target, TrendingUp,
-  UserCheck, X,
-} from 'lucide-react'
-
-const DATA_URL = '/data/Gobierno_IA_data.json'
+  BrainCircuit, CalendarDays, ClipboardCheck, AlertTriangle, ShieldCheck,
+  ShieldAlert, Scale, Target, TrendingUp, LockKeyhole, HeartPulse, Eye,
+  Sparkles, GitBranch, Gauge
+} from 'lucide-react';
 
 const clr = {
   rojo: '#ef4444', amarillo: '#f59e0b', verde: '#22c55e',
   gris: '#6b7280', azul: '#3b82f6', violeta: '#8b5cf6',
   cyan: '#06b6d4', card: '#0f172a', borde: '#1e293b', bg: '#0b1829',
-}
-
-const iconMap = {
-  go: ClipboardCheck, switch: Gauge, risk: ShieldAlert, maturity: TrendingUp,
-  law: Scale, iso: ShieldCheck, privacy: LockKeyhole, ethics: Eye,
-}
+};
 
 function statusColor(status) {
-  const s = (status || '').toUpperCase()
-  if (['CRITICO', 'CRÍTICO', 'ALTO', 'ALTA', 'ALTO RIESGO'].some(x => s.includes(x))) return clr.rojo
-  if (['MEDIO', 'MEDIA', 'ALERTA', 'CONDICIONADO', 'PENDIENTE', 'EN CURSO', 'PROGRAMADA', 'IMPLEMENTACION', 'LIMITADO', 'PARCIAL', 'VIGILANCIA', 'AMARILLO'].some(x => s.includes(x))) return clr.amarillo
-  if (['CONFORME', 'CUBIERTA', 'ALINEADO', 'CONTROL', 'COMPLETADA', 'GOBERNADO', 'OBJETIVO', 'ARMADO'].some(x => s.includes(x))) return clr.verde
-  return clr.gris
-}
-
-function fmtDate(iso) {
-  if (!iso) return '-'
-  try {
-    return new Date(iso).toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' })
-  } catch { return iso }
+  const s = (status || '').toUpperCase();
+  if (['CRITICO', 'CRÍTICO', 'ALTO', 'ALTA', 'ALTO RIESGO', 'BAJA ⚠', 'RECHAZADAS'].some(x => s.includes(x))) return clr.rojo;
+  if (['MEDIO', 'MEDIA', 'ALERTA', 'CONDICIONADO', 'PENDIENTE', 'EN CURSO', 'PROGRAMADA', 'LIMITADO', 'COND.', 'AMARILLO'].some(x => s.includes(x))) return clr.amarillo;
+  if (['CONFORME', 'CUBIERTA', 'ALINEADO', 'CONTROL', 'COMPLETADA', 'ARMADO', 'ALTA', 'APLICADAS', 'CUMPLE'].some(x => s.includes(x))) return clr.verde;
+  return clr.gris;
 }
 
 function Sbadge({ label, color }) {
-  const c = color || statusColor(label)
+  const c = color || statusColor(label);
   return (
     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap"
       style={{ background: `${c}18`, color: c, border: `1px solid ${c}30` }}>
       {label}
     </span>
-  )
+  );
 }
 
 function Block({ title, icon: Icon, accent = clr.azul, children }) {
@@ -62,873 +45,557 @@ function Block({ title, icon: Icon, accent = clr.azul, children }) {
       </div>
       <div className="p-4">{children}</div>
     </div>
-  )
+  );
 }
 
 function SectionTitle({ eyebrow, title, icon: Icon, accent }) {
   return (
-    <div className="flex items-center justify-between gap-3 pt-1">
+    <div className="flex items-center justify-between gap-3 pt-4 mb-2">
       <div className="flex items-center gap-2">
-        <Icon size={13} style={{ color: accent }} />
+        <Icon size={14} style={{ color: accent }} />
         <div>
-          <p className="text-[8px] uppercase tracking-wider font-semibold text-slate-600">{eyebrow}</p>
+          <p className="text-[9px] uppercase tracking-wider font-semibold text-slate-500">{eyebrow}</p>
           <h2 className="text-sm font-bold text-slate-200">{title}</h2>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function DarkTip({ active, payload, label }) {
-  if (!active || !payload?.length) return null
+  if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-lg px-3 py-2 text-xs shadow-xl max-w-xs"
+    <div className="rounded-lg px-3 py-2 text-xs shadow-xl"
       style={{ background: '#1e2d45', border: '1px solid #334155' }}>
       {label && <p className="text-slate-400 mb-1">{label}</p>}
       {payload.map((p, i) => (
-        <p key={i} style={{ color: p.fill || p.color || clr.azul }} className="font-bold">
+        <p key={i} style={{ color: p.fill || p.color || p.stroke || clr.azul }} className="font-bold">
           {p.name}: {p.value}
         </p>
       ))}
     </div>
-  )
+  );
 }
 
-function KpiStrip({ items }) {
-  return (
-    <div className="grid grid-cols-2 xl:grid-cols-4 gap-3">
-      {items.map(item => {
-        const color = statusColor(item.estado)
-        const Icon = iconMap[item.icon] || Target
-        return (
-          <div key={item.label} className="rounded-xl p-3 border flex items-center gap-3"
-            style={{ background: `${color}06`, borderColor: `${color}20` }}>
-            <div className="p-1.5 rounded-lg shrink-0" style={{ background: `${color}16`, border: `1px solid ${color}30` }}>
-              <Icon size={13} style={{ color }} />
-            </div>
-            <div className="min-w-0">
-              <p className="text-[9px] uppercase tracking-wider font-semibold text-slate-500 truncate">{item.label}</p>
-              <p className="text-lg font-bold tabular-nums leading-tight truncate" style={{ color }}>
-                {item.value}<span className="text-xs text-slate-500 font-normal">{item.suffix}</span>
-              </p>
-            </div>
-          </div>
-        )
-      })}
-    </div>
-  )
-}
-
-function GovernanceScore({ data, resumen }) {
-  const scoreColor = statusColor(data.estado_semaforo)
-  return (
-    <Block title="Estado General de Gobernanza" icon={Gauge} accent={scoreColor}>
-      <div className="grid grid-cols-1 xl:grid-cols-[220px_1fr] gap-4">
-        <div className="rounded-lg p-4 border flex flex-col justify-between" style={{ background: `${scoreColor}06`, borderColor: `${scoreColor}20` }}>
-          <div>
-            <p className="text-[9px] uppercase tracking-wider font-semibold text-slate-500">AI Governance Score</p>
-            <p className="text-4xl font-bold tabular-nums leading-tight" style={{ color: scoreColor }}>{data.ai_governance_score}%</p>
-            <Sbadge label={data.estado_semaforo} color={scoreColor} />
-          </div>
-          <div className="space-y-1 mt-4 text-[10px] text-slate-500">
-            <p>Ultima auditoria: <strong className="text-slate-300">{fmtDate(data.ultima_auditoria)}</strong></p>
-            <p>Proxima auditoria: <strong className="text-slate-300">{fmtDate(data.proxima_auditoria)}</strong></p>
-            <p>Clasificacion: <strong className="text-slate-300">{resumen.clasificacion_eu_ai_act}</strong></p>
-          </div>
-        </div>
-        <ResponsiveContainer width="100%" height={230}>
-          <BarChart data={data.dimensiones} margin={{ top: 4, right: 20, bottom: 4, left: -20 }}>
-            <CartesianGrid stroke="#1e293b" vertical={false} />
-            <XAxis dataKey="nombre" tick={{ fill: '#94a3b8', fontSize: 9 }} interval={0} />
-            <YAxis domain={[0, 100]} tick={{ fill: '#475569', fontSize: 9 }} />
-            <Tooltip content={<DarkTip />} />
-            <Bar dataKey="valor" name="Score" radius={[3, 3, 0, 0]} isAnimationActive={false}>
-              {data.dimensiones.map(item => <Cell key={item.nombre} fill={statusColor(item.estado)} />)}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-    </Block>
-  )
-}
-
-function IsoGovernance({ data }) {
-  const maturity = data.madurez_dominios.map(item => ({ ...item, pct: Math.round((item.nivel / item.max) * 100) }))
-  return (
-    <Block title="Gobierno y Cumplimiento ISO 42001" icon={ShieldCheck} accent={clr.azul}>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-4">
-        {[
-          ['Auditorias realizadas', data.auditorias_realizadas, clr.verde],
-          ['Hallazgos abiertos', data.hallazgos_abiertos, clr.amarillo],
-          ['Acciones pendientes', data.acciones_correctivas_pendientes, clr.rojo],
-          ['Riesgos mitigados', `${data.riesgos_mitigados}/${data.riesgos_identificados}`, clr.azul],
-        ].map(([label, value, color]) => (
-          <div key={label} className="rounded-lg p-2.5 border" style={{ background: `${color}06`, borderColor: `${color}20` }}>
-            <p className="text-[8px] uppercase tracking-wider text-slate-500">{label}</p>
-            <p className="text-lg font-bold tabular-nums" style={{ color }}>{value}</p>
-          </div>
-        ))}
-      </div>
-      <ResponsiveContainer width="100%" height={220}>
-        <BarChart layout="vertical" data={maturity} margin={{ top: 4, right: 22, bottom: 4, left: 0 }}>
-          <XAxis type="number" domain={[0, 100]} tick={{ fill: '#475569', fontSize: 9 }} />
-          <YAxis type="category" dataKey="dominio" width={145} tick={{ fill: '#94a3b8', fontSize: 9 }} />
-          <Tooltip content={<DarkTip />} />
-          <Bar dataKey="pct" name="Madurez" fill={clr.azul} barSize={10} radius={[0, 3, 3, 0]} isAnimationActive={false} />
-        </BarChart>
-      </ResponsiveContainer>
-    </Block>
-  )
-}
-
-function RiskEthics({ data, risks, onSelect }) {
-  return (
-    <div className="space-y-5">
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        {[
-          ['Riesgos abiertos', data.riesgos_abiertos, clr.rojo],
-          ['Mitigados', data.riesgos_mitigados, clr.verde],
-          ['Aceptados', data.riesgos_aceptados, clr.azul],
-          ['Escalados al Comite', data.riesgos_escalados_comite, clr.amarillo],
-        ].map(([label, value, color]) => (
-          <div key={label} className="rounded-xl p-3 border" style={{ background: `${color}06`, borderColor: `${color}20` }}>
-            <p className="text-[9px] uppercase tracking-wider text-slate-500">{label}</p>
-            <p className="text-xl font-bold tabular-nums" style={{ color }}>{value}</p>
-          </div>
-        ))}
-      </div>
-      <RiskHeatmap risks={risks} onSelect={onSelect} />
-      <EthicalFrameworks frameworks={data.marcos_eticos} />
-    </div>
-  )
-}
-
-function EthicalFrameworks({ frameworks }) {
-  return (
-    <Block title="Supervision Etica UE - UNESCO - CONPES" icon={Eye} accent={clr.violeta}>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
-        {frameworks.map(frame => (
-          <div key={frame.marco} className="rounded-lg p-3 border" style={{ background: clr.bg, borderColor: clr.borde }}>
-            <p className="text-xs font-bold text-slate-200 mb-2">{frame.marco}</p>
-            <div className="space-y-2">
-              {frame.principios.map(p => {
-                const color = statusColor(p.estado)
-                return (
-                  <div key={p.nombre}>
-                    <div className="flex items-center justify-between gap-2 text-[9px] mb-1">
-                      <span className="text-slate-400 truncate">{p.nombre}</span>
-                      <span className="font-bold tabular-nums" style={{ color }}>{p.valor}%</span>
-                    </div>
-                    <div className="h-1.5 rounded-full overflow-hidden" style={{ background: '#1e293b' }}>
-                      <div className="h-full rounded-full" style={{ width: `${p.valor}%`, background: color }} />
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        ))}
-      </div>
-    </Block>
-  )
-}
-
-function ModelData({ data }) {
-  return (
-    <div className="space-y-5">
-      <Block title="Modelo y Datos" icon={HeartPulse} accent={clr.cyan}>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
-          {[
-            ['Calidad datos', `${data.calidad_general_datos}%`, clr.verde],
-            ['MAE actual', `${data.mae_actual_pct}%`, data.mae_actual_pct > 15 ? clr.rojo : clr.verde],
-            ['RMSE', data.rmse_actual, clr.azul],
-            ['Estado predictivo', data.estado_predictivo, clr.amarillo],
-          ].map(([label, value, color]) => (
-            <div key={label} className="rounded-lg p-2.5 border" style={{ background: `${color}06`, borderColor: `${color}20` }}>
-              <p className="text-[8px] uppercase tracking-wider text-slate-500">{label}</p>
-              <p className="text-lg font-bold tabular-nums leading-tight" style={{ color }}>{value}</p>
-            </div>
-          ))}
-        </div>
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-          <ResponsiveContainer width="100%" height={220}>
-            <BarChart data={data.calidad_fuentes} margin={{ top: 4, right: 16, bottom: 4, left: -20 }}>
-              <CartesianGrid stroke="#1e293b" vertical={false} />
-              <XAxis dataKey="fuente" tick={{ fill: '#94a3b8', fontSize: 9 }} />
-              <YAxis domain={[0, 100]} tick={{ fill: '#475569', fontSize: 9 }} />
-              <Tooltip content={<DarkTip />} />
-              <Bar dataKey="calidad" name="Calidad" radius={[3, 3, 0, 0]} isAnimationActive={false}>
-                {data.calidad_fuentes.map(item => <Cell key={item.fuente} fill={statusColor(item.estado)} />)}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-          <ResponsiveContainer width="100%" height={220}>
-            <BarChart data={data.error_municipios} margin={{ top: 4, right: 16, bottom: 4, left: -20 }}>
-              <CartesianGrid stroke="#1e293b" vertical={false} />
-              <XAxis dataKey="municipio" tick={{ fill: '#94a3b8', fontSize: 9 }} />
-              <YAxis tick={{ fill: '#475569', fontSize: 9 }} />
-              <Tooltip content={<DarkTip />} />
-              <Legend wrapperStyle={{ fontSize: 10, color: '#94a3b8' }} />
-              <Bar dataKey="demanda_real" name="Real" fill={clr.cyan} radius={[3, 3, 0, 0]} isAnimationActive={false} />
-              <Bar dataKey="demanda_predicha" name="Predicha" fill={clr.violeta} radius={[3, 3, 0, 0]} isAnimationActive={false} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </Block>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        {[
-          ['Anonimizacion exitosa', data.anonimizacion_exitosa_pct, clr.verde],
-          ['k-anonimidad', data.cumplimiento_k_anonimidad_pct, clr.verde],
-          ['Drift datos', data.data_drift, clr.amarillo],
-          ['Alertas inequidad', data.fairness.alertas_inequidad, clr.rojo],
-        ].map(([label, value, color]) => (
-          <div key={label} className="rounded-xl p-3 border" style={{ background: `${color}06`, borderColor: `${color}20` }}>
-            <p className="text-[9px] uppercase tracking-wider text-slate-500">{label}</p>
-            <p className="text-xl font-bold tabular-nums" style={{ color }}>{value}{typeof value === 'number' && label !== 'Alertas inequidad' ? '%' : ''}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function SecurityPrivacy({ data }) {
-  return (
-    <Block title="Seguridad y Privacidad" icon={LockKeyhole} accent={clr.amarillo}>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
-        {[
-          ['Eventos seguridad', data.eventos_seguridad, clr.verde],
-          ['Accesos no autorizados', data.intentos_acceso_no_autorizado, clr.verde],
-          ['Usuarios DWH', data.usuarios_dwh, clr.azul],
-          ['Ley 1581', `${data.cumplimiento_ley_1581}%`, clr.amarillo],
-        ].map(([label, value, color]) => (
-          <div key={label} className="rounded-lg p-2.5 border" style={{ background: `${color}06`, borderColor: `${color}20` }}>
-            <p className="text-[8px] uppercase tracking-wider text-slate-500">{label}</p>
-            <p className="text-lg font-bold tabular-nums" style={{ color }}>{value}</p>
-          </div>
-        ))}
-      </div>
-      <div className="grid grid-cols-1 xl:grid-cols-[1fr_180px] gap-4">
-        <ResponsiveContainer width="100%" height={220}>
-          <BarChart data={data.accesos_por_rol} margin={{ top: 4, right: 16, bottom: 4, left: -20 }}>
-            <CartesianGrid stroke="#1e293b" vertical={false} />
-            <XAxis dataKey="rol" tick={{ fill: '#94a3b8', fontSize: 9 }} interval={0} />
-            <YAxis tick={{ fill: '#475569', fontSize: 9 }} />
-            <Tooltip content={<DarkTip />} />
-            <Bar dataKey="usuarios" name="Usuarios" fill={clr.amarillo} radius={[3, 3, 0, 0]} isAnimationActive={false} />
-          </BarChart>
-        </ResponsiveContainer>
-        <div className="rounded-lg p-3 border" style={{ background: clr.bg, borderColor: clr.borde }}>
-          <p className="text-[9px] uppercase tracking-wider text-slate-500">Cifrado AES-256</p>
-          <p className="text-xl font-bold text-green-400">{data.estado_aes_256}</p>
-          <p className="text-[9px] text-slate-500 mt-2">Logs auditoria: <strong className="text-slate-300">{data.logs_auditoria}%</strong></p>
-          <p className="text-[9px] text-slate-500">Consultas DWH mes: <strong className="text-slate-300">{data.consultas_dwh_mes}</strong></p>
-        </div>
-      </div>
-    </Block>
-  )
-}
-
-function PublicValue({ data }) {
-  return (
-    <Block title="Valor Publico e Impacto Institucional" icon={Sparkles} accent={clr.verde}>
-      <ResponsiveContainer width="100%" height={250}>
-        <BarChart data={data.indicadores} margin={{ top: 4, right: 16, bottom: 4, left: -20 }}>
-          <CartesianGrid stroke="#1e293b" vertical={false} />
-          <XAxis dataKey="nombre" tick={{ fill: '#94a3b8', fontSize: 9 }} interval={0} />
-          <YAxis tick={{ fill: '#475569', fontSize: 9 }} />
-          <Tooltip content={<DarkTip />} />
-          <Legend wrapperStyle={{ fontSize: 10, color: '#94a3b8' }} />
-          <Bar dataKey="antes" name="Antes SIAGP" fill={clr.gris} radius={[3, 3, 0, 0]} isAnimationActive={false} />
-          <Bar dataKey="despues" name="Despues SIAGP" fill={clr.verde} radius={[3, 3, 0, 0]} isAnimationActive={false} />
-        </BarChart>
-      </ResponsiveContainer>
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-2 mt-3">
-        {data.indicadores.map(item => (
-          <div key={item.nombre} className="rounded-lg p-2.5 border" style={{ background: clr.bg, borderColor: clr.borde }}>
-            <p className="text-[9px] text-slate-500 truncate">{item.nombre}</p>
-            <p className="text-lg font-bold tabular-nums text-green-400">+{item.mejora}<span className="text-[10px] text-slate-500 ml-1">{item.unidad}</span></p>
-          </div>
-        ))}
-      </div>
-    </Block>
-  )
-}
-
-function RiskHeatmap({ risks, onSelect }) {
-  return (
-    <Block title="Mapa Ejecutivo de Riesgos IA - NIST AI RMF" icon={ShieldAlert} accent={clr.rojo}>
-      <div className="grid grid-cols-[52px_repeat(5,minmax(0,1fr))] gap-1.5 text-[8px] text-slate-500 mb-2">
-        <div />
-        {[1, 2, 3, 4, 5].map(n => <div key={n} className="text-center">P{n}</div>)}
-      </div>
-      <div className="grid grid-cols-[52px_repeat(5,minmax(0,1fr))] gap-1.5">
-        {[5, 4, 3, 2, 1].map(impacto => (
-          <div key={impacto} className="contents">
-            <div className="text-[8px] text-slate-500 flex items-center">I{impacto}</div>
-            {[1, 2, 3, 4, 5].map(probabilidad => {
-              const risk = risks.find(r => r.probabilidad === probabilidad && r.impacto === impacto)
-              const score = probabilidad * impacto
-              const bg = score >= 15 ? 'rgba(239,68,68,0.18)' : score >= 10 ? 'rgba(245,158,11,0.14)' : 'rgba(59,130,246,0.08)'
-              return (
-                <button
-                  key={`${impacto}-${probabilidad}`}
-                  onClick={() => risk && onSelect(risk)}
-                  title={risk ? `${risk.categoria}: ${risk.riesgo}` : `Probabilidad ${probabilidad} / Impacto ${impacto}`}
-                  className="relative h-14 rounded-lg border outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
-                  style={{ background: bg, borderColor: risk ? `${statusColor(risk.nivel)}55` : clr.borde, cursor: risk ? 'pointer' : 'default' }}
-                >
-                  {risk && (
-                    <span className="absolute inset-0 flex items-center justify-center">
-                      <span className="rounded-full flex items-center justify-center text-[9px] font-bold"
-                        style={{
-                          width: 22 + risk.score * 1.7,
-                          height: 22 + risk.score * 1.7,
-                          background: `${statusColor(risk.nivel)}28`,
-                          border: `2px solid ${statusColor(risk.nivel)}`,
-                          color: statusColor(risk.nivel),
-                        }}>
-                        {risk.categoria.slice(0, 3)}
-                      </span>
-                    </span>
-                  )}
-                </button>
-              )
-            })}
-          </div>
-        ))}
-      </div>
-      <div className="mt-3 grid grid-cols-1 md:grid-cols-5 gap-2">
-        {risks.map(r => (
-          <button key={r.id} onClick={() => onSelect(r)}
-            className="text-left rounded-lg p-2.5 border hover:bg-white/[0.03] transition-colors"
-            style={{ background: clr.bg, borderColor: clr.borde }}>
-            <div className="flex items-center justify-between gap-2 mb-1">
-              <p className="text-[11px] font-bold text-slate-200 truncate">{r.categoria}</p>
-              <Sbadge label={r.nivel} />
-            </div>
-            <p className="text-[9px] text-slate-500 leading-relaxed line-clamp-2">{r.riesgo}</p>
-          </button>
-        ))}
-      </div>
-    </Block>
-  )
-}
-
-function Compliance({ items }) {
-  return (
-    <Block title="Cumplimiento Regulatorio" icon={Scale} accent={clr.azul}>
-      <div className="space-y-2">
-        {items.map(m => {
-          const color = statusColor(m.estado)
-          return (
-            <div key={m.nombre} className="rounded-lg p-3 border" style={{ background: clr.bg, borderColor: clr.borde }}>
-              <div className="flex items-center justify-between gap-2 mb-2">
-                <p className="text-[11px] font-bold text-slate-200">{m.nombre}</p>
-                <Sbadge label={m.estado} color={color} />
-              </div>
-              <div className="h-1.5 rounded-full overflow-hidden mb-2" style={{ background: '#1e293b' }}>
-                <div className="h-full rounded-full" style={{ width: `${m.valor}%`, background: color }} />
-              </div>
-              <p className="text-[9px] text-slate-500 leading-relaxed">{m.detalle}</p>
-            </div>
-          )
-        })}
-      </div>
-    </Block>
-  )
-}
-
-function SystemIdentity({ meta, roles }) {
-  return (
-    <Block title="Identificacion del Sistema SIAGP" icon={BrainCircuit} accent={clr.violeta}>
-      <p className="text-[10px] text-slate-400 leading-relaxed mb-3">{meta.tipo_sistema}</p>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-3">
-        {Object.entries(roles).map(([k, v]) => (
-          <div key={k} className="rounded-lg p-2.5 border" style={{ background: clr.bg, borderColor: clr.borde }}>
-            <p className="text-[8px] uppercase tracking-wider text-slate-600">{k.replaceAll('_', ' ')}</p>
-            <p className="text-[10px] font-semibold text-slate-300">{v}</p>
-          </div>
-        ))}
-      </div>
-      <div className="rounded-lg p-2.5 border" style={{ background: 'rgba(239,68,68,0.05)', borderColor: 'rgba(239,68,68,0.18)' }}>
-        <p className="text-[9px] text-red-300 font-bold mb-1">Lineas rojas</p>
-        <p className="text-[9px] text-slate-500 leading-relaxed">{meta.exclusiones}</p>
-      </div>
-    </Block>
-  )
-}
-
-function Ethics({ data }) {
-  const radar = data.radar.map(item => ({ dimension: item.nombre, valor: item.valor }))
-
-  return (
-    <Block title="Etica y Confianza" icon={Eye} accent={clr.violeta}>
-      <div className="grid grid-cols-1 xl:grid-cols-[280px_1fr] gap-4">
-        <div>
-          <div className="rounded-lg p-3 border mb-3" style={{ background: clr.bg, borderColor: clr.borde }}>
-            <p className="text-[9px] uppercase tracking-wider font-semibold text-slate-500">Indice Global de Confianza IA</p>
-            <div className="flex items-end gap-2">
-              <p className="text-2xl font-bold tabular-nums" style={{ color: statusColor(data.estado) }}>{data.indice_global}%</p>
-              <Sbadge label={data.estado} />
-            </div>
-          </div>
-          <ResponsiveContainer width="100%" height={220}>
-            <RadarChart data={radar} margin={{ top: 12, right: 28, bottom: 12, left: 28 }}>
-              <PolarGrid stroke="#1e293b" />
-              <PolarAngleAxis dataKey="dimension" tick={{ fill: '#94a3b8', fontSize: 8 }} />
-              <PolarRadiusAxis angle={90} domain={[0, 100]} tick={{ fill: '#334155', fontSize: 6 }} tickCount={4} />
-              <Radar name="Confianza" dataKey="valor" stroke={clr.violeta} fill={clr.violeta} fillOpacity={0.18} strokeWidth={2} dot={{ r: 2, fill: clr.violeta }} isAnimationActive={false} />
-              <Tooltip content={<DarkTip />} />
-            </RadarChart>
-          </ResponsiveContainer>
-        </div>
-        <div className="space-y-2">
-          {data.radar.map(item => (
-            <div key={item.nombre} className="flex items-start gap-2.5 rounded-lg p-2.5 border"
-              style={{ background: clr.bg, borderColor: clr.borde }}>
-              <span className="w-2 h-2 rounded-full mt-1 shrink-0" style={{ background: statusColor(item.estado) }} />
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between gap-2">
-                  <p className="text-[11px] font-bold text-slate-200">{item.nombre}</p>
-                  <span className="text-[10px] font-bold tabular-nums" style={{ color: statusColor(item.estado) }}>{item.valor}%</span>
-                </div>
-                <p className="text-[9px] text-slate-500 leading-relaxed mt-0.5">{item.descripcion}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </Block>
-  )
-}
-
-function HumanSupervision({ data }) {
-  const alert = data.tasa_discrepancia < data.rango_discrepancia_min || data.tasa_discrepancia > data.rango_discrepancia_max
-  return (
-    <Block title="Supervision Humana HITL" icon={UserCheck} accent={alert ? clr.amarillo : clr.verde}>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
-        {[
-          ['Deliberacion humana', data.tasa_deliberacion, clr.verde, '%'],
-          ['Discrepancia Humano vs IA', data.tasa_discrepancia, alert ? clr.rojo : clr.verde, '%'],
-          ['Decisiones justificadas', data.decisiones_justificadas, clr.verde, '%'],
-          ['Muestra auditoria HITL', data.muestra_auditoria, clr.azul, '%'],
-        ].map(([label, value, color, suffix]) => (
-          <div key={label} className="rounded-lg p-3 border" style={{ background: `${color}06`, borderColor: `${color}20` }}>
-            <p className="text-[9px] uppercase tracking-wider font-semibold text-slate-500">{label}</p>
-            <p className="text-xl font-bold tabular-nums leading-tight" style={{ color }}>{value}{suffix}</p>
-          </div>
-        ))}
-      </div>
-      {alert && (
-        <div className="rounded-lg px-3 py-2 text-[10px] text-slate-300 flex items-start gap-2 mb-4"
-          style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.22)' }}>
-          <AlertTriangle size={13} style={{ color: clr.rojo }} className="mt-0.5 shrink-0" />
-          <span>{data.alerta}</span>
-        </div>
-      )}
-      <ResponsiveContainer width="100%" height={230}>
-        <BarChart data={data.historial} margin={{ top: 4, right: 14, bottom: 4, left: -20 }}>
-          <CartesianGrid stroke="#1e293b" vertical={false} />
-          <XAxis dataKey="periodo" tick={{ fill: '#94a3b8', fontSize: 9 }} />
-          <YAxis tick={{ fill: '#475569', fontSize: 9 }} />
-          <Tooltip content={<DarkTip />} />
-          <Legend wrapperStyle={{ fontSize: 10, color: '#94a3b8' }} />
-          <Bar dataKey="deliberacion" name="Deliberacion" fill={clr.verde} radius={[3, 3, 0, 0]} isAnimationActive={false} />
-          <Bar dataKey="discrepancia" name="Discrepancia" fill={alert ? clr.rojo : clr.amarillo} radius={[3, 3, 0, 0]} isAnimationActive={false} />
-          <Bar dataKey="justificacion" name="Justificacion" fill={clr.azul} radius={[3, 3, 0, 0]} isAnimationActive={false} />
-        </BarChart>
-      </ResponsiveContainer>
-    </Block>
-  )
-}
-
-function CitizenChallenge({ data }) {
-  return (
-    <Block title="Impugnaciones Ciudadanas" icon={FileSearch} accent={clr.cyan}>
-      <div className="flex items-center justify-between mb-3">
-        <Sbadge label={data.estado} />
-        <span className="text-[10px] text-slate-500">SLA: {data.sla_horas}h</span>
-      </div>
-      <div className="grid grid-cols-3 gap-2 mb-3">
-        {[
-          ['Abiertas', data.abiertas, clr.amarillo],
-          ['En revision', data.en_revision, clr.azul],
-          ['Resueltas', data.resueltas, clr.verde],
-        ].map(([label, value, color]) => (
-          <div key={label} className="rounded-lg p-2.5 border" style={{ background: `${color}06`, borderColor: `${color}20` }}>
-            <p className="text-[8px] uppercase tracking-wider text-slate-500">{label}</p>
-            <p className="text-lg font-bold tabular-nums" style={{ color }}>{value}</p>
-          </div>
-        ))}
-      </div>
-      <p className="text-[10px] text-slate-500 leading-relaxed">{data.descripcion}</p>
-    </Block>
-  )
-}
-
-function SystemHealth({ data }) {
-  return (
-    <Block title="Salud del Sistema IA" icon={HeartPulse} accent={clr.cyan}>
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-2">
-        {data.map(item => {
-          const color = statusColor(item.estado)
-          return (
-            <div key={item.nombre} className="rounded-lg p-2.5 border" style={{ background: `${color}06`, borderColor: `${color}20` }}>
-              <p className="text-[9px] text-slate-500 leading-tight min-h-8">{item.nombre}</p>
-              <p className="text-lg font-bold tabular-nums leading-tight" style={{ color }}>{item.valor}%</p>
-              <p className="text-[8px] text-slate-500 leading-tight">{item.meta}</p>
-            </div>
-          )
-        })}
-      </div>
-    </Block>
-  )
-}
-
-function Trends({ data }) {
-  return (
-    <Block title="Tendencias de Gobierno IA" icon={TrendingUp} accent={clr.verde}>
-      <ResponsiveContainer width="100%" height={250}>
-        <LineChart data={data} margin={{ top: 8, right: 16, bottom: 4, left: -18 }}>
-          <CartesianGrid stroke="#1e293b" vertical={false} />
-          <XAxis dataKey="periodo" tick={{ fill: '#94a3b8', fontSize: 9 }} />
-          <YAxis domain={[0, 100]} tick={{ fill: '#475569', fontSize: 9 }} />
-          <Tooltip content={<DarkTip />} />
-          <Legend wrapperStyle={{ fontSize: 10, color: '#94a3b8' }} />
-          <Line type="monotone" dataKey="riesgo" name="Riesgo" stroke={clr.rojo} strokeWidth={2} dot={{ r: 2 }} isAnimationActive={false} />
-          <Line type="monotone" dataKey="cumplimiento" name="Cumplimiento" stroke={clr.azul} strokeWidth={2} dot={{ r: 2 }} isAnimationActive={false} />
-          <Line type="monotone" dataKey="madurez" name="Madurez" stroke={clr.violeta} strokeWidth={2} dot={{ r: 2 }} isAnimationActive={false} />
-          <Line type="monotone" dataKey="precision" name="Precision" stroke={clr.verde} strokeWidth={2} dot={{ r: 2 }} isAnimationActive={false} />
-          <Line type="monotone" dataKey="calidad_datos" name="Calidad datos" stroke={clr.cyan} strokeWidth={2} dot={{ r: 2 }} isAnimationActive={false} />
-        </LineChart>
-      </ResponsiveContainer>
-    </Block>
-  )
-}
-
-function Auditability({ data }) {
-  const pie = [
-    { name: 'Ejecutadas', value: data.ejecutadas, color: clr.verde },
-    { name: 'Programadas', value: data.programadas, color: clr.azul },
-    { name: 'Pendientes', value: data.pendientes, color: clr.amarillo },
+const D = {
+  isoClausulas: [
+    {id:'6.1',v:90,u:85}, {id:'6.2',v:85,u:80}, {id:'7.2',v:80,u:100},
+    {id:'8.4',v:88,u:85}, {id:'9.1',v:75,u:80}, {id:'10.1',v:70,u:80}
+  ],
+  maeMonthly: [
+    { periodo: 'Dic', val: 9.1, meta: 15 },
+    { periodo: 'Ene', val: 10.4, meta: 15 },
+    { periodo: 'Feb', val: 11.8, meta: 15 },
+    { periodo: 'Mar', val: 13.2, meta: 15 },
+    { periodo: 'Abr', val: 12.1, meta: 15 },
+    { periodo: 'May', val: 11.3, meta: 15 }
+  ],
+  fairnessData: [
+    { metric: 'IID (×0.1)', valor: 8.2, umbral: 7.5, fill: clr.verde },
+    { metric: 'ICE %', valor: 74, umbral: 80, fill: clr.amarillo },
+    { metric: '|EOD|×20', valor: 0.6, umbral: 1, fill: clr.verde },
+    { metric: 'DI (×0.1)', valor: 9.1, umbral: 8.0, fill: clr.verde }
+  ],
+  tendencias: [
+    {p:'Mar', riesgo:82, cumplimiento:45, madurez:35, precision:0},
+    {p:'Abr', riesgo:78, cumplimiento:58, madurez:48, precision:72},
+    {p:'May', riesgo:72, cumplimiento:68, madurez:58, precision:80},
+    {p:'Jun', riesgo:68, cumplimiento:76, madurez:68, precision:85}
+  ],
+  hitlHistorial: [
+    {p:'Mar', deliberacion:0,  discrepancia:0,  justificacion:0},
+    {p:'Abr', deliberacion:30, discrepancia:1,  justificacion:35},
+    {p:'May', deliberacion:65, discrepancia:2,  justificacion:70},
+    {p:'Jun', deliberacion:90, discrepancia:3,  justificacion:91}
+  ],
+  heatmap: [
+    {p:5,i:1,v:5,n:'m'},{p:5,i:2,v:10,n:'h'},{p:5,i:3,v:15,n:'h'},{p:5,i:4,v:20,n:'c'},{p:5,i:5,v:25,n:'c'},
+    {p:4,i:1,v:4,n:'l'},{p:4,i:2,v:8,n:'m'},{p:4,i:3,v:12,n:'h',r:'RS-01/03'},{p:4,i:4,v:16,n:'c'},{p:4,i:5,v:20,n:'c'},
+    {p:3,i:1,v:3,n:'l'},{p:3,i:2,v:6,n:'m'},{p:3,i:3,v:9,n:'m',r:'RS-05'},{p:3,i:4,v:12,n:'h',r:'RS-02'},{p:3,i:5,v:15,n:'h'},
+    {p:2,i:1,v:2,n:'l'},{p:2,i:2,v:4,n:'l'},{p:2,i:3,v:6,n:'m'},{p:2,i:4,v:8,n:'m'},{p:2,i:5,v:10,n:'h',r:'RS-04'},
+    {p:1,i:1,v:1,n:'l'},{p:1,i:2,v:2,n:'l'},{p:1,i:3,v:3,n:'l'},{p:1,i:4,v:4,n:'l'},{p:1,i:5,v:5,n:'m'}
   ]
+};
+
+export default function GobiernoIA() {
+
+  const Kpi = ({ label, val, sub, subIconColor, subText, mainColor = clr.text }) => (
+    <div className="rounded-xl p-3 border" style={{ background: clr.card, borderColor: clr.borde }}>
+      <p className="text-[10px] font-mono text-slate-500 mb-1">{label}</p>
+      <p className="text-2xl font-bold leading-tight" style={{ color: mainColor }}>{val}</p>
+      <div className="flex items-center gap-1.5 mt-2">
+        <div className="w-1.5 h-1.5 rounded-full" style={{ background: subIconColor }}></div>
+        <p className="text-[11px] text-slate-400">{subText}</p>
+      </div>
+    </div>
+  );
+
+  const BarRow = ({ label, pct, color }) => (
+    <div className="flex items-center gap-3 mb-2">
+      <span className="text-[11px] text-slate-400 w-28 shrink-0 text-right">{label}</span>
+      <div className="flex-1 h-1.5 rounded-full" style={{ background: clr.bg }}>
+        <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, background: color }}></div>
+      </div>
+      <span className="text-[11px] font-mono font-semibold w-8 text-right" style={{ color }}>{pct}</span>
+    </div>
+  );
+
+  const MetricRow = ({ name, val, thr, dotColor, valColor = '#e2e8f0' }) => (
+    <div className="flex items-center gap-2 py-2 border-b last:border-b-0" style={{ borderColor: clr.borde }}>
+      <span className="text-xs text-slate-400 flex-1">{name}</span>
+      <span className="text-xs font-semibold w-12 text-right" style={{ color: valColor }}>{val}</span>
+      <span className="text-[10px] font-mono text-slate-500 w-12 text-right">{thr}</span>
+      <div className="w-1.5 h-1.5 rounded-full ml-1" style={{ background: dotColor }}></div>
+    </div>
+  );
+
+  const FairnessRow = ({ name, formula, val, thr, dotColor, valColor }) => (
+    <div className="grid grid-cols-[1fr_auto_auto_10px] gap-2 items-center py-2 border-b last:border-b-0" style={{ borderColor: clr.borde }}>
+      <div>
+        <div className="text-xs text-slate-400">{name}</div>
+        <div className="text-[10px] font-mono text-slate-500">{formula}</div>
+      </div>
+      <span className="text-sm font-semibold font-mono text-right" style={{ color: valColor }}>{val}</span>
+      <span className="text-[10px] font-mono text-slate-500 text-right whitespace-nowrap">{thr}</span>
+      <div className="w-1.5 h-1.5 rounded-full" style={{ background: dotColor }}></div>
+    </div>
+  );
+
+  const hmColor = (n) => {
+    if (n === 'c') return { bg: 'rgba(239,68,68,0.18)', text: clr.rojo };
+    if (n === 'h') return { bg: 'rgba(245,158,11,0.16)', text: clr.amarillo };
+    if (n === 'm') return { bg: 'rgba(59,130,246,0.12)', text: clr.azul };
+    return { bg: 'rgba(34,197,94,0.10)', text: clr.verde };
+  };
 
   return (
-    <Block title="Auditoria, Trazabilidad y Evidencias" icon={FileSearch} accent={clr.amarillo}>
-      <div className="grid grid-cols-1 xl:grid-cols-[230px_1fr] gap-4">
+    <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 py-6 space-y-6" style={{ background: clr.bg, color: '#e2e8f0' }}>
+      
+      {/* ══ HEADER ══════════════════════════════════════════ */}
+      <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 pb-4 border-b" style={{ borderColor: clr.borde }}>
         <div>
-          <ResponsiveContainer width="100%" height={180}>
-            <PieChart>
-              <Pie data={pie} dataKey="value" nameKey="name" innerRadius={44} outerRadius={70} paddingAngle={3} isAnimationActive={false}>
-                {pie.map(item => <Cell key={item.name} fill={item.color} />)}
-              </Pie>
-              <Tooltip content={<DarkTip />} />
-            </PieChart>
-          </ResponsiveContainer>
-          <div className="grid grid-cols-3 gap-2">
-            {pie.map(item => (
-              <div key={item.name} className="text-center">
-                <p className="text-base font-bold tabular-nums" style={{ color: item.color }}>{item.value}</p>
-                <p className="text-[8px] text-slate-500">{item.name}</p>
+          <div className="text-lg font-semibold tracking-tight text-slate-100">Gobierno de IA — SIAGP <span style={{fontWeight: 300, color: 'var(--text3)'}}>/ HDPUV</span></div>
+          <div className="text-[11px] text-slate-500 mt-1 font-mono">ISO/IEC 42001 · NIST AI RMF · EU AI Act · AIA · CONPES 3975 &nbsp;|&nbsp; v2.0 · Mayo 2026 · JSON v2</div>
+        </div>
+        <div className="flex gap-2 flex-wrap items-center">
+          <Sbadge label="⚡ GO condicionado" color={clr.amarillo} />
+          <Sbadge label="Riesgo ALTO" color={clr.rojo} />
+          <Sbadge label="Kill-Switch armado" color={clr.verde} />
+          <Sbadge label="5 condiciones pendientes" color={clr.azul} />
+        </div>
+      </div>
+      
+      {/* ══ FILA 1 — KPI EJECUTIVOS ════════════════════════ */}
+      <SectionTitle eyebrow="Fila 1" title="Resumen ejecutivo" icon={Gauge} accent={clr.verde} />
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <Kpi label="AI Governance Score" val={<span>82<span className="text-sm font-normal text-slate-400">%</span></span>} subIconColor={clr.amarillo} subText="Riesgo moderado" />
+        <Kpi label="Madurez AIMS (ISO 42001)" val={<span>68<span className="text-sm font-normal text-slate-400">%</span></span>} subIconColor={clr.amarillo} subText="En curso" />
+        <Kpi label="MAE Global" val={<span>11.3<span className="text-sm font-normal text-slate-400">%</span></span>} subIconColor={clr.verde} subText="Meta ≤15%" />
+        <Kpi label="Incidentes activos" val="0" mainColor={clr.verde} subIconColor={clr.verde} subText="Meta = 0" />
+        <Kpi label="HITL discrepancia" val={<span>3<span className="text-sm font-normal text-slate-400">%</span></span>} mainColor={clr.amarillo} subIconColor={clr.amarillo} subText="Rango sano: 10-30%" />
+      </div>
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <Kpi label="Concept Drift" val={<span>8<span className="text-sm font-normal text-slate-400">%</span></span>} subIconColor={clr.verde} subText="Umbral: <15%" />
+        <Kpi label="Calidad DWH" val={<span>98.1<span className="text-sm font-normal text-slate-400">%</span></span>} subIconColor={clr.verde} subText="Meta ≥97%" />
+        <Kpi label="Data Literacy" val={<span>83<span className="text-sm font-normal text-slate-400">%</span></span>} mainColor={clr.amarillo} subIconColor={clr.amarillo} subText="Meta 100%" />
+        <Kpi label="ICE Territorial" val={<span>74<span className="text-sm font-normal text-slate-400">%</span></span>} mainColor={clr.amarillo} subIconColor={clr.amarillo} subText="Meta ≥80%" />
+        <Kpi label="Riesgo residual" val={<span>72<span className="text-sm font-normal text-slate-400">%</span></span>} mainColor={clr.rojo} subIconColor={clr.rojo} subText="Apetito: 60%" />
+      </div>
+      
+      {/* ══ BLOQUE 2 — GOBERNANZA Y CUMPLIMIENTO ═══════════ */}
+      <SectionTitle eyebrow="Bloque 2" title="Gobernanza y cumplimiento ISO/IEC 42001" icon={ShieldCheck} accent={clr.azul} />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <Block title="Dimensiones de gobernanza" icon={ShieldCheck} accent={clr.azul}>
+          <div className="mb-4">
+            <BarRow label="Cumplimiento" pct={100} color={clr.verde} />
+            <BarRow label="Seguridad" pct={95} color={clr.verde} />
+            <BarRow label="Ética" pct={92} color={clr.verde} />
+            <BarRow label="Calidad de datos" pct={89} color={clr.amarillo} />
+            <BarRow label="Riesgos" pct={87} color={clr.amarillo} />
+            <BarRow label="Fairness" pct={74} color={clr.amarillo} />
+            <BarRow label="Supervisión humana" pct={83} color={clr.amarillo} />
+          </div>
+          <div className="border-t pt-4" style={{ borderColor: clr.borde }}>
+            <p className="text-xs font-semibold text-slate-200 mb-3">Madurez ISO 42001 por cláusula</p>
+            <div className="h-40">
+              <ResponsiveContainer width="100%" height="100%">
+                <ComposedChart layout="vertical" data={D.isoClausulas} margin={{ top: 0, right: 10, bottom: 0, left: -20 }}>
+                  <CartesianGrid stroke="#1e293b" horizontal={false} />
+                  <XAxis type="number" domain={[0, 100]} tick={{ fill: '#475569', fontSize: 9 }} />
+                  <YAxis type="category" dataKey="id" tick={{ fill: '#94a3b8', fontSize: 9 }} />
+                  <Tooltip content={<DarkTip />} cursor={{fill: 'rgba(255,255,255,0.02)'}} />
+                  <Bar dataKey="u" name="Umbral" fill="rgba(255,255,255,0.06)" barSize={14} radius={[0,3,3,0]} isAnimationActive={false} />
+                  <Bar dataKey="v" name="Implementado" barSize={14} radius={[0,3,3,0]} isAnimationActive={false}>
+                    {D.isoClausulas.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.v >= entry.u ? 'rgba(34,197,94,0.6)' : 'rgba(245,158,11,0.6)'} />
+                    ))}
+                  </Bar>
+                </ComposedChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </Block>
+        <Block title="Cumplimiento normativo multi-marco" icon={Scale} accent={clr.azul}>
+          <div className="grid grid-cols-5 gap-2 mb-4">
+            {[
+              { n: 'ISO 42001', v: '100%', c: clr.verde, st: 'Cubierta' },
+              { n: 'EU AI Act', v: '74%', c: clr.amarillo, st: 'Limitado' },
+              { n: 'Ley 1581', v: '87%', c: clr.amarillo, st: 'Cond.' },
+              { n: 'UNESCO', v: '82%', c: clr.azul, st: 'Medio/A' },
+              { n: 'CONPES IA', v: '80%', c: clr.verde, st: 'Alineado' }
+            ].map(x => (
+              <div key={x.n} className="rounded-lg p-2 text-center" style={{ background: clr.bg }}>
+                <p className="text-[9px] font-mono text-slate-500 mb-1 truncate">{x.n}</p>
+                <p className="text-lg font-bold leading-none mb-2" style={{ color: x.c }}>{x.v}</p>
+                <Sbadge label={x.st} color={x.c} />
               </div>
             ))}
           </div>
-          <div className="rounded-lg p-2.5 border mt-3" style={{ background: clr.bg, borderColor: clr.borde }}>
-            <p className="text-[9px] text-slate-500">Trazabilidad</p>
-            <p className="text-xl font-bold tabular-nums" style={{ color: clr.amarillo }}>{data.trazabilidad}%</p>
-            <p className="text-[8px] text-slate-500">{data.evidencias} evidencias clave</p>
+          <div className="border-t pt-4 mb-4" style={{ borderColor: clr.borde }}>
+            <p className="text-xs font-semibold text-slate-200 mb-3">Auditorías 2026</p>
+            <div className="grid grid-cols-3 gap-2">
+              <div className="rounded-lg p-2 text-center" style={{ background: clr.bg }}>
+                <p className="text-xl font-bold" style={{ color: clr.verde }}>4</p>
+                <p className="text-[9px] font-mono text-slate-500 mt-1">Realizadas</p>
+              </div>
+              <div className="rounded-lg p-2 text-center" style={{ background: clr.bg }}>
+                <p className="text-xl font-bold" style={{ color: clr.amarillo }}>2</p>
+                <p className="text-[9px] font-mono text-slate-500 mt-1">Pendientes</p>
+              </div>
+              <div className="rounded-lg p-2 text-center" style={{ background: clr.bg }}>
+                <p className="text-xl font-bold text-slate-200">6</p>
+                <p className="text-[9px] font-mono text-slate-500 mt-1">Total año</p>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr style={{ borderBottom: `1px solid ${clr.borde}` }}>
-                {['Auditoria', 'Frecuencia', 'Responsable', 'Estado'].map(h => (
-                  <th key={h} className="text-left pb-1.5 pr-3 text-slate-500 font-semibold uppercase tracking-wider text-[8px]">{h}</th>
+          <div className="border-t pt-4" style={{ borderColor: clr.borde }}>
+            <p className="text-xs font-semibold text-slate-200 mb-2">Salvaguardas de gobernanza</p>
+            {[
+              { n: 'Human-in-the-Loop (HITL)', ok: true, s: 'Cumple' },
+              { n: 'K-anonimidad k≥5', ok: true, s: 'Cumple' },
+              { n: 'Fail-Safe (MAE > 15%)', ok: true, s: 'Cumple' },
+              { n: 'Monitoreo de Drift mensual', ok: true, s: 'Cumple' },
+              { n: 'Auditoría externa ciberseguridad', ok: false, s: 'Jul 2026' },
+              { n: 'Data Literacy 100% certificados', ok: false, s: '83% actual' }
+            ].map(x => (
+              <div key={x.n} className="flex items-center gap-2 py-1.5 border-b last:border-b-0" style={{ borderColor: clr.borde }}>
+                <span className="text-sm font-bold w-4 text-center" style={{ color: x.ok ? clr.verde : clr.rojo }}>{x.ok ? '✓' : '✗'}</span>
+                <span className="text-[11px] text-slate-400 flex-1">{x.n}</span>
+                <Sbadge label={x.s} color={x.ok ? clr.verde : clr.amarillo} />
+              </div>
+            ))}
+          </div>
+        </Block>
+      </div>
+      
+      {/* ══ BLOQUE 3 — RIESGOS NIST ════════════════════════ */}
+      <SectionTitle eyebrow="Bloque 3" title="Mapa de riesgos NIST AI RMF (P × I)" icon={ShieldAlert} accent={clr.rojo} />
+      <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-4">
+        <Block title="Heatmap 5×5 — Probabilidad × Impacto" icon={ShieldAlert} accent={clr.rojo}>
+          <div style={{display: 'grid', gridTemplateColumns: '22px repeat(5,1fr)', gap: 2, fontSize: 9, color: 'var(--text3)', fontFamily: 'var(--mono)', marginBottom: 3}}>
+            <div></div><div className="text-center text-slate-500">I=1</div><div className="text-center text-slate-500">I=2</div><div className="text-center text-slate-500">I=3</div><div className="text-center text-slate-500">I=4</div><div className="text-center text-slate-500">I=5</div>
+          </div>
+          <div style={{display: 'grid', gridTemplateColumns: '22px repeat(5,1fr)', gap: 3}}>
+            {[5, 4, 3, 2, 1].map((p) => (
+              <React.Fragment key={`p-${p}`}>
+                <div className="flex items-center justify-center text-[9px] text-slate-500 font-mono">P{p}</div>
+                {[1, 2, 3, 4, 5].map((i) => {
+                  const cell = D.heatmap.find(c => c.p === p && c.i === i);
+                  if (!cell) return <div key={`p${p}i${i}`} className="rounded bg-slate-800/50 h-9" />;
+                  const hc = hmColor(cell.n);
+                  return (
+                    <div key={`p${p}i${i}`} className="rounded h-9 flex flex-col items-center justify-center cursor-default font-mono transition-colors" 
+                         style={{ background: hc.bg, color: hc.text }} title={`P=${p} × I=${i} = ${cell.v}${cell.r?' ('+cell.r+')':''}`}>
+                      <span className="text-[11px] font-bold">{cell.v}</span>
+                      {cell.r && <span className="text-[8px] opacity-85">{cell.r}</span>}
+                    </div>
+                  );
+                })}
+              </React.Fragment>
+            ))}
+          </div>
+          <div className="flex flex-wrap gap-4 mt-4 text-[10px]">
+            <span style={{color: clr.rojo}}>■ Crítico ≥16</span>
+            <span style={{color: clr.amarillo}}>■ Alto 10–15</span>
+            <span style={{color: clr.azul}}>■ Medio 5–9</span>
+            <span style={{color: clr.verde}}>■ Bajo 1–4</span>
+          </div>
+        </Block>
+        <Block title="Riesgos identificados" icon={AlertTriangle} accent={clr.amarillo}>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b text-[10px] uppercase font-mono text-slate-500" style={{ borderColor: clr.borde }}>
+                  <th className="pb-1.5 font-medium">ID</th>
+                  <th className="pb-1.5 font-medium">Riesgo</th>
+                  <th className="pb-1.5 font-medium">P×I</th>
+                  <th className="pb-1.5 font-medium">Nivel</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  {id:'RS-01', r:'Subregistro calidad HIS', pi:12, n:'Alto', c:clr.amarillo},
+                  {id:'RS-02', r:'Concept Drift / obsolescencia', pi:12, n:'Alto', c:clr.amarillo},
+                  {id:'RS-03', r:'Complacencia algorítmica', pi:12, n:'Alto', c:clr.amarillo},
+                  {id:'RS-04', r:'Reidentificación municipios', pi:10, n:'Alto', c:clr.amarillo},
+                  {id:'RS-05', r:'Trazabilidad / function creep', pi:9, n:'Medio', c:clr.azul},
+                ].map(x => (
+                  <tr key={x.id} className="border-b last:border-b-0" style={{ borderColor: clr.borde }}>
+                    <td className="py-2 text-[11px] font-mono font-medium" style={{ color: clr.azul }}>{x.id}</td>
+                    <td className="py-2 text-[11px] text-slate-400">{x.r}</td>
+                    <td className="py-2 text-[11px] font-mono font-bold" style={{ color: x.c }}>{x.pi}</td>
+                    <td className="py-2"><Sbadge label={x.n} color={x.c} /></td>
+                  </tr>
                 ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="mt-4 p-2.5 rounded-lg text-[11px] border" style={{ background: 'rgba(239,68,68,0.05)', color: clr.rojo, borderColor: 'rgba(239,68,68,0.2)' }}>
+            ⚠ Riesgo residual 72% supera apetito (60%). Revisión del Comité de Gobernanza requerida.
+          </div>
+        </Block>
+      </div>
+      
+      {/* ══ BLOQUE 4 — FAIRNESS ════════════════════════════ */}
+      <SectionTitle eyebrow="Bloque 4" title="Fairness (semáforo de equidad territorial)" icon={Scale} accent={clr.azul} />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <Block title="Métricas prioritarias ★ — valores técnicos corregidos" icon={Scale} accent={clr.azul}>
+          <div className="grid grid-cols-[1fr_auto_auto_10px] gap-2 pb-1 border-b mb-1" style={{ borderColor: clr.borde }}>
+            <span className="text-[10px] font-mono text-slate-500">MÉTRICA</span>
+            <span className="text-[10px] font-mono text-slate-500 text-right">VALOR</span>
+            <span className="text-[10px] font-mono text-slate-500 text-right">UMBRAL V.</span>
+            <span></span>
+          </div>
+          <FairnessRow name="★ IID — Índice de Impacto Distribucional" formula="(Recursos_i/Total) ÷ (Necesidad_i/Total)" val="0.82" thr="0.75–1.25" dotColor={clr.verde} valColor={clr.verde} />
+          <FairnessRow name="★ ICE — Índice de Cobertura Equitativa" formula="% municipios con IID ∈ [0.75, 1.25]" val="74%" thr="≥ 80%" dotColor={clr.amarillo} valColor={clr.amarillo} />
+          <FairnessRow name="★ EOD — Equal Opportunity Difference" formula="TPR_rural − TPR_urbano" val="−0.03" thr="−0.05 a 0.05" dotColor={clr.verde} valColor={clr.verde} />
+          <FairnessRow name="★ Data Literacy — Usuarios certificados" formula="(certificados / total directos) × 100" val="83%" thr="100%" dotColor={clr.amarillo} valColor={clr.amarillo} />
+          <FairnessRow name="DI — Disparate Impact Ratio (apoyo)" formula="P(Ŷ=1|rural) / P(Ŷ=1|urbano)" val="0.91" thr="0.80–1.25" dotColor={clr.verde} valColor={clr.verde} />
+          <FairnessRow name="ΔMAE — Delta error rural/urbano (apoyo)" formula="MAE_rural − MAE_urbano" val="8.2%" thr="≤ 5%" dotColor={clr.amarillo} valColor={clr.amarillo} />
+          
+          <div className="grid grid-cols-3 gap-2 mt-4">
+            <div className="rounded-lg p-2 text-center" style={{ background: 'rgba(34,197,94,0.1)' }}>
+              <p className="text-[10px] font-mono font-bold" style={{ color: clr.verde }}>Verde</p>
+              <p className="text-[9px] mt-1 opacity-80" style={{ color: clr.verde }}>IID ≥0.75 · ICE ≥80%<br/>EOD ≤±0.05 · DI ≥0.80</p>
+            </div>
+            <div className="rounded-lg p-2 text-center" style={{ background: 'rgba(245,158,11,0.1)' }}>
+              <p className="text-[10px] font-mono font-bold" style={{ color: clr.amarillo }}>Amarillo</p>
+              <p className="text-[9px] mt-1 opacity-80" style={{ color: clr.amarillo }}>IID 0.60–0.75<br/>ICE 70–80%</p>
+            </div>
+            <div className="rounded-lg p-2 text-center" style={{ background: 'rgba(239,68,68,0.1)' }}>
+              <p className="text-[10px] font-mono font-bold" style={{ color: clr.rojo }}>Rojo</p>
+              <p className="text-[9px] mt-1 opacity-80" style={{ color: clr.rojo }}>IID &lt;0.60 o ICE &lt;70%<br/>EOD &gt;±0.15 → KS</p>
+            </div>
+          </div>
+        </Block>
+        <Block title="Evaluación de impacto — municipios del Valle" icon={Target} accent={clr.azul}>
+          <table className="w-full text-left border-collapse mb-3">
+            <thead>
+              <tr className="border-b text-[10px] uppercase font-mono text-slate-500" style={{ borderColor: clr.borde }}>
+                <th className="pb-1.5 font-medium">Municipio</th>
+                <th className="pb-1.5 font-medium">Real</th>
+                <th className="pb-1.5 font-medium">Pred.</th>
+                <th className="pb-1.5 font-medium">Error</th>
+                <th className="pb-1.5 font-medium">IID</th>
+                <th className="pb-1.5 font-medium">Rep.</th>
               </tr>
             </thead>
             <tbody>
-              {data.items.map((a, i) => (
-                <tr key={a.tipo} style={{ borderBottom: i < data.items.length - 1 ? `1px solid ${clr.borde}` : 'none' }}>
-                  <td className="py-2 pr-3">
-                    <p className="text-[10px] text-slate-200 font-medium">{a.tipo}</p>
-                    <p className="text-[8px] text-slate-500">{a.artefacto}</p>
-                  </td>
-                  <td className="py-2 pr-3 text-[9px] text-slate-400">{a.frecuencia}</td>
-                  <td className="py-2 pr-3 text-[9px] text-slate-400">{a.responsable}</td>
-                  <td className="py-2"><Sbadge label={a.estado} /></td>
+              {[
+                {m:'Cali', r:92, p:89, e:'3%', ec:clr.verde, i:'1.02', ic:clr.text, s:'Alta', sc:clr.verde},
+                {m:'Palmira', r:47, p:44, e:'3%', ec:clr.verde, i:'0.95', ic:clr.text, s:'Media', sc:clr.azul},
+                {m:'Buenaventura', r:38, p:31, e:'7%', ec:clr.amarillo, i:'0.81', ic:clr.text, s:'Media', sc:clr.azul},
+                {m:'Dagua', r:16, p:10, e:'6%', ec:clr.rojo, i:'0.68', ic:clr.amarillo, s:'Baja ⚠', sc:clr.amarillo},
+                {m:'El Dovio', r:12, p:7, e:'5%', ec:clr.rojo, i:'0.63', ic:clr.amarillo, s:'Baja ⚠', sc:clr.amarillo},
+              ].map(x => (
+                <tr key={x.m} className="border-b last:border-b-0" style={{ borderColor: clr.borde }}>
+                  <td className="py-2 text-[11px] text-slate-400">{x.m}</td>
+                  <td className="py-2 text-[11px] text-slate-400">{x.r}</td>
+                  <td className="py-2 text-[11px] text-slate-400">{x.p}</td>
+                  <td className="py-2 text-[11px] font-medium" style={{ color: x.ec }}>{x.e}</td>
+                  <td className="py-2 text-[11px] font-mono" style={{ color: x.ic }}>{x.i}</td>
+                  <td className="py-2"><Sbadge label={x.s} color={x.sc} /></td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </div>
-      </div>
-    </Block>
-  )
-}
-
-function StrategicAlerts({ items }) {
-  return (
-    <Block title="Alertas Estrategicas" icon={AlertTriangle} accent={clr.rojo}>
-      <div className="space-y-2">
-        {items.map(item => (
-          <div key={item.titulo} className="rounded-lg p-3 border" style={{ background: clr.bg, borderColor: clr.borde }}>
-            <div className="flex items-center justify-between gap-2 mb-1">
-              <p className="text-[11px] font-bold text-slate-200">{item.titulo}</p>
-              <Sbadge label={item.prioridad} />
+          <p className="text-[11px] text-slate-400 mb-4">
+            Dagua (IID=0.68) y El Dovio (IID=0.63) en zona amarilla — próximos al umbral de alerta crítica (IID&lt;0.60).<br/>ICE global = 74% (meta ≥80%).
+          </p>
+          <div className="border-t pt-4" style={{ borderColor: clr.borde }}>
+            <p className="text-xs font-semibold text-slate-200 mb-3">Fairness por dimensión</p>
+            <div className="h-32">
+              <ResponsiveContainer width="100%" height="100%">
+                <ComposedChart data={D.fairnessData} margin={{ top: 0, right: 0, bottom: 0, left: -20 }}>
+                  <CartesianGrid stroke="#1e293b" vertical={false} />
+                  <XAxis dataKey="metric" tick={{ fill: '#94a3b8', fontSize: 9 }} />
+                  <YAxis tick={{ fill: '#475569', fontSize: 9 }} />
+                  <Tooltip content={<DarkTip />} cursor={{fill: 'rgba(255,255,255,0.02)'}} />
+                  <Bar dataKey="umbral" name="Umbral" fill="rgba(255,255,255,0.06)" barSize={22} radius={[3,3,0,0]} isAnimationActive={false} />
+                  <Bar dataKey="valor" name="Valor" barSize={22} radius={[3,3,0,0]} isAnimationActive={false}>
+                    {D.fairnessData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.fill} />
+                    ))}
+                  </Bar>
+                </ComposedChart>
+              </ResponsiveContainer>
             </div>
-            <p className="text-[9px] text-slate-500 leading-relaxed">{item.descripcion}</p>
           </div>
-        ))}
+        </Block>
       </div>
-    </Block>
-  )
-}
-
-function StrategicImpact({ items }) {
-  return (
-    <Block title="Impacto Estrategico SIAGP" icon={Sparkles} accent={clr.violeta}>
-      <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-6 gap-3">
-        {items.map(item => (
-          <div key={item.nombre} className="rounded-lg p-3 border" style={{ background: clr.bg, borderColor: clr.borde }}>
-            <p className="text-[9px] uppercase tracking-wider font-semibold text-slate-500 min-h-7">{item.nombre}</p>
-            <p className="text-lg font-bold text-slate-100 leading-tight mt-1">
-              {item.valor}<span className="text-[10px] text-slate-500 ml-1">{item.suffix}</span>
-            </p>
-            <div className="h-1.5 rounded-full overflow-hidden my-2" style={{ background: '#1e293b' }}>
-              <div className="h-full rounded-full" style={{ width: `${item.impacto}%`, background: clr.violeta }} />
-            </div>
-            <p className="text-[9px] text-slate-500 leading-relaxed">{item.descripcion}</p>
+      
+      {/* ══ BLOQUE 5 — DESEMPEÑO Y SEGURIDAD ══════════════ */}
+      <SectionTitle eyebrow="Bloque 5" title="Desempeño y seguridad" icon={TrendingUp} accent={clr.verde} />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <Block title="Evolución MAE mensual — detección de drift" icon={HeartPulse} accent={clr.cyan}>
+          <div className="h-40 mb-4">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={D.maeMonthly} margin={{ top: 10, right: 10, bottom: 0, left: -20 }}>
+                <CartesianGrid stroke="#1e293b" vertical={false} />
+                <XAxis dataKey="periodo" tick={{ fill: '#94a3b8', fontSize: 9 }} />
+                <YAxis domain={[0, 20]} tick={{ fill: '#475569', fontSize: 9 }} tickFormatter={v => v+'%'} />
+                <Tooltip content={<DarkTip />} />
+                <Line type="monotone" dataKey="meta" name="Fail-Safe 15%" stroke="rgba(240,82,82,0.7)" strokeWidth={1.5} strokeDasharray="5 4" dot={false} isAnimationActive={false} />
+                <Line type="monotone" dataKey="val" name="MAE %" stroke={clr.azul} strokeWidth={2} dot={{ r: 3, fill: clr.azul }} fill="rgba(59,130,246,0.1)" isAnimationActive={false} />
+              </LineChart>
+            </ResponsiveContainer>
           </div>
-        ))}
-      </div>
-    </Block>
-  )
-}
-
-function ExecutiveExplainability({ items }) {
-  return (
-    <Block title="Explicabilidad Ejecutiva" icon={Info} accent={clr.cyan}>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        {items.map(item => (
-          <div key={item.pregunta} className="rounded-lg p-3 border" style={{ background: clr.bg, borderColor: clr.borde }}>
-            <p className="text-[11px] font-bold text-slate-200 mb-1">{item.pregunta}</p>
-            <p className="text-[9px] text-slate-500 leading-relaxed">{item.respuesta}</p>
+          <div className="border-t pt-2" style={{ borderColor: clr.borde }}>
+            <MetricRow name="MAE Global (backtesting)" val="12.4%" thr="≤15%" dotColor={clr.verde} />
+            <MetricRow name="Nivel de confianza 95%" val="94.6%" thr="≥90%" dotColor={clr.verde} />
+            <MetricRow name="TSD subestimación demanda" val="22%" thr="≤30%" dotColor={clr.verde} />
+            <MetricRow name="RPP paridad rural/urbano" val="1.14" thr="0.8–1.2" dotColor={clr.verde} />
+            <MetricRow name="Justificación HITL escrita" val="91%" thr="≥90%" dotColor={clr.verde} />
           </div>
-        ))}
+        </Block>
+        <Block title="Tendencias Mar–Jun 2026" icon={TrendingUp} accent={clr.verde}>
+          <div className="h-44 mb-4">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={D.tendencias} margin={{ top: 10, right: 10, bottom: 0, left: -20 }}>
+                <CartesianGrid stroke="#1e293b" vertical={false} />
+                <XAxis dataKey="p" tick={{ fill: '#94a3b8', fontSize: 9 }} />
+                <YAxis domain={[0, 100]} tick={{ fill: '#475569', fontSize: 9 }} tickFormatter={v => v+'%'} />
+                <Tooltip content={<DarkTip />} />
+                <Line type="monotone" dataKey="riesgo" name="Riesgo" stroke={clr.rojo} strokeWidth={2} strokeDasharray="5 3" dot={{ r: 3, fill: clr.rojo }} isAnimationActive={false} />
+                <Line type="monotone" dataKey="cumplimiento" name="Cumplimiento" stroke={clr.verde} strokeWidth={2} dot={{ r: 3, fill: clr.verde }} isAnimationActive={false} />
+                <Line type="monotone" dataKey="madurez" name="Madurez" stroke={clr.azul} strokeWidth={2} strokeDasharray="3 3" dot={{ r: 3, fill: clr.azul }} isAnimationActive={false} />
+                <Line type="monotone" dataKey="precision" name="Precisión" stroke={clr.amarillo} strokeWidth={2} dot={{ r: 3, fill: clr.amarillo }} isAnimationActive={false} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="border-t pt-2" style={{ borderColor: clr.borde }}>
+            <p className="text-xs font-semibold text-slate-200 mb-2">Seguridad y privacidad</p>
+            <MetricRow name="Incidentes seguridad activos" val="0" thr="=0" dotColor={clr.verde} valColor={clr.verde} />
+            <MetricRow name="Cifrado DWH (AES-256)" val="Activo" thr="Mandatorio" dotColor={clr.verde} />
+            <MetricRow name="K-anonimidad k≥5" val="100%" thr="100%" dotColor={clr.verde} />
+            <MetricRow name="Filas riesgo reidentificación" val="0" thr="=0" dotColor={clr.verde} valColor={clr.verde} />
+            <MetricRow name="Cumplimiento Ley 1581" val="87%" thr="Cond." dotColor={clr.amarillo} valColor={clr.amarillo} />
+          </div>
+        </Block>
       </div>
-    </Block>
-  )
-}
-
-function Roadmap({ items }) {
-  return (
-    <Block title="Hoja de Ruta AIMS" icon={GitBranch} accent={clr.verde}>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-        {items.map((item, idx) => {
-          const color = statusColor(item.estado)
-          return (
-            <div key={item.fase} className="rounded-lg p-3 border" style={{ background: clr.bg, borderColor: clr.borde }}>
-              <div className="flex items-center gap-2 mb-2">
-                <div className="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold"
-                  style={{ background: `${color}18`, border: `1px solid ${color}40`, color }}>
-                  {idx + 1}
+      
+      {/* ══ VALOR PÚBLICO + HOJA DE RUTA ══════════════════ */}
+      <SectionTitle eyebrow="Conclusión" title="Valor público y plan de gobernanza" icon={Sparkles} accent={clr.verde} />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <Block title="Recomendaciones emitidas — Mayo 2026" icon={Sparkles} accent={clr.verde}>
+          <div className="flex h-2.5 rounded-full overflow-hidden mb-3">
+            <div style={{flex: 48, background: clr.verde}}></div>
+            <div style={{flex: 14, background: clr.amarillo}}></div>
+            <div style={{flex: 2, background: clr.rojo}}></div>
+          </div>
+          <div className="flex gap-4 text-[11px] mb-4">
+            <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-sm" style={{background: clr.verde}}></div>Aplicadas 48</span>
+            <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-sm" style={{background: clr.amarillo}}></div>Modificadas 14</span>
+            <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-sm" style={{background: clr.rojo}}></div>Rechazadas 2</span>
+          </div>
+          <BarRow label="FURAG datos" pct="80%" color={clr.azul} />
+          <BarRow label="MIPG evidencia" pct="82%" color={clr.azul} />
+          <BarRow label="Ocupación planif." pct="82%" color={clr.verde} />
+          <BarRow label="Reducción espera" pct="-15%" color={clr.verde} />
+        </Block>
+        <Block title="Hoja de ruta de gobernanza" icon={GitBranch} accent={clr.azul}>
+          <div className="mb-4">
+            {[
+              {f:'Fundamentos', pct:'100%', w:'100%', c:clr.verde, p:'Ene–Mar 2026 · Completada'},
+              {f:'Habilitadores', pct:'58%', w:'58%', c:clr.amarillo, p:'Abr–Jun 2026 · En curso'},
+              {f:'Operación plena', pct:'0%', w:'0%', c:clr.gris, p:'Jul–Sep 2026 · Pendiente'},
+              {f:'Madurez', pct:'0%', w:'0%', c:clr.gris, p:'Oct 2026–Dic 2027'},
+            ].map(x => (
+              <div key={x.f} className="mb-2.5">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-[11px] text-slate-400 w-28 shrink-0">{x.f}</span>
+                  <div className="flex-1 h-2 rounded-full" style={{ background: clr.bg }}>
+                    <div className="h-full rounded-full transition-all" style={{ width: x.w, background: x.c }}></div>
+                  </div>
+                  <span className="text-[11px] font-mono text-slate-500 w-8 text-right">{x.pct}</span>
                 </div>
-                <div className="min-w-0">
-                  <p className="text-[11px] font-bold text-slate-200 truncate">{item.fase}</p>
-                  <p className="text-[8px] text-slate-500">{item.periodo}</p>
-                </div>
+                <div className="text-[10px] font-mono text-slate-600 pl-30">{x.p}</div>
               </div>
-              <div className="h-1.5 rounded-full overflow-hidden mb-2" style={{ background: '#1e293b' }}>
-                <div className="h-full rounded-full" style={{ width: `${item.avance}%`, background: color }} />
-              </div>
-              <Sbadge label={item.estado} color={color} />
-            </div>
-          )
-        })}
-      </div>
-    </Block>
-  )
-}
-
-function RiskModal({ risk, onClose }) {
-  if (!risk) return null
-  const color = statusColor(risk.nivel)
-  return (
-    <div className="fixed inset-0 z-[80] flex items-center justify-center p-4" style={{ background: 'rgba(2,6,23,0.72)' }}>
-      <div className="w-full max-w-xl rounded-xl border shadow-2xl" style={{ background: clr.card, borderColor: clr.borde }}>
-        <div className="flex items-center justify-between gap-3 px-4 py-3 border-b" style={{ borderColor: clr.borde }}>
-          <div className="flex items-center gap-2">
-            <ShieldAlert size={15} style={{ color }} />
-            <div>
-              <p className="text-sm font-bold text-white">{risk.categoria}</p>
-              <p className="text-[10px] text-slate-500">{risk.id} - P{risk.probabilidad} / I{risk.impacto}</p>
+            ))}
+          </div>
+          <div className="border-t pt-4" style={{ borderColor: clr.borde }}>
+            <p className="text-xs font-semibold text-slate-200 mb-2">HITL — historial de supervisión humana</p>
+            <div className="h-32">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={D.hitlHistorial} margin={{ top: 0, right: 10, bottom: 0, left: -20 }}>
+                  <CartesianGrid stroke="#1e293b" vertical={false} />
+                  <XAxis dataKey="p" tick={{ fill: '#94a3b8', fontSize: 9 }} />
+                  <YAxis domain={[0, 100]} tick={{ fill: '#475569', fontSize: 9 }} tickFormatter={v=>v+'%'} />
+                  <Tooltip content={<DarkTip />} cursor={{fill: 'rgba(255,255,255,0.02)'}} />
+                  <Bar dataKey="deliberacion" name="Deliberación %" fill="rgba(59,130,246,0.6)" barSize={16} radius={[3,3,0,0]} isAnimationActive={false} />
+                  <Bar dataKey="justificacion" name="Justificadas %" fill="rgba(34,197,94,0.5)" barSize={16} radius={[3,3,0,0]} isAnimationActive={false} />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
           </div>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-white/5" aria-label="Cerrar detalle">
-            <X size={15} className="text-slate-400" />
-          </button>
+        </Block>
+      </div>
+      
+      {/* ══ ALERTAS ESTRATÉGICAS ═══════════════════════════ */}
+      <SectionTitle eyebrow="Alertas" title="Alertas estratégicas — alta dirección" icon={AlertTriangle} accent={clr.rojo} />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <div className="p-3 rounded-r-xl border-l-4" style={{ background: 'rgba(239,68,68,0.05)', borderLeftColor: clr.rojo }}>
+            <p className="text-xs font-bold text-slate-200 mb-1">Go condicionado — sin certificar, no avanzar</p>
+            <p className="text-[11px] text-slate-400">No avanzar a producción plena sin k-anonimidad certificada por tercero, logs explicables y Kill-Switch verificado. 5 condiciones pendientes.</p>
+          </div>
+          <div className="p-3 rounded-r-xl border-l-4" style={{ background: 'rgba(239,68,68,0.05)', borderLeftColor: clr.rojo }}>
+            <p className="text-xs font-bold text-slate-200 mb-1">Discrepancia HITL por debajo del umbral saludable</p>
+            <p className="text-[11px] text-slate-400">Tasa 3% (rango sano: 10–30%). Posible complacencia algorítmica o falta de registro deliberativo (RS-03 Automation Bias).</p>
+          </div>
         </div>
-        <div className="p-4 space-y-3">
-          <div className="flex items-center justify-between">
-            <Sbadge label={risk.nivel} color={color} />
-            <span className="text-[10px] text-slate-500">Score ejecutivo: <strong className="text-slate-300">{risk.score}</strong></span>
+        <div className="space-y-2">
+          <div className="p-3 rounded-r-xl border-l-4" style={{ background: 'rgba(59,130,246,0.1)', borderLeftColor: clr.azul }}>
+            <p className="text-xs font-bold text-slate-200 mb-1">ICE territorial en zona amarilla — 74%</p>
+            <p className="text-[11px] text-slate-400">Dagua (IID=0.68) y El Dovio (IID=0.63) próximos al umbral crítico. Revisar modelo con filtro W_geo. Meta ICE ≥80%.</p>
           </div>
-          <div>
-            <p className="text-[9px] uppercase tracking-wider text-slate-600 mb-1">Riesgo</p>
-            <p className="text-[12px] text-slate-200 leading-relaxed">{risk.riesgo}</p>
-          </div>
-          <div>
-            <p className="text-[9px] uppercase tracking-wider text-slate-600 mb-1">Control principal</p>
-            <p className="text-[11px] text-slate-400 leading-relaxed">{risk.control}</p>
-          </div>
-          <div>
-            <p className="text-[9px] uppercase tracking-wider text-slate-600 mb-1">Lectura ejecutiva</p>
-            <p className="text-[11px] text-slate-400 leading-relaxed">{risk.detalle}</p>
+          <div className="p-3 rounded-r-xl border-l-4" style={{ background: 'rgba(245,158,11,0.05)', borderLeftColor: clr.amarillo }}>
+            <p className="text-xs font-bold text-slate-200 mb-1">Function creep — líneas rojas operativas</p>
+            <p className="text-[11px] text-slate-400">NLP, triaje, predicción individual o automatización vinculante quedan fuera del alcance aprobado. Excederlos reclasifica el sistema en EU AI Act.</p>
           </div>
         </div>
       </div>
+      
+      {/* ══ GLOSARIO EJECUTIVO ═════════════════════════════ */}
+      <SectionTitle eyebrow="Glosario" title="Glosario ejecutivo" icon={Eye} accent={clr.violeta} />
+      <div className="space-y-2 mb-4">
+        {[
+          { q: '¿Qué significa Go condicionado?', a: 'El sistema puede avanzar solo si se certifican privacidad (k≥5 por tercero), trazabilidad, supervisión humana, Data Literacy al 100% y controles de equidad antes de operación plena.' },
+          { q: '¿Cuándo se activa el Fail-Safe?', a: 'Si el MAE supera el 15% durante dos semanas consecutivas, o si EOD supera ±0.15, la vista pasa a modo descriptivo hasta nueva autorización del Comité de Gobernanza.' },
+          { q: '¿Qué debe revisar la alta dirección?', a: 'Riesgo global vs. apetito (72% > 60%), discrepancia HITL (3% bajo rango sano), ICE territorial (74% < 80%), 2 auditorías pendientes, Data Literacy (83%) y evidencia FURAG/MIPG.' },
+        ].map(x => (
+          <div key={x.q} className="rounded-xl p-3" style={{ background: clr.card }}>
+            <p className="text-xs font-bold text-slate-200 mb-1">{x.q}</p>
+            <p className="text-[11px] text-slate-400">{x.a}</p>
+          </div>
+        ))}
+      </div>
+      
+      {/* ══ FOOTER ══════════════════════════════════════════ */}
+      <div className="flex justify-between items-center py-4 border-t mt-4" style={{ borderColor: clr.borde }}>
+        <span className="text-[10px] font-mono text-slate-500">HDPUV · SIAGP v1.3 · JSON v2.0 · Uso Interno / Alta Dirección · 2026-05-31</span>
+      </div>
+      
     </div>
-  )
-}
-
-export default function GobiernoIA() {
-  const [data, setData] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [selectedPeriod, setSelectedPeriod] = useState('2026-06')
-  const [selectedRisk, setSelectedRisk] = useState(null)
-
-  useEffect(() => {
-    fetch(`${DATA_URL}?t=${Date.now()}`)
-      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json() })
-      .then(json => {
-        const arr = Array.isArray(json) ? json : [json]
-        setData(arr[0])
-        setLoading(false)
-      })
-      .catch(err => {
-        console.error('Error cargando Gobierno_IA_data.json:', err)
-        setLoading(false)
-      })
-  }, [])
-
-  const trendData = useMemo(() => {
-    if (!data) return []
-    const idx = data.filtros_temporales.findIndex(f => f.id === selectedPeriod)
-    return data.capa3_salud_auditoria_valor.tendencias.slice(0, idx + 1)
-  }, [data, selectedPeriod])
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center" style={{ minHeight: '60vh' }}>
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-8 h-8 rounded-full border-2 animate-spin"
-            style={{ borderColor: '#1e3a5f', borderTopColor: clr.violeta }} />
-          <p className="text-xs text-slate-500">Cargando Gobierno_IA_data.json...</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (!data) {
-    return (
-      <div className="flex items-center justify-center" style={{ minHeight: '60vh' }}>
-        <p className="text-sm text-red-400">No se pudo cargar <code>data/Gobierno_IA_data.json</code></p>
-      </div>
-    )
-  }
-
-  const capa1 = data.capa1_gobierno_riesgo_cumplimiento
-  const capa2 = data.capa2_etica_confianza_supervision
-  const capa3 = data.capa3_salud_auditoria_valor
-  const modulos = data.modulos_ejecutivos
-  const resumen = data.resumen_ejecutivo
-
-  return (
-    <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 py-6 space-y-5">
-      <div className="flex items-center justify-between flex-wrap gap-3 rounded-xl px-4 py-3 border"
-        style={{ background: clr.card, borderColor: clr.borde }}>
-        <div className="flex items-center gap-3 flex-wrap">
-          <BrainCircuit size={14} style={{ color: clr.violeta }} />
-          <span className="text-xs font-bold text-slate-200">Gobierno de IA</span>
-          <span className="text-[10px] text-slate-500">SIAGP - Doc. {data.meta.documento_base} v{data.meta.version}</span>
-        </div>
-        <div className="flex items-center gap-3 text-[10px] text-slate-500 flex-wrap">
-          <select
-            value={selectedPeriod}
-            onChange={e => setSelectedPeriod(e.target.value)}
-            className="text-xs rounded-lg px-2 py-1.5 outline-none"
-            style={{ background: clr.bg, border: `1px solid ${clr.borde}`, color: '#e2e8f0' }}
-          >
-            {data.filtros_temporales.map(f => <option key={f.id} value={f.id}>{f.label}</option>)}
-          </select>
-          <span className="flex items-center gap-1" style={{ color: statusColor(resumen.dictamen) }}>
-            <ClipboardCheck size={10} />
-            {resumen.go_no_go}
-          </span>
-          <span className="flex items-center gap-1">
-            <CalendarDays size={10} />
-            Periodo: <strong className="text-slate-300 ml-1">{data.meta.periodo_reporte}</strong>
-          </span>
-          <span>Generado: <strong className="text-slate-300">{fmtDate(data.meta.fecha_generacion)}</strong></span>
-        </div>
-      </div>
-
-      <SectionTitle eyebrow="Modulo 1" title="Estado General de Gobernanza" icon={Gauge} accent={clr.verde} />
-      <KpiStrip items={resumen.indicadores} />
-      <div className="rounded-xl px-4 py-3 text-[11px] text-slate-400 leading-relaxed flex items-start gap-2"
-        style={{ background: 'rgba(139,92,246,0.06)', border: '1px solid rgba(139,92,246,0.15)' }}>
-        <Target size={13} style={{ color: clr.violeta }} className="mt-0.5 shrink-0" />
-        <span>{resumen.lectura}</span>
-      </div>
-      <div className="grid grid-cols-1 xl:grid-cols-[1fr_420px] gap-5 items-start">
-        <div className="space-y-5">
-          <GovernanceScore data={modulos.estado_general_gobernanza} resumen={resumen} />
-          <IsoGovernance data={modulos.gobierno_iso_42001} />
-        </div>
-        <div className="space-y-5">
-          <SystemIdentity meta={data.meta} roles={capa1.sistema} />
-          <Compliance items={capa1.cumplimiento} />
-        </div>
-      </div>
-
-      <SectionTitle eyebrow="Modulo 2" title="Riesgos y Etica" icon={ShieldAlert} accent={clr.rojo} />
-      <div className="grid grid-cols-1 xl:grid-cols-[1fr_420px] gap-5 items-start">
-        <div className="space-y-5">
-          <RiskEthics data={modulos.riesgos_etica} risks={capa1.riesgos_nist} onSelect={setSelectedRisk} />
-        </div>
-        <div className="space-y-5">
-          <Ethics data={capa2} />
-          <CitizenChallenge data={capa2.impugnaciones_ciudadanas} />
-        </div>
-      </div>
-
-      <SectionTitle eyebrow="Modulo 3" title="Modelo y Datos" icon={HeartPulse} accent={clr.cyan} />
-      <ModelData data={modulos.modelo_datos} />
-      <HumanSupervision data={capa2.supervision_humana} />
-
-      <SectionTitle eyebrow="Modulo 4" title="Seguridad y Privacidad" icon={LockKeyhole} accent={clr.amarillo} />
-      <div className="grid grid-cols-1 xl:grid-cols-[1fr_420px] gap-5 items-start">
-        <div className="space-y-5">
-          <SecurityPrivacy data={modulos.seguridad_privacidad} />
-          <SystemHealth data={capa3.salud_sistema} />
-          <Trends data={trendData} />
-          <Auditability data={capa3.auditoria} />
-        </div>
-        <div className="space-y-5 xl:sticky xl:top-24">
-          <StrategicAlerts items={capa3.alertas_estrategicas} />
-          <Roadmap items={data.hoja_ruta} />
-          <ExecutiveExplainability items={capa3.explicabilidad} />
-        </div>
-      </div>
-
-      <SectionTitle eyebrow="Modulo 5" title="Valor Publico" icon={Sparkles} accent={clr.verde} />
-      <PublicValue data={modulos.valor_publico} />
-      <StrategicImpact items={capa3.impacto_estrategico} />
-
-      <RiskModal risk={selectedRisk} onClose={() => setSelectedRisk(null)} />
-    </div>
-  )
+  );
 }

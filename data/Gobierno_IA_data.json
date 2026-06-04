@@ -14,10 +14,22 @@
       "clasificacion": "Uso Interno / Alta Direccion"
     },
     "filtros_temporales": [
-      { "id": "2026-03", "label": "Mar 2026" },
-      { "id": "2026-04", "label": "Abr 2026" },
-      { "id": "2026-05", "label": "May 2026" },
-      { "id": "2026-06", "label": "Jun 2026" }
+      {
+        "id": "2026-03",
+        "label": "Mar 2026"
+      },
+      {
+        "id": "2026-04",
+        "label": "Abr 2026"
+      },
+      {
+        "id": "2026-05",
+        "label": "May 2026"
+      },
+      {
+        "id": "2026-06",
+        "label": "Jun 2026"
+      }
     ],
     "resumen_ejecutivo": {
       "dictamen": "Go condicionado",
@@ -32,19 +44,75 @@
       "controles_eu_ai_act": "Nivel Alto Riesgo",
       "estado_iso_42001": "Cubierta documentalmente",
       "preparacion_aims": 68,
-      "estado_ley_1581": "Condicionado a k-anonimidad",
+      "estado_ley_1581": "Condicionado a auditoria externa k-anonimidad",
       "estado_unesco": "Alto/Medio",
       "estado_conpes": "Alineado",
       "lectura": "SIAGP es gobernable y estrategico, pero su paso operativo depende de certificar privacidad, trazabilidad, equidad territorial, supervision humana y fail-safe.",
+      "condiciones_go_pendientes": 5,
+      "condiciones_go_detalle": [
+        "Bloqueo por codigo del MAE > 15% con Fail-Safe automatico",
+        "Implementacion algoritmo k-anonimidad k>=5 certificado por tercero",
+        "Auditoria externa de ciberseguridad del DWH",
+        "Programa Data Literacy al 100% de usuarios directos (actual: 83%)",
+        "Registros inmutables de cada consulta al sistema"
+      ],
       "indicadores": [
-        { "label": "Estado global", "value": "Go", "suffix": " condicionado", "estado": "ALERTA", "icon": "go" },
-        { "label": "Kill Switch", "value": "Armado", "suffix": "", "estado": "CONTROL", "icon": "switch" },
-        { "label": "Riesgo Residual IA", "value": "Alto", "suffix": "", "estado": "ALTO", "icon": "risk" },
-        { "label": "Gobernabilidad Modelo", "value": "76", "suffix": "%", "estado": "EN CURSO", "icon": "maturity" },
-        { "label": "Clasificacion Legal", "value": "Limitado", "suffix": "", "estado": "ALERTA", "icon": "law" },
-        { "label": "Preparacion AIMS", "value": "68", "suffix": "%", "estado": "EN CURSO", "icon": "iso" },
-        { "label": "Ley 1581", "value": "K>=5", "suffix": " requerido", "estado": "CONDICIONADO", "icon": "privacy" },
-        { "label": "UNESCO/CONPES", "value": "Alineado", "suffix": "", "estado": "ALERTA", "icon": "ethics" }
+        {
+          "label": "Estado global",
+          "value": "Go",
+          "suffix": " condicionado",
+          "estado": "ALERTA",
+          "icon": "go"
+        },
+        {
+          "label": "Kill Switch",
+          "value": "Armado",
+          "suffix": "",
+          "estado": "CONTROL",
+          "icon": "switch"
+        },
+        {
+          "label": "Riesgo Residual IA",
+          "value": "Alto",
+          "suffix": "",
+          "estado": "ALTO",
+          "icon": "risk"
+        },
+        {
+          "label": "Gobernabilidad Modelo",
+          "value": "76",
+          "suffix": "%",
+          "estado": "EN CURSO",
+          "icon": "maturity"
+        },
+        {
+          "label": "Clasificacion Legal",
+          "value": "Limitado",
+          "suffix": "",
+          "estado": "ALERTA",
+          "icon": "law"
+        },
+        {
+          "label": "Preparacion AIMS",
+          "value": "68",
+          "suffix": "%",
+          "estado": "EN CURSO",
+          "icon": "iso"
+        },
+        {
+          "label": "Ley 1581",
+          "value": "K>=5",
+          "suffix": " requerido",
+          "estado": "CONDICIONADO",
+          "icon": "privacy"
+        },
+        {
+          "label": "UNESCO/CONPES",
+          "value": "Alineado",
+          "suffix": "",
+          "estado": "ALERTA",
+          "icon": "ethics"
+        }
       ]
     },
     "modulos_ejecutivos": {
@@ -52,21 +120,51 @@
         "ai_governance_score": 82,
         "indice_gobernabilidad_modelo": 76,
         "estado_semaforo": "Riesgo Moderado",
-        "ultima_auditoria": "2026-05-31",
-        "proxima_auditoria": "2026-06-30",
+        "ultima_auditoria": "2026-05-10",
+        "proxima_auditoria": "2026-07-01",
         "estado_operacional": "Operativo condicionado",
         "dimensiones": [
-          { "nombre": "Etica", "valor": 92, "estado": "CONFORME" },
-          { "nombre": "Riesgos", "valor": 87, "estado": "ALERTA" },
-          { "nombre": "Seguridad", "valor": 95, "estado": "CONFORME" },
-          { "nombre": "Calidad de Datos", "valor": 89, "estado": "ALERTA" },
-          { "nombre": "Fairness", "valor": 84, "estado": "ALERTA" },
-          { "nombre": "Cumplimiento", "valor": 100, "estado": "CONFORME" },
-          { "nombre": "Supervision Humana", "valor": 98, "estado": "CONFORME" }
+          {
+            "nombre": "Etica",
+            "valor": 92,
+            "estado": "CONFORME"
+          },
+          {
+            "nombre": "Riesgos",
+            "valor": 87,
+            "estado": "ALERTA"
+          },
+          {
+            "nombre": "Seguridad",
+            "valor": 95,
+            "estado": "CONFORME"
+          },
+          {
+            "nombre": "Calidad de Datos",
+            "valor": 89,
+            "estado": "ALERTA"
+          },
+          {
+            "nombre": "Fairness",
+            "valor": 74,
+            "estado": "ALERTA"
+          },
+          {
+            "nombre": "Cumplimiento",
+            "valor": 100,
+            "estado": "CONFORME"
+          },
+          {
+            "nombre": "Supervision Humana",
+            "valor": 83,
+            "estado": "ALERTA"
+          }
         ]
       },
       "gobierno_iso_42001": {
-        "auditorias_realizadas": 1,
+        "auditorias_realizadas": 4,
+        "auditorias_pendientes": 2,
+        "auditorias_total_ano": 6,
         "hallazgos_abiertos": 4,
         "hallazgos_cerrados": 0,
         "acciones_correctivas_pendientes": 5,
@@ -75,12 +173,76 @@
         "procesos_gobernados": 5,
         "riesgos_mitigados": 5,
         "riesgos_identificados": 10,
+        "clausulas_iso": [
+          {
+            "id": "6.1",
+            "nombre": "Evaluacion de riesgos",
+            "implementacion_pct": 90,
+            "umbral": 85,
+            "estado": "VERDE"
+          },
+          {
+            "id": "6.2",
+            "nombre": "Objetivos del AIMS",
+            "implementacion_pct": 85,
+            "umbral": 80,
+            "estado": "VERDE"
+          },
+          {
+            "id": "7.2",
+            "nombre": "Competencia del personal",
+            "implementacion_pct": 80,
+            "umbral": 100,
+            "estado": "AMARILLO"
+          },
+          {
+            "id": "8.4",
+            "nombre": "Ciclo de vida del sistema",
+            "implementacion_pct": 88,
+            "umbral": 85,
+            "estado": "VERDE"
+          },
+          {
+            "id": "9.1",
+            "nombre": "Seguimiento y evaluacion",
+            "implementacion_pct": 75,
+            "umbral": 80,
+            "estado": "AMARILLO"
+          },
+          {
+            "id": "10.1",
+            "nombre": "Mejora continua",
+            "implementacion_pct": 70,
+            "umbral": 80,
+            "estado": "AMARILLO"
+          }
+        ],
         "madurez_dominios": [
-          { "dominio": "Liderazgo", "nivel": 4, "max": 5 },
-          { "dominio": "Gestion de Riesgos", "nivel": 4, "max": 5 },
-          { "dominio": "Operacion", "nivel": 5, "max": 5 },
-          { "dominio": "Mejora Continua", "nivel": 4, "max": 5 },
-          { "dominio": "Evaluacion de Desempeno", "nivel": 4, "max": 5 }
+          {
+            "dominio": "Liderazgo",
+            "nivel": 4,
+            "max": 5
+          },
+          {
+            "dominio": "Gestion de Riesgos",
+            "nivel": 4,
+            "max": 5
+          },
+          {
+            "dominio": "Operacion",
+            "nivel": 5,
+            "max": 5
+          },
+          {
+            "dominio": "Mejora Continua",
+            "nivel": 4,
+            "max": 5
+          },
+          {
+            "dominio": "Evaluacion de Desempeno",
+            "nivel": 4,
+            "max": 5
+          }
         ]
       },
       "riesgos_etica": {
@@ -97,74 +259,225 @@
           {
             "marco": "UE",
             "principios": [
-              { "nombre": "Supervision Humana", "valor": 90, "estado": "ALTO" },
-              { "nombre": "Transparencia", "valor": 62, "estado": "MEDIO" },
-              { "nombre": "Robustez", "valor": 64, "estado": "MEDIO" },
-              { "nombre": "Privacidad", "valor": 86, "estado": "ALTO" },
-              { "nombre": "Equidad", "valor": 58, "estado": "MEDIO" },
-              { "nombre": "Accountability", "valor": 88, "estado": "ALTO" }
+              {
+                "nombre": "Supervision Humana",
+                "valor": 90,
+                "estado": "ALTO"
+              },
+              {
+                "nombre": "Transparencia",
+                "valor": 62,
+                "estado": "MEDIO"
+              },
+              {
+                "nombre": "Robustez",
+                "valor": 64,
+                "estado": "MEDIO"
+              },
+              {
+                "nombre": "Privacidad",
+                "valor": 86,
+                "estado": "ALTO"
+              },
+              {
+                "nombre": "Equidad",
+                "valor": 58,
+                "estado": "MEDIO"
+              },
+              {
+                "nombre": "Accountability",
+                "valor": 88,
+                "estado": "ALTO"
+              }
             ]
           },
           {
             "marco": "UNESCO",
             "principios": [
-              { "nombre": "Derechos Humanos", "valor": 90, "estado": "ALTO" },
-              { "nombre": "Inclusion", "valor": 82, "estado": "ALTO" },
-              { "nombre": "Diversidad Cultural", "valor": 80, "estado": "ALTO" },
-              { "nombre": "Sostenibilidad", "valor": 86, "estado": "ALTO" },
-              { "nombre": "Gobernanza Etica", "valor": 78, "estado": "ALTO" }
+              {
+                "nombre": "Derechos Humanos",
+                "valor": 90,
+                "estado": "ALTO"
+              },
+              {
+                "nombre": "Inclusion",
+                "valor": 82,
+                "estado": "ALTO"
+              },
+              {
+                "nombre": "Diversidad Cultural",
+                "valor": 80,
+                "estado": "ALTO"
+              },
+              {
+                "nombre": "Sostenibilidad",
+                "valor": 86,
+                "estado": "ALTO"
+              },
+              {
+                "nombre": "Gobernanza Etica",
+                "valor": 78,
+                "estado": "ALTO"
+              }
             ]
           },
           {
             "marco": "CONPES",
             "principios": [
-              { "nombre": "Calidad de Datos", "valor": 68, "estado": "MEDIO" },
-              { "nombre": "Transparencia Publica", "valor": 64, "estado": "MEDIO" },
-              { "nombre": "Confianza Ciudadana", "valor": 62, "estado": "MEDIO" },
-              { "nombre": "Calidad del Servicio", "valor": 70, "estado": "MEDIO" },
-              { "nombre": "Estrategia Nacional IA", "valor": 84, "estado": "ALTO" }
+              {
+                "nombre": "Calidad de Datos",
+                "valor": 68,
+                "estado": "MEDIO"
+              },
+              {
+                "nombre": "Transparencia Publica",
+                "valor": 64,
+                "estado": "MEDIO"
+              },
+              {
+                "nombre": "Confianza Ciudadana",
+                "valor": 62,
+                "estado": "MEDIO"
+              },
+              {
+                "nombre": "Calidad del Servicio",
+                "valor": 70,
+                "estado": "MEDIO"
+              },
+              {
+                "nombre": "Estrategia Nacional IA",
+                "valor": 84,
+                "estado": "ALTO"
+              }
             ]
           }
         ]
       },
       "modelo_datos": {
         "calidad_general_datos": 89,
-        "registros_incompletos_pct": 3.8,
+        "registros_incompletos_pct": 1.9,
         "registros_duplicados_pct": 2.1,
         "anonimizacion_exitosa_pct": 100,
         "cumplimiento_k_anonimidad_pct": 100,
+        "filas_riesgo_reidentificacion": 0,
         "intentos_reidentificacion": 0,
         "calidad_etl": 94,
         "calidad_fuentes": [
-          { "fuente": "HIS", "calidad": 88, "estado": "ALERTA" },
-          { "fuente": "KACTUS", "calidad": 91, "estado": "CONFORME" },
-          { "fuente": "SIGDOC", "calidad": 87, "estado": "ALERTA" }
+          {
+            "fuente": "HIS (HOSVITAL)",
+            "calidad": 88,
+            "estado": "ALERTA",
+            "nota": "Subregistro por retraso manual del personal asistencial — RS-01"
+          },
+          {
+            "fuente": "KACTUS",
+            "calidad": 91,
+            "estado": "CONFORME"
+          },
+          {
+            "fuente": "SIGDOC",
+            "calidad": 87,
+            "estado": "ALERTA"
+          }
         ],
         "observabilidad_modelo": {
           "estado_modelo": "Vigilancia",
           "estado_predictivo": "Activo condicionado",
-          "data_drift": 18,
-          "concept_drift": 24,
-          "feature_drift": 16,
+          "data_drift": 8,
+          "concept_drift": 8,
+          "feature_drift": 6,
+          "umbral_alerta_drift": 15,
+          "umbral_fail_safe": "MAE > 15% por dos semanas consecutivas",
           "ultimo_reentrenamiento": "2026-05-15",
           "proximo_reentrenamiento": "2026-07-15",
           "tendencia_error": "Estable con vigilancia",
-          "semaforo": "Amarillo"
+          "semaforo": "Verde"
         },
-        "metricas_tecnicas_secundarias": {
+        "metricas_tecnicas": {
+          "mae_global_pct": 11.3,
+          "mae_backtesting_pct": 12.4,
           "rmse_actual": 4.8,
-          "mae_actual_pct": 12.4,
-          "accuracy_historica": 85
+          "accuracy_historica": 85,
+          "nivel_confianza_pct": 94.6,
+          "tsd_pct": 22,
+          "rpp_ratio": 1.14,
+          "completitud_dwh_pct": 98.1,
+          "serie_mae_mensual": [
+            {
+              "mes": "Dic-2025",
+              "valor": 9.1
+            },
+            {
+              "mes": "Ene-2026",
+              "valor": 10.4
+            },
+            {
+              "mes": "Feb-2026",
+              "valor": 11.8
+            },
+            {
+              "mes": "Mar-2026",
+              "valor": 13.2
+            },
+            {
+              "mes": "Abr-2026",
+              "valor": 12.1
+            },
+            {
+              "mes": "May-2026",
+              "valor": 11.3
+            }
+          ]
         },
         "error_municipios": [
-          { "municipio": "Cali", "demanda_real": 92, "demanda_predicha": 89, "error": 3, "representacion": "Alta" },
-          { "municipio": "Palmira", "demanda_real": 47, "demanda_predicha": 44, "error": 3, "representacion": "Media" },
-          { "municipio": "Buenaventura", "demanda_real": 38, "demanda_predicha": 31, "error": 7, "representacion": "Media" },
-          { "municipio": "El Dovio", "demanda_real": 12, "demanda_predicha": 7, "error": 5, "representacion": "Baja" },
-          { "municipio": "Dagua", "demanda_real": 16, "demanda_predicha": 10, "error": 6, "representacion": "Baja" }
+          {
+            "municipio": "Cali",
+            "demanda_real": 92,
+            "demanda_predicha": 89,
+            "error_pct": 3,
+            "representacion": "Alta",
+            "iid": 1.02,
+            "alerta_fairness": false
+          },
+          {
+            "municipio": "Palmira",
+            "demanda_real": 47,
+            "demanda_predicha": 44,
+            "error_pct": 3,
+            "representacion": "Media",
+            "iid": 0.95,
+            "alerta_fairness": false
+          },
+          {
+            "municipio": "Buenaventura",
+            "demanda_real": 38,
+            "demanda_predicha": 31,
+            "error_pct": 7,
+            "representacion": "Media",
+            "iid": 0.81,
+            "alerta_fairness": false
+          },
+          {
+            "municipio": "Dagua",
+            "demanda_real": 16,
+            "demanda_predicha": 10,
+            "error_pct": 6,
+            "representacion": "Baja",
+            "iid": 0.68,
+            "alerta_fairness": true
+          },
+          {
+            "municipio": "El Dovio",
+            "demanda_real": 12,
+            "demanda_predicha": 7,
+            "error_pct": 5,
+            "representacion": "Baja",
+            "iid": 0.63,
+            "alerta_fairness": true
+          }
         ],
         "fairness": {
-          "cobertura_territorial": 80,
+          "cobertura_territorial": 74,
           "municipios_baja_representacion": 2,
           "sesgo_geografico_detectado": "Potencial",
           "alertas_inequidad": 2
@@ -174,14 +487,30 @@
         "eventos_seguridad": 0,
         "intentos_acceso_no_autorizado": 0,
         "estado_aes_256": "Activo",
-        "cumplimiento_ley_1581": 72,
+        "tls_en_transito": "TLS 1.3 activo",
+        "cumplimiento_ley_1581": 87,
         "logs_auditoria": 100,
         "accesos_por_rol": [
-          { "rol": "Gerencia", "usuarios": 2 },
-          { "rol": "Planeacion", "usuarios": 3 },
-          { "rol": "CISO/TIC", "usuarios": 3 },
-          { "rol": "Control Interno", "usuarios": 2 },
-          { "rol": "Areas Misionales", "usuarios": 2 }
+          {
+            "rol": "Gerencia",
+            "usuarios": 2
+          },
+          {
+            "rol": "Planeacion",
+            "usuarios": 3
+          },
+          {
+            "rol": "CISO/TIC",
+            "usuarios": 3
+          },
+          {
+            "rol": "Control Interno",
+            "usuarios": 2
+          },
+          {
+            "rol": "Areas Misionales",
+            "usuarios": 2
+          }
         ]
       },
       "valor_publico": {
@@ -196,11 +525,41 @@
           "mejoras_operativas_asociadas": 5
         },
         "indicadores": [
-          { "nombre": "Tiempos de espera", "antes": 100, "despues": 85, "mejora": 15, "unidad": "%" },
-          { "nombre": "Ocupacion planificada", "antes": 68, "despues": 82, "mejora": 14, "unidad": "%" },
-          { "nombre": "Congestion operativa", "antes": 100, "despues": 78, "mejora": 22, "unidad": "%" },
-          { "nombre": "FURAG datos", "antes": 55, "despues": 80, "mejora": 25, "unidad": "pts" },
-          { "nombre": "MIPG evidencia", "antes": 60, "despues": 82, "mejora": 22, "unidad": "pts" }
+          {
+            "nombre": "Tiempos de espera",
+            "antes": 100,
+            "despues": 85,
+            "mejora": 15,
+            "unidad": "%"
+          },
+          {
+            "nombre": "Ocupacion planificada",
+            "antes": 68,
+            "despues": 82,
+            "mejora": 14,
+            "unidad": "%"
+          },
+          {
+            "nombre": "Congestion operativa",
+            "antes": 100,
+            "despues": 78,
+            "mejora": 22,
+            "unidad": "%"
+          },
+          {
+            "nombre": "FURAG datos",
+            "antes": 55,
+            "despues": 80,
+            "mejora": 25,
+            "unidad": "pts"
+          },
+          {
+            "nombre": "MIPG evidencia",
+            "antes": 60,
+            "despues": 82,
+            "mejora": 22,
+            "unidad": "pts"
+          }
         ]
       }
     },
@@ -212,94 +571,337 @@
         "usuarios": "Jefes de areas misionales"
       },
       "cumplimiento": [
-        { "nombre": "ISO/IEC 42001", "valor": 100, "estado": "CUBIERTA", "detalle": "Clausulas 4 a 10 documentadas para el SGIA/AIMS; requiere ejecucion operativa y auditoria." },
-        { "nombre": "EU AI Act", "valor": 74, "estado": "RIESGO LIMITADO", "detalle": "Clasificacion legal: riesgo limitado. Por criticidad sanitaria, el HDPUV aplica controles equivalentes a nivel alto riesgo." },
-        { "nombre": "Ley 1581", "valor": 72, "estado": "CONDICIONADO", "detalle": "Depende de k-anonimidad k>=5, minimizacion, cifrado y pruebas de reidentificacion." },
-        { "nombre": "UNESCO", "valor": 82, "estado": "ALTO/MEDIO", "detalle": "Buen diseno etico; observaciones en explicabilidad, robustez y datos sesgados." },
-        { "nombre": "CONPES IA", "valor": 80, "estado": "ALINEADO", "detalle": "Alineado con valor publico, decisiones basadas en datos y transformacion digital." }
+        {
+          "nombre": "ISO/IEC 42001",
+          "valor": 100,
+          "estado": "CUBIERTA",
+          "detalle": "Clausulas 4 a 10 documentadas para el SGIA/AIMS; requiere ejecucion operativa y auditoria."
+        },
+        {
+          "nombre": "EU AI Act",
+          "valor": 74,
+          "estado": "RIESGO LIMITADO",
+          "detalle": "Clasificacion legal: riesgo limitado. Por criticidad sanitaria, el HDPUV aplica controles equivalentes a nivel alto riesgo."
+        },
+        {
+          "nombre": "Ley 1581",
+          "valor": 87,
+          "estado": "CONDICIONADO",
+          "detalle": "k-anonimidad k>=5 implementada al 100%. Condicionado a auditoria externa de ciberseguridad pendiente (Jul 2026)."
+        },
+        {
+          "nombre": "UNESCO",
+          "valor": 82,
+          "estado": "ALTO/MEDIO",
+          "detalle": "Buen diseno etico; observaciones en explicabilidad, robustez y datos sesgados."
+        },
+        {
+          "nombre": "CONPES IA",
+          "valor": 80,
+          "estado": "ALINEADO",
+          "detalle": "Alineado con valor publico, decisiones basadas en datos y transformacion digital."
+        }
       ],
       "riesgos_nist": [
         {
-          "id": "R-02",
+          "id": "RS-01",
           "categoria": "Datos",
-          "riesgo": "Reidentificacion de pacientes y calidad de origen",
-          "probabilidad": 2,
-          "impacto": 5,
-          "nivel": "CRITICO",
-          "score": 10,
-          "control": "k-anonimidad k>=5, AES-256, TLS 1.3, validacion ETL y pruebas de penetracion semestrales.",
-          "detalle": "El documento identifica riesgo de triangulacion en municipios de baja densidad y exige rechazar lotes que no cumplan k-anonimidad."
+          "riesgo": "Sesgo de calidad por subregistro humano en HIS",
+          "probabilidad": 4,
+          "impacto": 3,
+          "nivel": "ALTO",
+          "score": 12,
+          "control": "Reglas de validacion en origen, alertas de desfase temporal en ETL, imputacion estadistica.",
+          "detalle": "Personal asistencial registra egresos con retraso en HOSVITAL por sobrecarga laboral, generando censos falsos."
         },
         {
-          "id": "R-05",
+          "id": "RS-02",
           "categoria": "Modelo",
-          "riesgo": "Data drift / concept drift",
+          "riesgo": "Obsolescencia del modelo (Concept Drift)",
           "probabilidad": 3,
           "impacto": 4,
           "nivel": "ALTO",
           "score": 12,
-          "control": "Telemetria MAE mensual y fail-safe automatico si MAE > 15% o sigma intermunicipal > 5%.",
+          "control": "Telemetria MAE mensual; fail-safe automatico si MAE > 15% por dos semanas consecutivas.",
           "detalle": "Eventos epidemiologicos o cambios de proceso pueden invalidar patrones historicos ARIMA/SARIMAX."
         },
         {
-          "id": "R-03/R-04",
+          "id": "RS-03",
           "categoria": "Etica",
-          "riesgo": "Complacencia algoritmica y sesgo geografico",
+          "riesgo": "Sesgo de automatizacion (complacencia algoritmica)",
           "probabilidad": 4,
-          "impacto": 4,
-          "nivel": "ALTO",
-          "score": 16,
-          "control": "Human-in-the-Loop, justificacion firmada, auditoria 20%, tablero de equidad territorial.",
-          "detalle": "La baja demanda historica de municipios vulnerables no debe interpretarse como baja necesidad real."
-        },
-        {
-          "id": "RS-04/RS-05",
-          "categoria": "Seguridad",
-          "riesgo": "Acceso indebido, integridad de DWH y logs",
-          "probabilidad": 3,
-          "impacto": 4,
+          "impacto": 3,
           "nivel": "ALTO",
           "score": 12,
-          "control": "RBAC, logs criptograficos inmutables, repositorios firmados y segregacion de privilegios.",
-          "detalle": "La centralizacion de HIS, KACTUS y SIGDOC crea un vector critico que requiere control forense."
+          "control": "Human-in-the-Loop, justificacion firmada, auditoria 20%, Data Literacy obligatorio.",
+          "detalle": "Directivos aprueban mecanicamente distribucion de turnos sin deliberacion humana."
         },
         {
-          "id": "R-01/R-06/R-07",
-          "categoria": "Cumplimiento",
-          "riesgo": "Function creep, trazabilidad incompleta y brecha de competencias",
+          "id": "RS-04",
+          "categoria": "Seguridad / Privacidad",
+          "riesgo": "Reidentificacion por triangulacion en municipios pequenos",
+          "probabilidad": 2,
+          "impacto": 5,
+          "nivel": "ALTO",
+          "score": 10,
+          "control": "k-anonimidad k>=5, AES-256, TLS 1.3, SIEM, revocacion inmediata de tokens.",
+          "detalle": "Atacante cruza variables demograficas con diagnosticos CIE-10 para reidentificar pacientes en baja densidad."
+        },
+        {
+          "id": "RS-05",
+          "categoria": "Cumplimiento / Organizacional",
+          "riesgo": "Perdida de trazabilidad algoritmica y function creep",
           "probabilidad": 3,
           "impacto": 3,
           "nivel": "MEDIO",
           "score": 9,
-          "control": "Lineas rojas, auditorias de alcance, Data Literacy y revocacion de accesos sin certificacion.",
-          "detalle": "NLP, triaje, decisiones individuales o automatizacion vinculante reclasifican el sistema y elevan el riesgo."
+          "control": "Repositorios Git con firmas criptograficas, auditorias semestrales, lineas rojas de alcance.",
+          "detalle": "NLP, triaje, prediccion individual o automatizacion vinculante reclasifican el sistema en EU AI Act."
         }
-      ]
+      ],
+      "heatmap_nist": {
+        "descripcion": "Matriz 5x5 Probabilidad x Impacto. Valor en cada celda = P*I.",
+        "umbral_critico": 16,
+        "umbral_alto": 10,
+        "umbral_medio": 5,
+        "celdas": [
+          {
+            "p": 5,
+            "i": 1,
+            "valor": 5,
+            "nivel": "medio"
+          },
+          {
+            "p": 5,
+            "i": 2,
+            "valor": 10,
+            "nivel": "alto"
+          },
+          {
+            "p": 5,
+            "i": 3,
+            "valor": 15,
+            "nivel": "alto"
+          },
+          {
+            "p": 5,
+            "i": 4,
+            "valor": 20,
+            "nivel": "critico"
+          },
+          {
+            "p": 5,
+            "i": 5,
+            "valor": 25,
+            "nivel": "critico"
+          },
+          {
+            "p": 4,
+            "i": 1,
+            "valor": 4,
+            "nivel": "bajo"
+          },
+          {
+            "p": 4,
+            "i": 2,
+            "valor": 8,
+            "nivel": "medio"
+          },
+          {
+            "p": 4,
+            "i": 3,
+            "valor": 12,
+            "nivel": "alto",
+            "riesgos": [
+              "RS-01",
+              "RS-03"
+            ]
+          },
+          {
+            "p": 4,
+            "i": 4,
+            "valor": 16,
+            "nivel": "critico"
+          },
+          {
+            "p": 4,
+            "i": 5,
+            "valor": 20,
+            "nivel": "critico"
+          },
+          {
+            "p": 3,
+            "i": 1,
+            "valor": 3,
+            "nivel": "bajo"
+          },
+          {
+            "p": 3,
+            "i": 2,
+            "valor": 6,
+            "nivel": "medio"
+          },
+          {
+            "p": 3,
+            "i": 3,
+            "valor": 9,
+            "nivel": "medio",
+            "riesgos": [
+              "RS-05"
+            ]
+          },
+          {
+            "p": 3,
+            "i": 4,
+            "valor": 12,
+            "nivel": "alto",
+            "riesgos": [
+              "RS-02"
+            ]
+          },
+          {
+            "p": 3,
+            "i": 5,
+            "valor": 15,
+            "nivel": "alto"
+          },
+          {
+            "p": 2,
+            "i": 1,
+            "valor": 2,
+            "nivel": "bajo"
+          },
+          {
+            "p": 2,
+            "i": 2,
+            "valor": 4,
+            "nivel": "bajo"
+          },
+          {
+            "p": 2,
+            "i": 3,
+            "valor": 6,
+            "nivel": "medio"
+          },
+          {
+            "p": 2,
+            "i": 4,
+            "valor": 8,
+            "nivel": "medio"
+          },
+          {
+            "p": 2,
+            "i": 5,
+            "valor": 10,
+            "nivel": "alto",
+            "riesgos": [
+              "RS-04"
+            ]
+          },
+          {
+            "p": 1,
+            "i": 1,
+            "valor": 1,
+            "nivel": "bajo"
+          },
+          {
+            "p": 1,
+            "i": 2,
+            "valor": 2,
+            "nivel": "bajo"
+          },
+          {
+            "p": 1,
+            "i": 3,
+            "valor": 3,
+            "nivel": "bajo"
+          },
+          {
+            "p": 1,
+            "i": 4,
+            "valor": 4,
+            "nivel": "bajo"
+          },
+          {
+            "p": 1,
+            "i": 5,
+            "valor": 5,
+            "nivel": "medio"
+          }
+        ]
+      }
     },
     "capa2_etica_confianza_supervision": {
       "indice_global": 64,
       "estado": "MEDIA",
       "radar": [
-        { "nombre": "Supervision humana", "valor": 82, "estado": "ALTO", "descripcion": "Modelo Human-in-the-Loop y decisiones no vinculantes." },
-        { "nombre": "Equidad territorial", "valor": 52, "estado": "MEDIO", "descripcion": "Riesgo de subestimar demanda rural por datos historicos sesgados." },
-        { "nombre": "Transparencia", "valor": 58, "estado": "MEDIO", "descripcion": "Modelos explicables con brecha de traduccion ejecutiva." },
-        { "nombre": "Privacidad", "valor": 78, "estado": "ALTO", "descripcion": "Anonimizacion irreversible y prohibicion de identificadores directos." },
-        { "nombre": "Confianza operacional", "valor": 50, "estado": "MEDIO", "descripcion": "Requiere evitar complacencia automatizada y reforzar data literacy." }
+        {
+          "nombre": "Supervision humana",
+          "valor": 82,
+          "estado": "ALTO",
+          "descripcion": "Modelo Human-in-the-Loop y decisiones no vinculantes."
+        },
+        {
+          "nombre": "Equidad territorial",
+          "valor": 52,
+          "estado": "MEDIO",
+          "descripcion": "Riesgo de subestimar demanda rural por datos historicos sesgados."
+        },
+        {
+          "nombre": "Transparencia",
+          "valor": 58,
+          "estado": "MEDIO",
+          "descripcion": "Modelos explicables con brecha de traduccion ejecutiva."
+        },
+        {
+          "nombre": "Privacidad",
+          "valor": 78,
+          "estado": "ALTO",
+          "descripcion": "Anonimizacion irreversible y prohibicion de identificadores directos."
+        },
+        {
+          "nombre": "Confianza operacional",
+          "valor": 50,
+          "estado": "MEDIO",
+          "descripcion": "Requiere evitar complacencia automatizada y reforzar data literacy."
+        }
       ],
       "supervision_humana": {
         "tasa_deliberacion": 90,
         "tasa_discrepancia": 3,
         "rango_discrepancia_min": 10,
         "rango_discrepancia_max": 30,
-        "decisiones_justificadas": 90,
-        "muestra_auditoria": 20,
+        "decisiones_justificadas_pct": 91,
+        "muestra_auditoria_pct": 20,
+        "data_literacy_pct": 83,
+        "data_literacy_meta": 100,
         "estado": "ALERTA",
-        "alerta": "La discrepancia humana reportada esta por debajo del rango saludable 10%-30%; revisar posible complacencia algoritmica o falta de evidencia HITL.",
+        "alerta": "Discrepancia humana 3% por debajo del rango saludable (10-30%): posible complacencia algoritmica. Data Literacy al 83% — 17% de usuarios con acceso bloqueado pendiente.",
         "historial": [
-          { "periodo": "Mar", "deliberacion": 0, "discrepancia": 0, "justificacion": 0 },
-          { "periodo": "Abr", "deliberacion": 30, "discrepancia": 1, "justificacion": 35 },
-          { "periodo": "May", "deliberacion": 65, "discrepancia": 2, "justificacion": 70 },
-          { "periodo": "Jun", "deliberacion": 90, "discrepancia": 3, "justificacion": 90 }
+          {
+            "periodo": "Mar",
+            "deliberacion": 0,
+            "discrepancia": 0,
+            "justificacion": 0
+          },
+          {
+            "periodo": "Abr",
+            "deliberacion": 30,
+            "discrepancia": 1,
+            "justificacion": 35
+          },
+          {
+            "periodo": "May",
+            "deliberacion": 65,
+            "discrepancia": 2,
+            "justificacion": 70
+          },
+          {
+            "periodo": "Jun",
+            "deliberacion": 90,
+            "discrepancia": 3,
+            "justificacion": 91
+          }
         ]
       },
       "salvaguardas": {
@@ -308,12 +910,36 @@
         "porcentaje": 67,
         "estado": "Parcial",
         "items": [
-          { "nombre": "Human-in-the-Loop", "cumple": true, "estado": "Cumple" },
-          { "nombre": "K-anonimidad", "cumple": true, "estado": "Cumple" },
-          { "nombre": "Fail-Safe", "cumple": true, "estado": "Cumple" },
-          { "nombre": "Monitoreo de Drift", "cumple": true, "estado": "Cumple" },
-          { "nombre": "Auditoria de IA", "cumple": false, "estado": "Parcial" },
-          { "nombre": "Gestion de Riesgos", "cumple": false, "estado": "Parcial" }
+          {
+            "nombre": "Human-in-the-Loop",
+            "cumple": true,
+            "estado": "Cumple"
+          },
+          {
+            "nombre": "K-anonimidad k>=5",
+            "cumple": true,
+            "estado": "Cumple"
+          },
+          {
+            "nombre": "Fail-Safe (bloqueo MAE>15%)",
+            "cumple": true,
+            "estado": "Cumple"
+          },
+          {
+            "nombre": "Monitoreo de Drift mensual",
+            "cumple": true,
+            "estado": "Cumple"
+          },
+          {
+            "nombre": "Auditoria externa ciberseguridad",
+            "cumple": false,
+            "estado": "Pendiente — Jul 2026"
+          },
+          {
+            "nombre": "Data Literacy 100% certificados",
+            "cumple": false,
+            "estado": "Parcial — 83% actual"
+          }
         ]
       },
       "impugnaciones_ciudadanas": {
@@ -325,67 +951,375 @@
         "descripcion": "SP-06 debe permitir impugnacion de decisiones guiadas por algoritmo y congelar evidencia forense del modelo."
       },
       "fairness_interno": {
-        "ice": 80,
-        "iid": 75,
-        "eod": 95,
-        "di": 90,
-        "nota_ejecutiva": "Las metricas tecnicas de fairness se consolidan como semaforo ejecutivo de equidad territorial."
+        "semaforo_global": "AMARILLO",
+        "metricas_prioritarias": [
+          {
+            "id": "F01",
+            "prioridad": 1,
+            "nombre": "IID — Indice de Impacto Distribucional",
+            "formula": "(Recursos_i/Total) / (Necesidad_i/Total)",
+            "valor": 0.82,
+            "umbral_verde_min": 0.75,
+            "umbral_verde_max": 1.25,
+            "umbral_amarillo_min": 0.6,
+            "umbral_rojo": 0.6,
+            "estado": "VERDE",
+            "frecuencia": "Anual",
+            "responsable": "Comite de Gobernanza de IA"
+          },
+          {
+            "id": "F02",
+            "prioridad": 2,
+            "nombre": "ICE — Indice de Cobertura Equitativa",
+            "formula": "% municipios con IID entre 0.75 y 1.25",
+            "valor": 74,
+            "unidad": "%",
+            "umbral_verde": 80,
+            "umbral_amarillo_min": 70,
+            "umbral_rojo": 70,
+            "estado": "AMARILLO",
+            "alerta": "ICE=74% por debajo del umbral verde (>=80%). Revision del modelo requerida.",
+            "frecuencia": "Anual",
+            "responsable": "Comite de Gobernanza de IA"
+          },
+          {
+            "id": "F03",
+            "prioridad": 3,
+            "nombre": "EOD — Equal Opportunity Difference",
+            "formula": "TPR_rural - TPR_urbano",
+            "valor": -0.03,
+            "unidad": "ratio -1 a 1",
+            "umbral_verde_min": -0.05,
+            "umbral_verde_max": 0.05,
+            "umbral_amarillo": 0.15,
+            "umbral_kill_switch": 0.15,
+            "estado": "VERDE",
+            "frecuencia": "Mensual",
+            "responsable": "Cientifico de Datos"
+          },
+          {
+            "id": "F04",
+            "prioridad": 4,
+            "nombre": "Data Literacy — Usuarios directos certificados",
+            "formula": "(usuarios_certificados / usuarios_directos_total) * 100",
+            "valor": 83,
+            "unidad": "%",
+            "umbral_verde": 100,
+            "estado": "AMARILLO",
+            "consecuencia": "< 100%: bloqueo de cuentas sin certificado vigente",
+            "frecuencia": "Semestral",
+            "responsable": "Comite de Gobernanza de IA"
+          },
+          {
+            "id": "F05",
+            "prioridad": 5,
+            "nombre": "Incidentes de impacto negativo documentados",
+            "formula": "COUNT(incidentes_por_semestre)",
+            "valor": 0,
+            "umbral_verde": 0,
+            "estado": "VERDE",
+            "canal_reporte": "SIGDOC / PQRSD",
+            "frecuencia": "Semestral",
+            "responsable": "Control Interno"
+          }
+        ],
+        "metricas_apoyo": [
+          {
+            "id": "A-01",
+            "nombre": "DI — Disparate Impact Ratio",
+            "formula": "P(Yhat=1|rural) / P(Yhat=1|urbano)",
+            "valor": 0.91,
+            "unidad": "ratio 0 a 2",
+            "umbral_verde_min": 0.8,
+            "umbral_verde_max": 1.25,
+            "umbral_rojo_min": 0.65,
+            "estado": "VERDE"
+          },
+          {
+            "id": "A-02",
+            "nombre": "ΔMAE — Delta error rural vs urbano",
+            "formula": "MAE_rural - MAE_urbano",
+            "valor": 8.2,
+            "unidad": "%",
+            "umbral_verde": 5,
+            "umbral_amarillo_max": 12,
+            "umbral_rojo": 12,
+            "estado": "AMARILLO",
+            "alerta": "ΔMAE=8.2% en zona amarilla (5-12%). Ajuste del filtro W_geo recomendado."
+          },
+          {
+            "id": "A-03",
+            "nombre": "RPP — Paridad de error rural/urbano",
+            "formula": "MAE_rural / MAE_urbano",
+            "valor": 1.14,
+            "umbral_verde_min": 0.8,
+            "umbral_verde_max": 1.2,
+            "estado": "VERDE"
+          },
+          {
+            "id": "A-04",
+            "nombre": "TSD — Tasa de subestimacion de demanda",
+            "formula": "COUNT(predicciones < real) / COUNT(total) * 100",
+            "valor": 22,
+            "unidad": "%",
+            "umbral_verde": 30,
+            "estado": "VERDE"
+          }
+        ]
       }
     },
     "capa3_salud_auditoria_valor": {
       "salud_sistema": [
-        { "nombre": "Precision del sistema", "valor": 85, "meta": "MAE <= 15%", "estado": "OBJETIVO" },
-        { "nombre": "Estado de drift", "valor": 76, "meta": "Sin drift sostenido", "estado": "ALERTA" },
-        { "nombre": "Calidad de datos", "valor": 97, "meta": "Retrasos >12h < 3%", "estado": "OBJETIVO" },
-        { "nombre": "Fail-Safe", "valor": 100, "meta": "Modo descriptivo ante desviacion critica", "estado": "CONTROL" },
-        { "nombre": "Ciberseguridad", "valor": 72, "meta": "RBAC, cifrado y pruebas externas", "estado": "CONDICIONADO" }
+        {
+          "nombre": "MAE Global",
+          "valor": 11.3,
+          "meta": "MAE <= 15%",
+          "unidad": "%",
+          "estado": "OBJETIVO"
+        },
+        {
+          "nombre": "Concept Drift",
+          "valor": 8,
+          "meta": "< 15%",
+          "unidad": "%",
+          "estado": "OBJETIVO"
+        },
+        {
+          "nombre": "Calidad de datos DWH",
+          "valor": 98.1,
+          "meta": "Completitud >= 97%",
+          "unidad": "%",
+          "estado": "OBJETIVO"
+        },
+        {
+          "nombre": "Fail-Safe",
+          "valor": 100,
+          "meta": "Activo ante MAE>15% sostenido",
+          "estado": "CONTROL"
+        },
+        {
+          "nombre": "Ciberseguridad",
+          "valor": 87,
+          "meta": "RBAC, cifrado y auditoria externa",
+          "unidad": "%",
+          "estado": "CONDICIONADO"
+        },
+        {
+          "nombre": "Data Literacy",
+          "valor": 83,
+          "meta": "100% certificados",
+          "unidad": "%",
+          "estado": "ALERTA"
+        }
       ],
       "tendencias": [
-        { "periodo": "Mar", "riesgo": 82, "cumplimiento": 45, "madurez": 35, "precision": 0, "calidad_datos": 78 },
-        { "periodo": "Abr", "riesgo": 78, "cumplimiento": 58, "madurez": 48, "precision": 72, "calidad_datos": 84 },
-        { "periodo": "May", "riesgo": 72, "cumplimiento": 68, "madurez": 58, "precision": 80, "calidad_datos": 91 },
-        { "periodo": "Jun", "riesgo": 68, "cumplimiento": 76, "madurez": 68, "precision": 85, "calidad_datos": 97 }
+        {
+          "periodo": "Mar",
+          "riesgo": 82,
+          "cumplimiento": 45,
+          "madurez": 35,
+          "precision": 0,
+          "calidad_datos": 78
+        },
+        {
+          "periodo": "Abr",
+          "riesgo": 78,
+          "cumplimiento": 58,
+          "madurez": 48,
+          "precision": 72,
+          "calidad_datos": 84
+        },
+        {
+          "periodo": "May",
+          "riesgo": 72,
+          "cumplimiento": 68,
+          "madurez": 58,
+          "precision": 80,
+          "calidad_datos": 91
+        },
+        {
+          "periodo": "Jun",
+          "riesgo": 68,
+          "cumplimiento": 76,
+          "madurez": 68,
+          "precision": 85,
+          "calidad_datos": 97
+        }
       ],
       "auditoria": {
-        "ejecutadas": 1,
-        "programadas": 3,
+        "ejecutadas": 4,
+        "programadas": 6,
         "pendientes": 2,
         "hallazgos_criticos": 3,
         "evidencias": 8,
         "trazabilidad": 78,
         "items": [
-          { "tipo": "Tecnica del sistema", "frecuencia": "Trimestral", "responsable": "CISO + Planeacion", "artefacto": "Informe tecnico al Comite", "estado": "Programada" },
-          { "tipo": "Equidad algoritmica", "frecuencia": "Trimestral", "responsable": "Comite IA", "artefacto": "Semaforo de fairness", "estado": "Programada" },
-          { "tipo": "HITL", "frecuencia": "Trimestral", "responsable": "Control Interno", "artefacto": "Muestra 20% decisiones", "estado": "Programada" },
-          { "tipo": "Privacidad y seguridad", "frecuencia": "Semestral", "responsable": "CISO + tercero", "artefacto": "Certificado k-anonimidad", "estado": "Pendiente" },
-          { "tipo": "Integral AIMS", "frecuencia": "Anual", "responsable": "Control Interno", "artefacto": "Informe anual SGIA", "estado": "Pendiente" }
+          {
+            "tipo": "Control Interno semestral",
+            "frecuencia": "Semestral",
+            "responsable": "Control Interno",
+            "artefacto": "Informe auditoria interna",
+            "estado": "Realizada",
+            "fecha": "2026-01-15"
+          },
+          {
+            "tipo": "Revision alcance sistema",
+            "frecuencia": "Semestral",
+            "responsable": "Comite IA",
+            "artefacto": "Acta de revision de alcance",
+            "estado": "Realizada",
+            "fecha": "2026-02-01"
+          },
+          {
+            "tipo": "Auditoria log anonimizacion",
+            "frecuencia": "Trimestral",
+            "responsable": "CISO",
+            "artefacto": "Reporte k-anonimidad",
+            "estado": "Realizada",
+            "fecha": "2026-03-20"
+          },
+          {
+            "tipo": "Auditoria ciclo de desarrollo",
+            "frecuencia": "Semestral",
+            "responsable": "Control Interno + CISO",
+            "artefacto": "Informe Git/versionamiento",
+            "estado": "Realizada",
+            "fecha": "2026-04-10"
+          },
+          {
+            "tipo": "Auditoria externa ciberseguridad DWH",
+            "frecuencia": "Anual",
+            "responsable": "CISO + tercero independiente",
+            "artefacto": "Certificado penetracion DWH",
+            "estado": "Pendiente",
+            "fecha_programada": "2026-07-01"
+          },
+          {
+            "tipo": "Revision equidad algoritmica semestral",
+            "frecuencia": "Semestral",
+            "responsable": "Comite IA + Cientifico Datos",
+            "artefacto": "Semaforo fairness IID/ICE/EOD",
+            "estado": "Pendiente",
+            "fecha_programada": "2026-08-15"
+          }
         ]
       },
       "alertas_estrategicas": [
-        { "titulo": "Go condicionado", "prioridad": "ALTA", "descripcion": "No avanzar a produccion plena sin k-anonimidad certificada, logs explicables y kill switch verificado." },
-        { "titulo": "Discrepancia humana baja", "prioridad": "ALTA", "descripcion": "Una tasa cercana a cero puede indicar complacencia algoritmica o falta de registro deliberativo." },
-        { "titulo": "Function creep", "prioridad": "ALTA", "descripcion": "NLP, triaje, prediccion individual o automatizacion vinculante quedan fuera del alcance aprobado." },
-        { "titulo": "Explicabilidad ejecutiva", "prioridad": "MEDIA", "descripcion": "La alta direccion requiere lectura sencilla de incertidumbre, limites, confianza y responsabilidades." }
+        {
+          "titulo": "Go condicionado — sin certificar, no avanzar",
+          "prioridad": "ALTA",
+          "tipo": "CRITICA",
+          "descripcion": "No avanzar a produccion plena sin k-anonimidad certificada por tercero, logs explicables y kill switch verificado."
+        },
+        {
+          "titulo": "Discrepancia humana por debajo del umbral saludable",
+          "prioridad": "ALTA",
+          "tipo": "CRITICA",
+          "descripcion": "Tasa discrepancia 3% (rango sano: 10-30%). Posible complacencia algoritmica o falta de registro deliberativo (Automation Bias — RS-03)."
+        },
+        {
+          "titulo": "ICE territorial en zona amarilla",
+          "prioridad": "ALTA",
+          "tipo": "FAIRNESS",
+          "descripcion": "ICE=74% por debajo del umbral verde (>=80%). Dagua y El Dovio con IID<0.75. Revision del modelo con filtro W_geo."
+        },
+        {
+          "titulo": "Function creep — lineas rojas operativas",
+          "prioridad": "ALTA",
+          "tipo": "COMPLIANCE",
+          "descripcion": "NLP, triaje, prediccion individual o automatizacion vinculante quedan fuera del alcance aprobado. Excederlos reclasifica el sistema en EU AI Act."
+        },
+        {
+          "titulo": "Explicabilidad para alta direccion",
+          "prioridad": "MEDIA",
+          "tipo": "TRANSPARENCIA",
+          "descripcion": "Brecha de traduccion ejecutiva: modelos tecnicamente explicables pero sin lectura sencilla de incertidumbre y limites operacionales."
+        }
       ],
       "impacto_estrategico": [
-        { "nombre": "Ocupacion hospitalaria", "valor": "266", "suffix": "camas", "impacto": 85, "descripcion": "Planeacion anticipada de capacidad instalada y alertas por sobreocupacion." },
-        { "nombre": "Gestion de camas", "valor": "7", "suffix": "dias", "impacto": 78, "descripcion": "Horizonte de soporte para planificar demanda y recursos asistenciales." },
-        { "nombre": "Optimizacion procesos", "valor": "15", "suffix": "%", "impacto": 72, "descripcion": "Meta ejecutiva asociada a reduccion de tiempos y cuellos de botella." },
-        { "nombre": "PQRSD", "valor": "SGDEA", "suffix": "", "impacto": 70, "descripcion": "Redistribucion de cargas administrativas segun volumen proyectado." },
-        { "nombre": "FURAG", "valor": "80", "suffix": "%", "impacto": 80, "descripcion": "Meta de precargue/evidencias para decisiones basadas en datos." },
-        { "nombre": "Valor publico", "valor": "MIPG", "suffix": "", "impacto": 82, "descripcion": "Transparencia institucional ante entes de control y alta direccion." }
+        {
+          "nombre": "Ocupacion hospitalaria",
+          "valor": "266",
+          "suffix": "camas",
+          "impacto": 85,
+          "descripcion": "Planeacion anticipada de capacidad instalada y alertas por sobreocupacion."
+        },
+        {
+          "nombre": "Gestion de camas",
+          "valor": "7",
+          "suffix": "dias",
+          "impacto": 78,
+          "descripcion": "Horizonte de soporte para planificar demanda y recursos asistenciales."
+        },
+        {
+          "nombre": "Optimizacion procesos",
+          "valor": "15",
+          "suffix": "%",
+          "impacto": 72,
+          "descripcion": "Meta ejecutiva asociada a reduccion de tiempos y cuellos de botella."
+        },
+        {
+          "nombre": "PQRSD",
+          "valor": "SGDEA",
+          "suffix": "",
+          "impacto": 70,
+          "descripcion": "Redistribucion de cargas administrativas segun volumen proyectado."
+        },
+        {
+          "nombre": "FURAG",
+          "valor": "80",
+          "suffix": "%",
+          "impacto": 80,
+          "descripcion": "Meta de precargue/evidencias para decisiones basadas en datos."
+        },
+        {
+          "nombre": "Valor publico",
+          "valor": "MIPG",
+          "suffix": "",
+          "impacto": 82,
+          "descripcion": "Transparencia institucional ante entes de control y alta direccion."
+        }
       ],
       "explicabilidad": [
-        { "pregunta": "Que significa Go condicionado?", "respuesta": "El sistema puede avanzar solo si se certifican privacidad, trazabilidad, supervision humana y controles de equidad antes de operacion plena." },
-        { "pregunta": "Cuando se activa el Fail-Safe?", "respuesta": "Si el error predictivo o la disparidad territorial exceden umbrales, la vista predictiva cambia a analitica descriptiva hasta nueva autorizacion." },
-        { "pregunta": "Que debe mirar la alta direccion?", "respuesta": "Riesgo global, discrepancia humana, cumplimiento normativo, auditorias pendientes y evidencia de valor publico." }
+        {
+          "pregunta": "Que significa Go condicionado?",
+          "respuesta": "El sistema puede avanzar solo si se certifican privacidad (k>=5 por tercero), trazabilidad, supervision humana, Data Literacy al 100% y controles de equidad antes de operacion plena."
+        },
+        {
+          "pregunta": "Cuando se activa el Fail-Safe?",
+          "respuesta": "Si el MAE supera el 15% durante dos semanas consecutivas, o si EOD supera +-0.15, la vista pasa a modo descriptivo hasta nueva autorizacion del Comite de Gobernanza."
+        },
+        {
+          "pregunta": "Que debe revisar la alta direccion?",
+          "respuesta": "Riesgo global vs. apetito (72%>60%), discrepancia humana HITL (3% bajo rango sano), ICE territorial (74%<80%), 2 auditorias pendientes, Data Literacy (83%<100%) y evidencia de valor publico FURAG/MIPG."
+        }
       ]
     },
     "hoja_ruta": [
-      { "fase": "Fundamentos", "periodo": "Ene-Mar 2026", "estado": "Completada", "avance": 100 },
-      { "fase": "Habilitadores", "periodo": "Abr-Jun 2026", "estado": "En curso", "avance": 58 },
-      { "fase": "Operacion plena", "periodo": "Jul-Sep 2026", "estado": "Pendiente", "avance": 0 },
-      { "fase": "Madurez", "periodo": "Oct 2026-Dic 2027", "estado": "Pendiente", "avance": 0 }
+      {
+        "fase": "Fundamentos",
+        "periodo": "Ene-Mar 2026",
+        "estado": "Completada",
+        "avance": 100
+      },
+      {
+        "fase": "Habilitadores",
+        "periodo": "Abr-Jun 2026",
+        "estado": "En curso",
+        "avance": 58
+      },
+      {
+        "fase": "Operacion plena",
+        "periodo": "Jul-Sep 2026",
+        "estado": "Pendiente",
+        "avance": 0
+      },
+      {
+        "fase": "Madurez",
+        "periodo": "Oct 2026-Dic 2027",
+        "estado": "Pendiente",
+        "avance": 0
+      }
     ]
   }
 ]
